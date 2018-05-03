@@ -55,7 +55,7 @@
             <el-col :span="7">
                 <el-button-group>
                 	<el-button type="primary" size="small">审核</el-button>
-                    <el-button type="primary" size="small">查看</el-button>
+                    <el-button type="primary" @click="CheckCompanyRule" size="small">查看</el-button>
                     <el-button type="primary" size="small">新增</el-button>
                     <el-button type="primary" size="small" >修改</el-button>
                     <el-button type="primary" size="small" >终止</el-button>
@@ -148,7 +148,7 @@
 					state:'未执行'
 				},
 				{
-					key:'1',
+					key:'2',
 					startTime:"2018-11-11",
 					endTime:'2018-12-11',
 					sureEndTime:'李四',
@@ -177,6 +177,12 @@
 		methods:{
 			AddTotal(){
 				 this.$router.push({ path: "/index/AddTotalRule" });
+			},
+			CheckTotal(){
+				this.$router.push({ path: "/index/AddTotalRule" });
+			},
+			CheckCompanyRule(){
+				this.$router.push({ path: "/index/CheckCompanyRule" });	
 			}
 		}
 		

@@ -31,6 +31,9 @@ import examineCheck from '@/components/companymanagement/examineCheck'
 import Commissio from '@/components/rulemaid/Commissio'
 import CommissioCheck from '@/components/rulemaid/CommissioCheck'
 import AddTotalRule from '@/components/rulemaid/AddTotalRule'
+import CheckCompanyRule from '@/components/rulemaid/CheckCompanyRule'
+import choseCompany from '@/components/rulemaid/choseCompany'
+import SetRule from '@/components/rulemaid/SetRule'
 
 Vue.use(Router)
 
@@ -137,6 +140,18 @@ export default new Router({
         {
         	path:'/index/AddTotalRule',
         	component:AddTotalRule
+        },
+        {
+        	path:'/index/CheckCompanyRule',
+        	component:CheckCompanyRule
+        },
+        {
+        	path:'/index/choseCompany',
+        	component:choseCompany
+        },
+        {
+        	path:'/index/SetRule',
+        	component:SetRule
         }
         ]
     }, ]
