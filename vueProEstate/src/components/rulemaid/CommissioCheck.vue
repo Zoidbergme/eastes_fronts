@@ -4,8 +4,7 @@
 		<div v-if="false"> 
 			<span></span>
 			<input v-model="input" placeholder="请输入内容"></input>
-		</div>
-		
+		</div>		
 		<div class="attachment m_top" >
 			<el-row type="flex" justify="space-between" class="dynamicList-title  m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
@@ -13,29 +12,29 @@
             </el-col>
             <el-col :span="7">
                 <el-button-group>
-                    <el-button type="primary" size="small">查看</el-button>
+                    <el-button type="primary" @click="CheckTotal" size="small">查看</el-button>
                     <el-button type="primary" @click="AddTotal" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >终止</el-button>
+                    <el-button type="primary" @click="RecomposeTotal" size="small" >修改</el-button>
+                    <el-button type="primary" @click="StopTotal" size="small" >终止</el-button>
                 </el-button-group>
             </el-col>
         	</el-row>
 			<el-table :data="ruleData" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
                 <el-table-column type="selection" label="ALL" width="50">
                 </el-table-column>
-                <el-table-column prop="key" label="序号" width="60">
+                <el-table-column prop="rule_id" label="序号" width="60">
                 </el-table-column>
-                <el-table-column prop="startTime" label="开始执行日期"  width="120">
+                <el-table-column prop="begin_time" label="开始执行日期"  width="120">
                 </el-table-column>
-                <el-table-column prop="endTime" label="执行截止日期"  width="120">
+                <el-table-column prop="end_time" label="执行截止日期"  width="120">
                 </el-table-column>
             	<el-table-column prop="sureEndTime" label="实际截止日期" width="120">
            		</el-table-column>
-            	<el-table-column prop="affirmTime" label="到访保护确认期(分钟)" width="100">
+            	<el-table-column prop="visit_confirm_time" label="到访保护确认期(分钟)" width="100">
             	</el-table-column>
-            	<el-table-column prop="visitTime" label="有效来访保护期(天)" width="100">
+            	<el-table-column prop="valid_visit_time" label="有效来访保护期(天)" width="100">
             	</el-table-column>
-            	<el-table-column prop="dellTime" label="成交保护期(天)" width="100">
+            	<el-table-column prop="make_bargain_time" label="成交保护期(天)" width="100">
             	</el-table-column>
             	<el-table-column prop="payAffirTime" label="推荐佣金结佣周期(天)" width="100">
             	</el-table-column>
@@ -43,7 +42,10 @@
             	</el-table-column>
             	<el-table-column prop="payDellTime" label="成交佣金结佣周期" width="100">
             	</el-table-column>
-            	<el-table-column prop="state" label="执行状态" width="100">
+            	<el-table-column prop="state"  label="执行状态" width="100">	
+            		<template slot-scope="scope">
+     					{{scope.row.state==0?'未执行':'执行中'}}
+      			 	</template>
             	</el-table-column>
        		 </el-table>
 		</div>
@@ -95,7 +97,7 @@
             <el-col :span="7">
                 <el-button-group>
                     <el-button type="primary" size="small">审核</el-button>
-                    <el-button type="primary" size="small">查看</el-button>
+                    <el-button type="primary" @click="CheckPersonRule" size="small">查看</el-button>
                     <el-button type="primary" size="small">新增</el-button>
                     <el-button type="primary" size="small" >修改</el-button>
                     <el-button type="primary" size="small" >终止</el-button>
@@ -133,43 +135,15 @@
 		data(){
 			return{
 				input:"",
-				ruleData:[{
-					key:'1',
-					startTime:"2018-11-11",
-					endTime:'2018-12-11',
-					sureEndTime:'李四',
-					updataTime:'2018-12-11',
-					affirmTime:'60',
-					visitTime:'6',
-					dellTime:'30',
-					payAffirTime:'7',
-					payVisitTime:'7',
-					payDellTime:'7',
-					state:'未执行'
-				},
-				{
-					key:'2',
-					startTime:"2018-11-11",
-					endTime:'2018-12-11',
-					sureEndTime:'李四',
-					updataTime:'2018-12-11',
-					affirmTime:'60',
-					visitTime:'6',
-					dellTime:'30',
-					payAffirTime:'7',
-					payVisitTime:'7',
-					payDellTime:'7',
-					state:'执行中'
-				}
-				],
+				ruleData:[],
 				introData:[],
 				dellData:[],
 				visitedData:[]
-				
-			}
+			}	
 		},
 		created(){
-			console.log(this.attachmentData)
+				this.getruleData();
+				//this.getCompanyData();
 		},
 		mounted(){
 			
@@ -179,10 +153,38 @@
 				 this.$router.push({ path: "/index/AddTotalRule" });
 			},
 			CheckTotal(){
-				this.$router.push({ path: "/index/AddTotalRule" });
+				this.$router.push({ path: "/index/CheckTotalRule" });
+			},
+			StopTotal(){
+				this.$router.push({ path: "/index/EndTotalRule" });
+			},
+			RecomposeTotal(){
+				this.$router.push({ path: "/index/RecomposeTotalRule" });
 			},
 			CheckCompanyRule(){
 				this.$router.push({ path: "/index/CheckCompanyRule" });	
+			},
+			CheckPersonRule(){
+				this.$router.push({ path: "/index/CheckPersonRule" });	
+			},
+			getruleData(){
+				let url=this.Rooturl+"project/ruleBasic/list";
+				this.$http.get(url,{
+					state:0,
+					p:'0'
+				})
+				 .then((res)=>{
+				 	this.ruleData=res.data.data.data;
+				 	console.log(this.ruleData);
+				 })
+			},
+			getCompanyData(){
+				let url=this.Rooturl+"project/ruleCompany/list";
+				this.$http.get(url)
+				 .then((res)=>{
+				 	this.ruleData=res.data.data.data;
+				 	console.log(this.ruleData);
+				 })
 			}
 		}
 		

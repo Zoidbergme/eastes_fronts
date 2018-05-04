@@ -5,7 +5,7 @@
         <span class="ckBeConfirmed-title">查看</span>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" round @click="back()">关闭</el-button>
+        <el-button type="primary" size="small" round @click="back()">关闭</el-button>
       </el-col>
     </el-row>
     <el-form :model="disRuleForminfo" ref="form" label-width="140px" size="small" class="cktInfo-form">
@@ -487,6 +487,9 @@ export default {
     },
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
+    },
+    back(){
+    	this.$router.push({ path: "/index/dealed" });
     }
   }
 };

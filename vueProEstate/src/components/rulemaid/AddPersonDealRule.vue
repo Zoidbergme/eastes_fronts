@@ -1,8 +1,8 @@
 <template>
-<div id="SetRule">
+<div id="AddPersonDealRule">
 <el-row style="height:40px;padding-left:40px;background:#333333 ;">	
 	<el-col :span="12">
-		<span class="check-basetitle">设置公司</span>
+		<span class="check-basetitle">选择</span>
 	</el-col>
 	<el-col :span="4" :push="8" >	
     		<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
@@ -23,23 +23,13 @@
   	   		 </el-form-item>
   	   	</el-row>  	
   	   	<el-row style="margin-top:40px">
-  	   		<el-col :span="8">
-				<el-form-item label="*跳点：">
-          	 		<el-select v-model="form.desc" placeholder="">
-            			<el-option label="是" value="是"></el-option>
-           				<el-option checked selected label="否" value="否"></el-option>
-         			</el-select>
-  	   			</el-form-item>
+  	   		
+			<el-col :span="11">
+				 <el-form-item label="结佣周期">
+    				<el-input v-model="form.name"></el-input>
+  				</el-form-item>
 			</el-col>
-			<el-col :span="8">
-				<el-form-item label="*跳点提成积累">
-           			<el-select v-model="form.resource" placeholder="">
-            			<el-option label="是" value="是"></el-option>
-           				<el-option selected label="否" value="否"></el-option>
-        			</el-select>
-  	   			</el-form-item>
-			</el-col>
-			<el-col :span="8">
+			<el-col :span="11">
 				<el-form-item label="*单位">
            			<el-select v-model="form.resource" placeholder="人民币">
             			<el-option label="人民币" value="shanghai"></el-option>			
@@ -48,7 +38,7 @@
 			</el-col>
   	   	</el-row>
   	   	<el-row>
-  	   		<el-col :span="8">
+  	   		<el-col :span="11">
   	   			<el-form-item label="*提成方式：">
            			<el-select @change="change" v-model="form.way" placeholder="提成方式">
             			<el-option checked label="固定金额x套数" value="1"></el-option>
@@ -57,7 +47,7 @@
          			</el-select>
   	 			</el-form-item>
   	   		</el-col>
-  	   		<el-col :span="8">
+  	   		<el-col :span="11">
   	   			<el-form-item v-if="fixed_amount" label="固定定额">
            			<el-input v-model="form.fixed_amount"  type="number"  :disabled="!fixed_amount"  placeholder="输入固定金额1000" ></el-input>
   	 			</el-form-item>
@@ -70,45 +60,13 @@
   	   		</el-col>
   	   	</el-row>
 </el-form>
- <div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666">跳点规则</font>
-            </el-col>
-            <el-col :span="5">
-                <el-button-group>            
-                    <el-button @click="CheckJumpRule" type="primary" size="small">查看</el-button>
-                    <el-button @click="addJumpRule" type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <el-table :data="tableData" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="起始数" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="截止数"  >
-            </el-table-column>
-            <el-table-column prop="phone" label="提成公式" >
-            </el-table-column>
-            <el-table-column prop="phone" label="金额/比例/单价" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="是否累积" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
-            </el-table-column>   
-        </el-table>
-    </div> 
+  
 </div>
 </template>
 
 <script>
 	export default{
-		name:'SetRule',
+		name:'AddPersonDealRule',
 		data(){
 			return{
 				form: {
@@ -149,8 +107,7 @@
 		methods:{
 			onSubmit(){
 			  let url=this.Rooturl+"project/ruleCompany/getList";
-         	  this.$http.get(url,{
-         	
+         	     this.$http.get(url,{
        		  }).then(function(res){
         			console.log(res);
              })},

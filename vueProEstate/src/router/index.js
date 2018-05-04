@@ -34,9 +34,17 @@ import AddTotalRule from '@/components/rulemaid/AddTotalRule'
 import CheckCompanyRule from '@/components/rulemaid/CheckCompanyRule'
 import choseCompany from '@/components/rulemaid/choseCompany'
 import SetRule from '@/components/rulemaid/SetRule'
+import CheckJumpPointRule from '@/components/rulemaid/CheckJumpPointRule'
+import endContract from '@/components/rulemaid/endContract'
+import CheckPersonRule from '@/components/rulemaid/CheckPersonRule'
+import AddPersonDealRule from '@/components/rulemaid/AddPersonDealRule'
+import AddPersonVisitRule from '@/components/rulemaid/AddPersonVisitRule'
+import CheckTotalRule from '@/components/rulemaid/CheckTotalRule'
+import EndTotalRule from '@/components/rulemaid/EndTotalRule'
+import RecomposeTotalRule from '@/components/rulemaid/RecomposeTotalRule'
 
 Vue.use(Router)
-
+ 
 export default new Router({
     routes: [{
         path: '/',
@@ -152,7 +160,39 @@ export default new Router({
         {
         	path:'/index/SetRule',
         	component:SetRule
+        },{
+        	path:'/index/CheckJumpPointRule',
+        	component:CheckJumpPointRule     
+        },
+        {
+        	path:'/index/endContract',
+        	component:endContract     
+        },
+        {
+        	path:'/index/CheckPersonRule',
+        	component:CheckPersonRule     
+        },
+        {
+        	path:'/index/AddPersonDealRule',
+        	component:AddPersonDealRule     
+        },
+         {
+        	path:'/index/AddPersonVisitRule',
+        	component:AddPersonVisitRule    
+        },
+         {
+        	path:'/index/CheckTotalRule',
+        	component:CheckTotalRule    
+        },
+        {
+        	path:'/index/EndTotalRule',
+        	component: EndTotalRule  
+        },
+        {
+        	path:'/index/RecomposeTotalRule',
+        	component:RecomposeTotalRule 
         }
+       
         ]
     }, ]
 })

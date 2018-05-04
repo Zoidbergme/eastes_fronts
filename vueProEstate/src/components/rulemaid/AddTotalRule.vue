@@ -15,12 +15,12 @@
 <el-row >	
    	<el-col :span="12">
    	  <el-form-item  label="*开始执行时间">
-         <el-date-picker type="date"required placeholder="选择日期" v-model="form.date1" style="width: 90%;"></el-date-picker>
+         <el-date-picker type="date"required placeholder="选择日期" v-model="form.begin_time" style="width: 90%;"></el-date-picker>
       </el-form-item>
    	</el-col>
     <el-col :span="12">
     	 <el-form-item  label="*截止执行时间">
-           <el-date-picker type="date" required placeholder="选择日期" v-model="form.date1" style="width: 90%;"></el-date-picker> 
+           <el-date-picker type="date" required placeholder="选择日期" v-model="form.end_time" style="width: 90%;"></el-date-picker> 
  	    </el-form-item>
  	</el-col>    
 </el-row> 	    
@@ -28,21 +28,21 @@
 <el-row>
     <el-col :span="12">
     	 <el-form-item label="到访确认保护期(分钟)：">
-    			<el-input v-model="form.name" required placeholder="请输入失效时间" style="width: 90%;"></el-input>
+    			<el-input v-model="form.valid_visit_time" required placeholder="请输入失效时间" style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
 <el-row>
     <el-col :span="12">
-    	 <el-form-item label="到访确认保护期(天)：">
-    			<el-input v-model="form.name" placeholder="请输入失效时间"  style="width: 90%;"></el-input>
+    	 <el-form-item label="有效来访保护期(天)：">
+    			<el-input v-model="form.visit_confirm_time" placeholder="请输入失效时间"  style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
 <el-row>
     <el-col :span="12">
-    	 <el-form-item label="到访确认保护期(天)：">
-    			<el-input v-model="form.name" required  placeholder="请输入失效时间"  style="width: 90%;"></el-input>
+    	 <el-form-item label="成交保护期(天)：">
+    			<el-input v-model="form.make_bargain_time" required  placeholder="请输入失效时间"  style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
@@ -108,20 +108,19 @@
 	data() {
      return {
       		form: {
-         		 name: '',
-         		 visit:'',
-         		 recommand:'',
-         		 deel:'1',
-         		 delivery: false,
-         	     type: [],
-         		 resource: '',
-          		 desc: ''
+         		 visit_confirm_time: '',
+         		 valid_visit_time:'',
+         		 make_bargain_time:'',
+         		 comment:'1',		
+         		 begin_time: '',
+          		 end_time: ''
         		}
             }
     },
     methods: {
       onSubmit() {
-         this.$http.post("url",{
+      	 let url=this.Rooturl+"project/ruleBasic/create";
+         this.$http.post(url,{
          	
          })
          .then(function(res){
@@ -131,12 +130,12 @@
       },
       back(){
       	 this.$router.push({ path: "/index/CommissioCheck" });
-      }
+      } 
    	},
 	created(){
-			
-		}
+		
 	}
+}
 </script>
 	
 <style>

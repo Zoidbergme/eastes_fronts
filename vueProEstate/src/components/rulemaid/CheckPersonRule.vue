@@ -1,9 +1,9 @@
 <template>
-<div id="CheckCompanyRule">	
-<el-form id="AddTotalRule" ref="form" :model="form"  label-width="160px">
+<div id="CheckPersonRule">
+<el-form id="AddTotalRule" ref="form" :model="form"   label-width="160px">
 <el-row style="height:40px;padding-left:40px;background:#333333 ;">
 	<el-col :span="12">
-		<span class="check-basetitle">查看公司规则</span>
+		<span class="check-basetitle">查看全民经济人规则</span>
 	</el-col>
 	<el-col :span="8" :push="4" >
 		 <el-form-item>
@@ -13,49 +13,28 @@
 	</el-col>
 </el-row>
 <el-row>
-    <el-col :span="8">
-    	 <el-form-item label="甲方单位：">
-    			<el-input v-model="form.name" required placeholder="请输入甲方单位名称" style="width: 100%;"></el-input>
+    <el-col :span="11">
+    	 <el-form-item label="规则名称：">
+    			<el-input v-model="form.name" required placeholder="请输入规则名称" style="width: 100%;"></el-input>
   		</el-form-item>
     </el-col> 
-    <el-col :span="8">
-    	 <el-form-item label="甲方对接人：">
-    			<el-input v-model="form.name" required placeholder="请输入甲方对接人姓名" style="width: 100%;"></el-input>
-  		</el-form-item>
-    </el-col>
-    <el-col :span="8">
-    	 <el-form-item label="甲方对接人电话：">
-    			<el-input v-model="form.name" required placeholder="请输入甲方对接人电话" style="width: 100%;"></el-input>
-  		</el-form-item>
-    </el-col>
-</el-row>
-<el-row>
-    <el-col :span="8">
-    	 <el-form-item label="乙方单位：">
-    			<el-input v-model="form.name" required placeholder="请输入乙方单位" style="width: 73%;"></el-input>
-  				<el-button @click="chosseCompanyRule" type="primary" size="small" >选择</el-button>
-    	 </el-form-item>
-  		
-    </el-col> 
-    <el-col :span="8">
-    	 <el-form-item label="乙方对接人：">
-    			<el-input v-model="form.name" required placeholder="请输乙方对接人姓名" style="width: 100%;"></el-input>
-  		</el-form-item>
-    </el-col>
-    <el-col :span="8">
-    	 <el-form-item label="乙方对接人电话：">
-    			<el-input v-model="form.name" required placeholder="请输入乙方对接人电话" style="width: 100%;"></el-input>
+    <el-col :span="11">
+    	<el-form-item label="是否筛选经纪人">
+   			<el-select v-model="form.region" placeholder="请选择活动区域">
+      			<el-option  label="是" value="是"></el-option>
+      			<el-option label="否" value="否"></el-option>
+    		</el-select>
   		</el-form-item>
     </el-col>
 </el-row>
 <el-row >	
    	<el-col :span="11">
-   	  <el-form-item  label="*合同开始日期">
+   	  <el-form-item  label="*计划开始日期">
          <el-date-picker type="date"required placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
       </el-form-item>
    	</el-col>
     <el-col :span="11">
-    	 <el-form-item  label="*合同截止日期">
+    	 <el-form-item  label="*计划截止日期">
            <el-date-picker type="date" required placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker> 
  	    </el-form-item>
  	</el-col>    
@@ -74,47 +53,12 @@
 </el-row> 	    
  
 </el-form>
-    <div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666"> 附件</font>
-            </el-col>
-            <el-col  :span="5">
-                <el-button-group>            
-                    <el-button type="primary" size="small">查看</el-button>
-                    <el-button type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="文件名称" >
-            </el-table-column>
-            <el-table-column  label="附件"  >
-            	 <template slot-scope="scope">
-     				<a :href="scope.row.planeEndTime" target="_blank" style="color:blue;text-decoration: underline;cursor: pointer;">
-     					查看附件
-     				</a>
-      			 </template>
-            </el-table-column>
-            <el-table-column prop="phone" label="上传人员" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="上传时间" >
-            </el-table-column>               
-        </el-table>
-        <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-        </el-pagination>
-    </div>   
+      
     <div class="attachment m_top" >
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666"> 成交佣金</font>
-                <font style="font-size:12px;color:#999">(推荐的客户在该项目购置房源后产生的佣金)</font>
+                <font style="font-size:12px;color:#999">(经纪人推荐的客户在该项目购置房源后产生的佣金)</font>
             </el-col>
             <el-col :span="5">
                 <el-button-group>            
@@ -131,14 +75,10 @@
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
             <el-table-column prop="companyName" label="物业类型" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="跳点"  >
-            </el-table-column>
+            </el-table-column>           
             <el-table-column prop="phone" label="提成公式" >
             </el-table-column>
-            <el-table-column prop="planeTime" label="单位" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
+             <el-table-column prop="planeTime" label="结佣周期" >
             </el-table-column>   
         </el-table>
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
@@ -148,7 +88,7 @@
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666"> 到访佣金</font>
-                <font style="font-size:12px;color:#999">(推荐的客户在该项目购置房源后产生的佣金)</font>
+                <font style="font-size:12px;color:#999">(经纪人推荐的客户在该项目购置房源后产生的佣金)</font>
             </el-col>
             <el-col :span="5">
                 <el-button-group>            
@@ -165,14 +105,10 @@
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
             <el-table-column prop="companyName" label="物业类型" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="跳点"  >
-            </el-table-column>
+            </el-table-column>           
             <el-table-column prop="phone" label="提成公式" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="单位" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
+            </el-table-column>           
+             <el-table-column prop="planeTime" label="结佣周期" >
             </el-table-column>   
         </el-table>
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
@@ -182,7 +118,7 @@
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666"> 推荐佣金</font>
-                <font style="font-size:12px;color:#999">(推荐的客户在该项目购置房源后产生的佣金)</font>
+                <font style="font-size:12px;color:#999">(经纪人推荐的客户在该项目购置房源后产生的佣金)</font>
             </el-col>
             <el-col :span="5">
                 <el-button-group>            
@@ -196,65 +132,27 @@
         <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
             <el-table-column type="selection" label="ALL" width="50">
             </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
+           <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
             <el-table-column prop="companyName" label="物业类型" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="跳点"  >
-            </el-table-column>
+            </el-table-column>           
             <el-table-column prop="phone" label="提成公式" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="单位" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
+            </el-table-column>           
+             <el-table-column prop="planeTime" label="结佣周期" >
             </el-table-column>   
         </el-table>
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
         </el-pagination>
     </div> 
-	<div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666">合作项目记录</font>
-                
-            </el-col>
-            <el-col :span="5">
-                
-            </el-col>
-        </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="项目名称" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="公司名称"  >
-            </el-table-column>
-            <el-table-column prop="phone" label="开始时间" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="截止时间" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="区域" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="推荐客户数量" >
-            </el-table-column>
-             <el-table-column prop="planeTime" label="到访数量" >
-            </el-table-column>
-             <el-table-column prop="planeTime" label="成交数量" >
-            </el-table-column>
-        </el-table>
-        <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-        </el-pagination>
-    </div> 
+	
 
 </div>
 </template>
 
 <script>
-export default {
- 	 name: "CheckCompanyRule",
- 	 data(){
+export default{
+		name:'CheckPersonRule',
+		data(){
  	 	return{
  	 		title:"结佣规则",
  	 		Data: [],
@@ -270,7 +168,8 @@ export default {
          		 delivery: false,
          	     type: [],
          		 resource: '',
-          		 desc: ''
+          		 desc: '',
+          		 region:"是"
         	}
            
         }
@@ -340,7 +239,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 	.Commissio_title{
 		height:32px;
 		line-height:32px;

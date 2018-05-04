@@ -5,7 +5,7 @@
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item v-for="(name,index) in breadcrumbName" v-bind:key="name.id" :to="name.router">
                         <i class="el-icon-message" v-if="index===0"></i>
-                        <span v-bind:style="[{fontWeight:index===0?'700':'400'}]">{{name.breadcrumbname}}</span>
+                        <span @click="addColor($event)" v-bind:style="[{fontWeight:index===0?'700':'400'}]">{{name.breadcrumbname}}</span>
                     </el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>
@@ -16,13 +16,23 @@
 <script>
 export default {
   name: "breadcrumb",
+  data(){
+  	return{
+  		src:''
+  	}
+  },
   props: {
     breadcrumbName: Array
   },
   methods:{
-  	addColor(){
-    	alert(1);
+  	addColor(e){
+     var src=e.currentTarget;
+     this.src=src;
+     
     }
+  },
+  mounted(){
+  	
   }
 };
 </script>

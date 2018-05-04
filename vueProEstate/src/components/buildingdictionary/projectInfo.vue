@@ -317,7 +317,7 @@ export default {
     //   });
     this.getProvinceList();
     this.getProjectInfo();
-    this.$http.get("/api/config").then(res => {
+    this.$http.get("http://120.27.21.136:2798/config").then(res => {
       console.log("++++++++++++++++++++++++++++++++++++++")
       console.log(res);
     });
@@ -351,7 +351,7 @@ export default {
     },
     //查询项目信息
     getProjectInfo() {
-      this.$http.get("/api/project/project/getProjectInfo").then(res => {
+      this.$http.get("http://120.27.21.136:2798/project/project/getProjectInfo").then(res => {
         console.log(res);
         this.projectInfo = res.data.data;
         this.ruleForminfo.provalue = this.projectInfo.province;
@@ -391,7 +391,7 @@ export default {
     // 读取省列表
     getProvinceList() {
       let token = sessionStorage.getItem("userinfo");
-      this.$http.get("/api/getProvinceList").then(res => {
+      this.$http.get("http://120.27.21.136:2798/getProvinceList").then(res => {
       	console.log("1");
         console.log(res);
         this.firoptions = res.data;
@@ -399,13 +399,14 @@ export default {
     },
     // 读取市区列表
     provinceChange(value) {
-      this.$http.get("/api/getCityList?provinceCode=" + value).then(res => {
+      this.$http.get("http://120.27.21.136:2798/getCityList?provinceCode=" + value).then(res => {
+      	
         this.secoptions = res.data;
       });
     },
     // 读取区县列表
     cityChange(value) {
-      this.$http.get("/api/getDistrictList?cityCode=" + value).then(res => {
+      this.$http.get("http://120.27.21.136:2798/getDistrictList?cityCode=" + value).then(res => {
         this.thioptions = res.data;
       });
     },

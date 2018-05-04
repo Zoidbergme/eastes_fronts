@@ -8,8 +8,8 @@
         <el-button-group>
           <el-button type="primary" size="small">高级搜索</el-button>
           <el-button type="primary" size="small" @click="check()">查看</el-button>
-          <el-button type="primary" size="small" disabled="true">确认</el-button>
-          <el-button type="primary" size="small" disabled="true">成交</el-button>
+          <el-button type="primary" size="small" :disabled="true">确认</el-button>
+          <el-button type="primary" size="small" :disabled="true">成交</el-button>
         </el-button-group>
       </el-col>
     </el-row>

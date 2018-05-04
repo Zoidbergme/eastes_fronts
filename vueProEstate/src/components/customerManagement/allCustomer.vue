@@ -4,7 +4,7 @@
             <el-col :span="18">
                 <breadcrumb :breadcrumbName="breadcrumbName"></breadcrumb>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="6" >
                 <el-button-group>
                     <el-button type="primary" size="small">高级搜索</el-button>
                     <el-button type="primary" size="small">查看</el-button>
@@ -102,6 +102,10 @@ export default {
           allotTime:"2017/01/08  12:09:09",
           propertyConsultant:"王五"
         });
+        this.$http.get("http://120.27.21.136:2798/project/client/all")
+          .then(function(res){
+          		console.log(res.data);
+        })
       }
       this.page();
     },

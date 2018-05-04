@@ -3,7 +3,7 @@
 <el-form  :model="formInline" >
 <el-row style="height:40px;padding-left:40px;background:#333333 ;">	
 	<el-col :span="12">
-		<span class="check-basetitle">选择</span>
+		<span class="check-basetitle">选择公司</span>
 	</el-col>
 	<el-col :span="4" :push="8" >
 		 <el-form-item>

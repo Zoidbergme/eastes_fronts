@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       breadcrumbName: [
-         { breadcrumbname: "全部", router: "/index/allCustomer" },
+        { breadcrumbname: "全部", router: "/index/allCustomer" },
         { breadcrumbname: "待确认客户", router: "" },
         { breadcrumbname: "有效客户", router: "/index/effective" },
         { breadcrumbname: "无效客户", router: "/index/invalid" },

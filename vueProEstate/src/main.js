@@ -15,10 +15,10 @@ Vue.prototype.MD5 = md5
 Vue.prototype.$http = axios
 Vue.prototype.URL = httpinfo.httpurl
 Vue.prototype.HEAD = httpinfo.httphead
-Vue.prototype.url = 'http://120.27.21.136:2798/'
-    //Vue.prototype.HOST = '/api'
-    //Vue.prototype.webservicexml = httpinfo.webservicexml
-    //Vue.prototype.returndata = httpinfo.returndata
+Vue.prototype.Rooturl = 'http://120.27.21.136:2798/'
+Vue.prototype.HOST = '/api'
+Vue.prototype.webservicexml = httpinfo.webservicexml
+Vue.prototype.returndata = httpinfo.returndata
 
 Vue.config.productionTip = false
 

@@ -140,4 +140,8 @@ export default {
   width: 100%;
   margin: 30px auto;
 }
+.el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover{
+	cursor:pointer!important;
+	color:#409EFF!important;
+}
 </style>

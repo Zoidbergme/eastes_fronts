@@ -1,9 +1,9 @@
 <template>
 
-<el-form id="CheckTotalRule" ref="form" :model="form"  label-width="200px">
+<el-form id="RecomposeTotalRule" ref="form" :model="form"  label-width="200px">
 <el-row style="height:40px;padding-left:40px;background:#333333 ;">
 	<el-col :span="12">
-		<span class="check-basetitle">查看</span>
+		<span class="check-basetitle">修改</span>
 	</el-col>
 	<el-col :span="8" :push="4" >
 		 <el-form-item>
@@ -104,7 +104,7 @@
 
 <script>
 	export default{
-	name:'CheckTotalRule',
+	name:'RecomposeTotalRule',
 	data() {
      return {
       		form: {
@@ -148,10 +148,10 @@
 		margin-bottom:20px;
 	}
 	
-	#AddTotalRule el-date-picker {
+	#RecomposeTotalRule el-date-picker {
  		 width: 275px !important;
 	}
-	#AddTotalRule .check-basetitle{
+	#RecomposeTotalRule .check-basetitle{
 		height:40px;
 		line-height:40px;
 		color:#fff;

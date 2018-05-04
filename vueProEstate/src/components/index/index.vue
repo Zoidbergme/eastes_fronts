@@ -42,7 +42,6 @@ export default {
       this.$http
         .get("../../static/mockdata/menulist.json")
         .then(res => {
-          console.log(res.data);
           this.menulist = res.data;
         })
         .catch(res => {});
