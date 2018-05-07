@@ -62,7 +62,7 @@
     "menuname": "佣金管理",
     "menustate": "1",
     "menuico": "",
-    "menurouter": "",
+    "menurouter": "../index/CompanyCommission",
     "menutype": 2
 },
 {
