@@ -1,7 +1,7 @@
 <template>
 <div id="CheckPersonRule">
-<el-form id="AddTotalRule" ref="form" :model="form"   label-width="160px">
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">
+<el-form id="AddTotalRule" ref="form" :model="form" label-width="160px">
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
 		<span class="check-basetitle">查看全民经济人规则</span>
 	</el-col>

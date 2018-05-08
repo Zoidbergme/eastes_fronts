@@ -13,17 +13,17 @@
           </el-col>
           <el-col :span="5" :offset="1">
             <el-row>
-              <el-button type="primary" @click="seeImgVisible = true">预览</el-button>
+              <el-button type="primary" style="width:80px;" size="small" @click="seeImgVisible = true">预览</el-button>
               <el-dialog :visible.sync="seeImgVisible" width="90%">
                 <img :src="upImgVisibleUrl" alt="" class="seeImg">
               </el-dialog>
             </el-row>
             <el-row>
-              <el-button class="gen-btn" type="primary" @click="changeImgVisible = true">修改图片</el-button>
+              <el-button class="gen-btn" style="width:80px;" size="small" type="primary" @click="changeImgVisible = true">修改图片</el-button>
               <el-dialog title="新增:" :visible.sync="changeImgVisible">
                 <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
                   <el-form-item label="添加文件:">
-                    <el-upload action="" list-type="picture-card" :before-upload="beforeImgUpload">
+                    <el-upload action="" list-type="picture-card">
                       <i class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog :visible.sync="upImgVisible">
@@ -32,13 +32,13 @@
                   </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                  <el-button @click="changeImgVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="changeImgVisible = false">确 定</el-button>
+                  <el-button size="small" @click="changeImgVisible = false">取 消</el-button>
+                  <el-button type="primary" size="small" @click="changeImgVisible = false">确 定</el-button>
                 </span>
               </el-dialog>
             </el-row>
             <el-row>
-              <el-button type="primary">删除</el-button>
+              <el-button style="width:80px;" size="small" type="primary">删除</el-button>
             </el-row>
           </el-col>
         </el-row>
@@ -84,9 +84,9 @@
             <span class="gen-title">楼栋设置</span>
           </el-col>
           <el-col class="gen-lay-info">
-            <el-button type="primary" size="mini">一栋</el-button>
-            <el-button type="primary" size="mini">二栋</el-button>
-            <el-button type="primary" size="mini">三栋</el-button>
+            <el-button type="primary" @click="buildDetail($event)" id="27" size="mini">一栋</el-button>
+            <el-button type="primary" @click="buildDetail($event)" id="28" size="mini">二栋</el-button>
+            <el-button type="primary" @click="buildDetail($event)" id="29" size="mini">三栋</el-button>
           </el-col>
           <el-row class="gen-lay-list">
             <el-col :span="5">
@@ -94,41 +94,39 @@
             </el-col>
             <el-col :span="5" :offset="14">
               <el-button-group>
-                <el-button type="primary" size="mini" @click="newInfo()">查看</el-button>
-                <el-button type="primary" size="mini">新增</el-button>
-                <el-button type="primary" size="mini">修改</el-button>
-                <el-button type="primary" size="mini">删除</el-button>
+                <el-button type="primary" size="mini" @click="ToNewInfo">查看</el-button>
+                <el-button type="primary" @click="ToAddInfo" size="mini">新增</el-button>
+                <el-button type="primary" @click="ToNewInfo" size="mini">修改</el-button>
+                <el-button type="primary" @click="DeleteInfo" size="mini">删除</el-button>
               </el-button-group>
             </el-col>
-
           </el-row>
-
-          <el-table :data="Data" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" size='mini'>
-            <el-table-column type="selection" width="50">
+          <el-table :data="Data" border style="width: 100%"  @selection-change="selsChange" ref="multipleTable" tooltip-effect="dark" size='mini'>
+            <el-table-column type="selection" reserve-selection="" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="55">
             </el-table-column>
-            <el-table-column prop="name" label="名称">
+            <el-table-column prop="name" label="名称" width="85">
             </el-table-column>
-            <el-table-column prop="preSaleLicenseNumber" label="预售许可证编号">
+            <el-table-column prop="preSaleLicenseNumber" label="预售许可证编号" width="155">
             </el-table-column>
-            <el-table-column prop="issueTime" label="发证时间">
+            <el-table-column prop="issueTime" label="发证时间" width="90">
             </el-table-column>
-            <el-table-column prop="openWay" label="开盘方式">
+            <el-table-column prop="openWay" label="开盘方式" width="90">
             </el-table-column>
-            <el-table-column prop="openTime" label="开盘时间">
+            <el-table-column prop="openTime" label="开盘时间" width="90">
             </el-table-column>
-            <el-table-column prop="endTime" label="交房时间">
+            <el-table-column prop="endTime" label="交房时间" width="90">
             </el-table-column>
-            <el-table-column prop="units" label="单元数">
+            <el-table-column prop="units" label="单元数" width="80">
             </el-table-column>
-            <el-table-column prop="ladderRatio" label="梯户比">
+            <el-table-column prop="ladderRatio" label="梯户比" width="80">
             </el-table-column>
-            <el-table-column prop="households" label="总户数">
+            <el-table-column prop="households" label="总户数" width="80">
             </el-table-column>
-            <el-table-column prop="floorNumber" label="楼上层数">
+            <el-table-column prop="floorNumber" label="楼上层数" width="80">
             </el-table-column>
-            <el-table-column prop="downstairsNumber" label="楼下层数">
+            <el-table-column prop="downstairsNumber" label="楼下层数" width="80">
             </el-table-column>
           </el-table>
           <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange">
@@ -140,6 +138,7 @@
   </div>
 </template>
 <script>
+import {mapMutations} from 'vuex'
 export default {
   name: "generalLayout",
   data() {
@@ -153,8 +152,9 @@ export default {
       upImgVisible: false,
       seeImgVisible:false,
       ruleFormUplode: {},
-      upImgVisibleUrl: "/static/img/generalpic.jpg"
-    };
+      upImgVisibleUrl: "/static/img/generalpic.jpg",
+      sels:[]
+    }
   },
   created() {
     this.getgeneralLayoutlist();
@@ -164,7 +164,6 @@ export default {
     beforeImgUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
-
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }
@@ -193,7 +192,6 @@ export default {
       this.page();
     },
     page() {
-      console.log(this.tableData.length);
       for (
         let i = 0;
         i < Math.ceil(this.tableData.length / this.pageSize);
@@ -208,20 +206,61 @@ export default {
             arr.push(this.tableData[j]);
           }
         }
-
         this.alltablesize.push(arr);
       }
-
-      console.log(this.alltablesize);
       this.Data = this.alltablesize[0];
     },
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
     },
-    newInfo() {
-      this.$router.push({ path: "/index/checkInfo" });
+    buildDetail(e){
+    	let src=e.currentTarget;
+    	this.generalLayout(src.id);
+    	this.$router.push({path:"/index/BuildingDetail"})
     },
-    
+    ...mapMutations([
+    	 'generalLayout','addProId'
+    ]),
+    ToAddInfo(){
+    	 this.$router.push({ path: "/index/AddInfo" });
+    },
+    ToNewInfo(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addProId(sels[0].key);
+      	this.$router.push({path: '/index/checkInfo'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+      
+    },
+    selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
+    },
+    DeleteInfo(){
+    	let sels=this.sels;
+    	let url=this.Rooturl+'';
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addProId(sels[0].key);
+      	this.$http.get(url,{
+      		params:{
+      			
+      		}
+      	}).then(res=>{
+      		if(res.code==200){
+      			this.$message.success("删除成功");
+      		}
+      	})
+      }else{
+      	this.$message.error("请选择删除内容")
+      }
+    }
   }
 };
 </script>
@@ -230,15 +269,20 @@ export default {
   padding: 0px;
 }
 .geninfo {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
-  margin-top: -20px;
-  background-color: #dcdfe6;
+
+  background-color: #545c64;
 }
 .gen-title {
   display: block;
   margin-left: 20px;
+ 
+  font-size: 16px;
+}
+.el-header .gen-title{
+	color:#fff;
 }
 .gen-btn {
   margin: 10px 0px;
@@ -285,6 +329,9 @@ export default {
 
 .el-pagination {
   margin-top: 20px;
+}
+#generalLayout .el-button{
+	
 }
 </style>
 

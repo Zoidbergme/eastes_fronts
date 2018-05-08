@@ -1,6 +1,6 @@
 <template>
-	<div id="">
-		<el-row style="height:40px;padding-left:40px;background:#333333 ;">	
+	<div id="AddPersonVisitRule">
+		<el-row style="height:40px;padding-left:40px;background:#545c64 ;">	
 			<el-col :span="12">
 				<span class="check-basetitle">选择</span>
 			</el-col>
@@ -51,7 +51,7 @@
 		line-height:40px;
 		color:#fff;
 	}
-	.el-button{
+	#AddPersonDealRule .el-button{
 		margin-top:3px!important;
 	}
 </style>

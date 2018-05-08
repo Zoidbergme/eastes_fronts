@@ -5,7 +5,7 @@
         <span class="ckBeConfirmed-title">查看</span>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" size="small" round @click="back()">关闭</el-button>
+        <el-button type="primary" size="small"  @click="back()">关闭</el-button>
       </el-col>
     </el-row>
     <el-form :model="disRuleForminfo" ref="form" label-width="140px" size="small" class="cktInfo-form">
@@ -339,6 +339,8 @@
   </div>
 </template>
 <script>
+import {mapState} from 'vuex'
+
 export default {
   name: "cKDeal",
   data() {
@@ -453,6 +455,11 @@ export default {
   created() {
     this.getCkDealList();
   },
+  computed:{
+  	...mapState({
+  		 project_id:state=>state.dealed.project_id
+  	})
+  },
   methods: {
     getCkDealList() {
       for (let i = 0; i < 100; i++) {
@@ -497,19 +504,20 @@ export default {
 
 <style scoped>
 .Checkinfo {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
-  margin-top: -20px;
-  background-color: #dcdfe6;
+
+  background-color: #545c64;
+  color:#fff;
 }
 .ckBeConfirmed-title {
   display: block;
   margin-left: 20px;
 }
 .ck-state {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 10px;
   border: 1px solid #b3c0d1;
 }

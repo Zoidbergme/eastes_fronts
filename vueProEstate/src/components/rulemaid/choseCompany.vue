@@ -1,7 +1,7 @@
 <template>
 <div id="choseCompany">
 <el-form  :model="formInline" >
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">	
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">	
 	<el-col :span="12">
 		<span class="check-basetitle">选择公司</span>
 	</el-col>

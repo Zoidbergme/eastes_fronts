@@ -5,7 +5,7 @@
                 <span class="ckBeConfirmed-title">查看</span>
             </el-col>
             <el-col :span="2">
-                <el-button type="primary" round @click="back()">关闭</el-button>
+                <el-button type="primary" size="small" @click="back()">关闭</el-button>
             </el-col>
         </el-row>
         <el-row class="ck-state">
@@ -210,6 +210,7 @@
     </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default {
   name: "ckInvalid",
   data() {
@@ -257,28 +258,37 @@ export default {
       ]
     };
   },
+  computed:{
+  	...mapState({
+  		project_id:state=>state.invalid.project_id
+  	})
+  },
   methods: {
     back() {
       this.$router.push({ path: "/index/invalid" });
     }
+    
+  },
+  mounted(){
+  	console.log(this.project_id);
   }
 };
 </script>
 <style scoped>
 .Checkinfo {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height:40px;
   margin-bottom: 20px;
-  margin-top: -20px;
-  background-color: #dcdfe6;
+  color:#fff;
+  background-color: #545c64;
 }
 .ckBeConfirmed-title {
   display: block;
   margin-left: 20px;
 }
 .ck-state {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 10px;
   border: 1px solid #b3c0d1;
 }

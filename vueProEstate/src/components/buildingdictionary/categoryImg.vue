@@ -141,9 +141,9 @@ export default {
     // 云算接口
     this.$http
       .get("http://39.108.60.120:10009/ysservice.ashx?action=getxm")
-       then(res => {
-         console.log(JSON.pares(decodeURI(res.data)));
-       });
+        .then(res => {
+           console.log(JSON.parse(decodeURI(res.data)));
+        });
     // 配置信息
     // this.$http.get("/api/config").then(res => {
     //   console.log("+++++++++++++++++++++++++++++++++++");
@@ -357,9 +357,9 @@ export default {
 </script>
 <style scoped>
 .categoryImginfo {
-  height: 50px;
-  line-height: 50px;
-  margin-top: -20px;
+  height: 40px;
+  line-height: 40px;
+
   background-color: #545c64;
 }
 .img-basetitle {
@@ -373,7 +373,9 @@ export default {
 .el-button-group {
   margin-bottom: 5px;
 }
-
+#categoryImg .el-button{
+	margin-top:3px!important;
+} 
 .el-dialog__title {
   color: #fff !important;
 }

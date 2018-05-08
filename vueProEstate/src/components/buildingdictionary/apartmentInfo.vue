@@ -99,7 +99,6 @@ export default {
       this.page();
     },
     page() {
-      console.log(this.tableData.length);
       for (
         let i = 0;
         i < Math.ceil(this.tableData.length / this.pageSize);
@@ -117,8 +116,6 @@ export default {
 
         this.alltablesize.push(arr);
       }
-
-      console.log(this.alltablesize);
       this.Data = this.alltablesize[0];
     },
     handleCurrentChange(val) {
@@ -149,6 +146,9 @@ export default {
 .textImgType {
   width: 80%;
   height: 25px;
+}
+#apartmentInfo .el-main{
+	padding-top:20px!important;
 }
 </style>
 

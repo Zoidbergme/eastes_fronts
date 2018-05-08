@@ -5,7 +5,7 @@
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item v-for="(name,index) in breadcrumbName" v-bind:key="name.id" :to="name.router">
                         <i class="el-icon-message" v-if="index===0"></i>
-                        <span @click="addColor($event)" v-bind:style="[{fontWeight:index===0?'700':'400'}]">{{name.breadcrumbname}}</span>
+                        <span @click="addColor($event)" style="cursor: pointer;" v-bind:style="[{fontWeight:src==name.breadcrumbname?'700':'400'}]">{{name.breadcrumbname}}</span>
                     </el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>
@@ -14,22 +14,31 @@
 </template>
 
 <script>
+import {mapState,mapMutations} from 'vuex'
+
 export default {
   name: "breadcrumb",
   data(){
   	return{
-  		src:''
+  		
   	}
   },
   props: {
     breadcrumbName: Array
   },
+  computed:{
+  	...mapState({
+  		src:state=>state.allCustomer.ele
+  	})
+  },
   methods:{
   	addColor(e){
-     var src=e.currentTarget;
-     this.src=src;
-     
-    }
+     let src=e.currentTarget;
+     this.change(src.innerHTML);
+   },
+   ...mapMutations([
+   		'change'
+   ])
   },
   mounted(){
   	
@@ -45,6 +54,7 @@ export default {
 }
 .el-breadcrumb {
   line-height: 30px;
+  padding-left: 20px;
 }
 .el-breadcrumb__inner span {
   font-weight: 700;

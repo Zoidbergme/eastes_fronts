@@ -1,7 +1,7 @@
 <template>
 
 <el-form id="RecomposeTotalRule" ref="form" :model="form"  label-width="200px">
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
 		<span class="check-basetitle">修改</span>
 	</el-col>

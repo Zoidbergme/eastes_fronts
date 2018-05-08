@@ -2,11 +2,11 @@
     <div id="proAnaly">
         <el-row class="proAnalyinfo" type="flex" justify="space-between">
             <el-col :span="4">
-                <span class="proAnaly-title">查看</span>
+                <span class="proAnaly-title">查看项目分析</span>
             </el-col>
             <el-col :span="4">
-                <el-button type="primary" round>预览</el-button>
-                <el-button type="primary" round>保存</el-button>
+                <el-button type="primary" size="small" >预览</el-button>
+                <el-button  size="small" >保存</el-button>
             </el-col>
         </el-row>
         <el-form  :model="proAnalyForm" label-width="80px" class="analyForm">
@@ -42,16 +42,18 @@ export default {
 </script>
 <style scoped>
 .proAnalyinfo {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
-  margin-top: -20px;
-  background-color: #dcdfe6;
+
+  background-color: #545c64;
+  color:#fff;
+ 
 }
 .proAnaly-title {
   display: block;
   margin-left: 20px;
-  font-size: 18px;
+  font-size: 16px;
 }
 .analyForm {
     width: 750px;

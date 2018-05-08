@@ -4,7 +4,15 @@ import Router from 'vue-router'
 import login from '@/components/user/login'
 import forgetPassword from '@/components/user/forgetPassword'
 import projectInfo from '@/components/buildingdictionary/projectinfo'
+import ChangeDynamicList from '@/components/buildingdictionary/ChangeDynamicList'
+import BuildingDetail from '@/components/buildingdictionary/BuildingDetail'
+import AddDynamicList from '@/components/buildingdictionary/AddDynamicList'
+import palnPho from '@/components/buildingdictionary/palnPho'
 import generalLayout from '@/components/buildingdictionary/generalLayout'
+import AddInfo  from '@/components/buildingdictionary/AddInfo'
+import effectPic  from '@/components/buildingdictionary/effectPic'
+import thressDPic from '@/components/buildingdictionary/thressDPic'
+import LivePic  from '@/components/buildingdictionary/LivePic'
 import checkInfo from '@/components/buildingdictionary/checkInfo'
 import projectImg from '@/components/buildingdictionary/projectImg'
 import categoryImg from '@/components/buildingdictionary/categoryImg'
@@ -42,6 +50,9 @@ import AddPersonVisitRule from '@/components/rulemaid/AddPersonVisitRule'
 import CheckTotalRule from '@/components/rulemaid/CheckTotalRule'
 import EndTotalRule from '@/components/rulemaid/EndTotalRule'
 import RecomposeTotalRule from '@/components/rulemaid/RecomposeTotalRule'
+import PersonCommission from '@/components/CommissionManagement/PersonCommission'
+import CompanyCommission from '@/components/CommissionManagement/CompanyCommission'
+import CkAndCgComDealRule from '@/components/rulemaid/CkAndCgComDealRule'
 
 Vue.use(Router)
  
@@ -103,7 +114,34 @@ export default new Router({
             component: apartmentInfo
         }, {
             path: '/index/checkApartment',
-            component: checkApartment
+            component: checkApartment,
+            name:'checkApartment',
+            children:[
+            	{
+            		 path: '/',
+           			 redirect: '/index/palnPho'
+            	},
+            	{
+            		path: '/index/palnPho',
+           			name:'palnPho',
+           			component:palnPho
+            	},
+            	{
+            		path: '/index/effectPic',
+           			name:'effectPic',
+           			component:effectPic
+            	},
+            	{
+            		path: '/index/thressDPic',
+           			name:'thressDPic',
+           			component:thressDPic
+            	},
+            	{
+            		path: '/index/LivePic',
+           			name:'LivePic',
+           			component:LivePic
+            	}
+            ]
         }, {
             path: '/index/proAnaly',
             component: proAnaly
@@ -191,8 +229,39 @@ export default new Router({
         {
         	path:'/index/RecomposeTotalRule',
         	component:RecomposeTotalRule 
+        },
+        {
+        	path:'/index/PersonCommission',
+        	component:PersonCommission
+        },
+        {
+        	path:'/index/CompanyCommission',
+        	component:CompanyCommission
+        
+        },
+        {
+        	path:'/index/AddDynamicList',
+        	component:AddDynamicList
+        	
+        },
+        {
+        	path:'/index/ChangeDynamicList',
+        	component: ChangeDynamicList
+        },
+        {
+        	path:'/index/CkAndCgComDealRule',
+        	component: CkAndCgComDealRule
+        },
+        {
+        	path:'/index/BuildingDetail',
+        	component:BuildingDetail
+        },
+        {
+        	path:'/index/AddInfo',
+        	component:AddInfo,
+        	name:'AddInfo'
         }
-       
+        
         ]
     }, ]
 })

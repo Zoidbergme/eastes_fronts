@@ -2,11 +2,11 @@
   <div id="checkInfo">
     <el-row class="checkInfo-title" type="flex" justify="space-between">
       <el-col :span="5">
-        <span class="check-basetitle">查看</span>
+        <span class="check-basetitle"  >查看楼栋信息</span>
       </el-col>
       <el-col :span="4">
-        <el-button type="primary" round>确定</el-button>
-        <el-button type="primary" round>取消</el-button>
+        <el-button type="primary" size="small" >确定</el-button>
+        <el-button  size="small" @click="back" >取消</el-button>
       </el-col>
     </el-row>
     <el-form :model="ruleFormcheck" ref="form" label-width="100px" size="small" class="checkInfo-form">
@@ -19,8 +19,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="绑定楼栋:">
-            <el-input v-model="ruleFormcheck.building">
-            </el-input>
+         				<el-select v-model="ruleFormcheck.building">
+         					 <el-option label="1栋" :value="27"></el-option>
+         					 <el-option label="2栋" :value="28"></el-option>
+         				</el-select>  
           </el-form-item>
         </el-col>
       </el-row>
@@ -89,8 +91,16 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="梯户比:">
-            <el-input v-model="ruleFormcheck.ladderRatio">
-            </el-input>
+            <el-select class="floor" v-model="ruleFormcheck.floorId">
+            		<el-option label="1" :value="1"></el-option>
+         				<el-option label="2" :value="2"></el-option>
+            </el-select>
+            <font>梯</font>
+            <el-select class="floor" v-model="ruleFormcheck.houseId">
+            		<el-option label="1" :value="1"></el-option>
+         				<el-option label="2" :value="2"></el-option>
+            </el-select>
+            <font>户</font>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -104,13 +114,14 @@
   </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default {
   name: "checkInfo",
   data() {
     return {
       ruleFormcheck: {
         name: "",
-        building: "",
+        building: "1栋",
         permit: "",
         issueTime: "",
         openWay: "",
@@ -120,18 +131,57 @@ export default {
         floorNumber: "",
         downstairsNumber: "",
         ladderRatio: "",
-        households: ""
+        households: "",
+        houseId:1,
+       	floorId:1
       }
     }
   },
   created(){
-  	
+ 			//load();等待接口，未对接
+  },
+  computed:{
+ 			...mapState({
+ 			project_id:state=>state.beConfirmed.sels
+ 		})
+  },
+  methods:{
+  	 back(){
+  	 		this.$router.push({path:'/index/generalLayout'});
+  	 },
+  	 load(){//修改差接口，未对接
+  	 	let url=this.Rooturl+""
+  	 	 	this.$http.get(url,{
+  	 	 		params:{
+  	 	 			project_id:this.project_id
+  	 	 		}
+  	 	 	}).then(res=>{this.ruleFormcheck=res.data})
+  	 },
+  	 add(){//修改差接口，未对接
+  	 	 	let url=this.Rooturl+""
+  	 	 	this.$http.get(url,{
+  	 	 		params:{
+  	 	 			project_id:this.project_id,
+  	 	 			data:ruleFormcheck
+  	 	 		}
+  	 	 	}).then(res=>{
+  	 	 		if(res.code==200){
+  	 	 			this.$router.push({path:'/index/generalLayout'});
+  	 	 		}else{
+  	 	 			this.$message.error("网络错误")
+  	 	 		}
+  	 	 	})
+  	 }
   }
-};
+}
 </script>
 <style scoped>
-#checkInfo el-date-picker {
+#checkInfo .el-date-picker ,.el-select{
   width: 275px !important;
+  text-align: center;
+}
+.el-option{
+	 text-align: center!important;
 }
 .checkInfo-form {
   -webkit-border-radius: 5px;
@@ -146,15 +196,18 @@ export default {
   width: 100% !important;
 }
 .checkInfo-title {
-  height: 50px;
-  line-height: 50px;
-  margin-top: -20px;
+  height: 40px;
+  line-height: 40px;
+
   background-color: #545c64;
 }
 .check-basetitle {
   display: block;
   margin-left: 20px;
   color: #fff;
+}
+.floor{
+	width: 115px !important;
 }
 </style>
 

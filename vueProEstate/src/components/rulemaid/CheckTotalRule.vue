@@ -1,9 +1,9 @@
 <template>
 
 <el-form id="CheckTotalRule" ref="form" :model="form"  label-width="200px">
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
-		<span class="check-basetitle">查看</span>
+		<span class="check-basetitle">查看基本规则</span>
 	</el-col>
 	<el-col :span="8" :push="4" >
 		 <el-form-item>
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-	export default{
+export default{
 	name:'CheckTotalRule',
 	data() {
      return {
@@ -131,12 +131,17 @@
       },
       back(){
       	 this.$router.push({ path: "/index/CommissioCheck" });
+      },
+      test(){
+      	this.$http.get("/api")
+          .then(res=>console.log(res.data));
       }
+     
    	},
 	created(){
-			
-		}
+			this.test();
 	}
+}
 </script>
 	
 <style>
@@ -165,5 +170,11 @@
 	}
 	.Commissio_title{
 		line-height:32px;
+	}
+	.check-basetitle{
+		color:#fff;
+		height:40px;
+		line-height:40px;
+		font-size: 16px;
 	}
 </style>

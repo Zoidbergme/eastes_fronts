@@ -4,14 +4,14 @@
             <el-header>
                 <el-row class="CheckApartinfo" type="flex" justify="space-between">
                     <el-col :span="5">
-                        <span class="CheckApart-title">查看</span>
+                        <span class="CheckApart-title">查看户型信息</span>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="primary" round>关闭</el-button>
+                        <el-button type="primary" @click="back" size="small" >关闭</el-button>
                     </el-col>
                 </el-row>
             </el-header>
-            <!-- <el-main class="check-con">  子组件报错先注释掉
+            <el-main class="check-con">  
                 <el-form :model="ruleFormcheckApart" ref="form" label-width="100px" class="checkInfo-form">
                     <el-form-item label="户型编号:">
                         <el-input v-model="ruleFormcheckApart.houseNum">
@@ -46,66 +46,20 @@
                         </el-input>
                     </el-form-item>
                 </el-form>
-                <el-row class="apart-lay-list">
-                    <el-col :span="4">
-                        <el-checkbox v-model="checkAlls" @change="handleCheckAllChange" class="apart-title">平面图</el-checkbox>
-                    </el-col>
-                    <el-col :span="6" :offset="14">
-                        <el-button-group>
-                            <el-button type="primary" size="mini">预览</el-button>
-                            <el-button type="primary" size="mini">查看</el-button>
-                            <el-button type="primary" size="mini" @click="addImgVisible = true">新增</el-button>
-                            <el-button type="primary" size="mini">修改</el-button>
-                            <el-button type="primary" size="mini">删除</el-button>
-                        </el-button-group>
-                    </el-col>
-                </el-row>
-                <el-table :data="Data" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table">
-                    <el-table-column type="selection" label="ALL" width="50" prop="chk">
-                    </el-table-column>
-                    <el-table-column prop="pictureOrder" label="图片顺序">
-                    </el-table-column>
-                    <el-table-column prop="imgPath" label="图片">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.imgPath" alt="" class="baseImg">
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="remarks" label="备注">
-                    </el-table-column>
-                    <el-table-column prop="update" label="更新人员">
-                    </el-table-column>
-                    <el-table-column prop="ordering" label="调序">
-                        <template scope="scope">
-                            <i class="el-icon-upload2" @click="order(scope.row.pictureOrder)"></i>
-                            <i class="el-icon-download"></i>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="cate-page">
-                </el-pagination>
-            </el-main> -->
+             
+             	<el-row class="nav">	
+             		<font>选择户型图类型：</font>
+                	<router-link :to="{name:'palnPho'}">平面图</router-link>
+                	<router-link :to="{name:'thressDPic'}">3D图</router-link>
+                	<router-link :to="{name:'LivePic'}">实景图</router-link>
+                	<router-link :to="{name:'effectPic'}">效果图</router-link>
+                </el-row>  
+       
+                <router-view></router-view>   
+            </el-main>
         </el-container>
         <!-- 新增图片弹窗 -->
-        <el-dialog title="新增" :visible.sync="addImgVisible">
-            <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
-                <el-form-item label="添加文件:">
-                    <el-upload action="/api/project/file/upload" :data="{file_name:'img'}" name="img" list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="upImgVisible">
-                        <img width="100%" :src="upImgVisibleUrl" alt="">
-                    </el-dialog>
-                </el-form-item>
-                <el-form-item label="备注:">
-                    <el-input type="textarea" autosize placeholder="请输入内容" v-model="ruleFormUplode.remarks">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addImgVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addImgVisible = false">确 定</el-button>
-            </span>
-        </el-dialog>
+        
     </div>
 </template>
 <script>
@@ -133,15 +87,17 @@ export default {
       isIndeterminate: false,
       upImgVisibleUrl: "",
       upImgVisible: false,
-      addImgVisible: false
-    };
+      addImgVisible: false,
+      checkImgVisible:false,
+      changeImgVisible:false
+    }
   },
   created() {
     this.getCheckApartmentList();
   },
   methods: {
     getCheckApartmentList() {
-      for (let i = 1; i < 100; i++) {
+      for (let i = 1; i <20; i++) {
         this.tableData.push({
           chk: false,
           pictureOrder: i,
@@ -186,7 +142,6 @@ export default {
     beforeImgUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
-
       if (!isJPG) {
         this.$message.error("上传头像图片只能是 JPG 格式!");
       }
@@ -199,19 +154,23 @@ export default {
     addImgSuccess(res, file) {
       let imgUrl = res.data;
       seeImgVisible = imgUrl;
+    },
+    back(){
+    	this.$router.push({path:"/index/apartmentInfo"});
     }
   }
 };
 </script>
 <style scoped>
-.CheckApartinfo {
-  height: 50px;
-  line-height: 50px;
+	
+#checkApartment .CheckApartinfo {
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
-  margin-top: -20px;
-  background-color: #dcdfe6;
+  color:#fff;
+  background-color: #545c64;
 }
-.checkInfo-form {
+#checkApartment .checkInfo-form {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   -moz-border-radius: 5px;
@@ -220,29 +179,29 @@ export default {
   width: 750px;
   padding: 0px 35px 10px 35px;
 }
-.el-main {
+#checkApartment .el-main {
   padding: 0;
 }
-.apart-title {
+#checkApartment .apart-title {
   display: block;
   margin-left: 20px;
 }
-.CheckApart-title {
+#checkApartment .CheckApart-title {
   display: block;
   margin-left: 20px;
 }
-.check-con {
-  margin: -30px 20px 0;
+#checkApartment .check-con {
+
   border: 1px solid #d3dce6;
 }
-.apart-lay-list {
+#checkApartment .apart-lay-list {
   line-height: 50px;
   height: 50px;
   margin-bottom: 20px;
   border-top: 1px solid #d3dce6;
   border-bottom: 1px solid #d3dce6;
 }
-.baseImg {
+#checkApartment .baseImg {
   width: 50px;
 }
 .el-icon-upload2,
@@ -250,6 +209,26 @@ export default {
   font-size: 20px;
   color: #409eff;
   cursor: pointer;
+}
+#checkApartment .el-header{
+	padding: 0px!important;
+}
+#checkApartment .nav{
+	height:40px;
+	box-sizing: border-box;
+	padding-left:20px;
+}
+#checkApartment .nav  a{
+	margin-left:10px;
+	padding:3px 9px;
+	border:1px solid #ddd;
+	color:#409EFF;
+	background: #fff;
+}
+#checkApartment .nav  a:hover{
+	color:#fff;
+	background: #409EFF;
+	
 }
 </style>
 

@@ -1,11 +1,11 @@
 <template>
 <div id="CheckCompanyRule">	
 <el-form id="AddTotalRule" ref="form" :model="form"  label-width="160px">
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
 		<span class="check-basetitle">查看公司规则</span>
 	</el-col>
-	<el-col :span="8" :push="4" >
+	<el-col :span="7" :push="5" >
 		 <el-form-item>
     		<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
     		<el-button size="small" @click="back" >取消</el-button>
@@ -252,6 +252,7 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex'
 export default {
  	 name: "CheckCompanyRule",
  	 data(){
@@ -332,7 +333,27 @@ export default {
       },
       addCompanydealRule(){
       	this.$router.push({ path: "/index/SetRule" });
-      }
+      },
+      check(){
+        let sels=this.sels;
+        if(sels.length>1){
+      	  this.$message.error("查看只能单选")
+        }else if(sels.length==1){
+      	  this.addComRule(sels[0].key);
+      	  this.$router.push({path: '/index/ckBeConfirmed'})
+        }else{
+      	  this.$message.error("请选择查看内容")
+        }
+      
+      },
+      selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
+      },
+    ...mapMutations([
+    	'addsels'
+      ])
  	},
  	created(){
  		this.getApartmentInfoImgList();	
@@ -366,5 +387,8 @@ export default {
 	}
 	.Commissio_title{
 		line-height:32px;
+	}
+	#CheckCompanyRule .el-form{
+		margin-top:0px;
 	}
 </style>

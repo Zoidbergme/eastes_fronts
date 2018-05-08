@@ -13,8 +13,8 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" border @selection-change="selsChange" ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column reserve-selection="" type="selection" label="ALL" width="50">
             </el-table-column>
            <el-table-column prop="key" label="序号">
             </el-table-column>
@@ -46,7 +46,9 @@
     </div>
 </template>
 <script>
-import breadcrumb from "@/components/shared/breadcrumb";
+import breadcrumb from "@/components/shared/breadcrumb"
+import {mapMutations} from 'vuex'
+
 export default {
   name: "effective",
   components: { breadcrumb },
@@ -62,8 +64,9 @@ export default {
        Data: [],
       tableData: [],
       pageSize: 6,
-      alltablesize: []
-    };
+      alltablesize: [],
+      sels:[]
+    }
   },
   created() {
     this.getApartmentInfoImgList();
@@ -112,9 +115,27 @@ export default {
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
     },
-    check() {
-      this.$router.push({path: '/index/ckEffective'})
-    }
+    check(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addEffectiveId(sels[0].key);
+      	this.$router.push({path: '/index/ckEffective'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+      
+    },
+    selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
+    },
+    ...mapMutations([
+    	'addEffectiveId'
+    ])
+   
   }
 };
 </script>

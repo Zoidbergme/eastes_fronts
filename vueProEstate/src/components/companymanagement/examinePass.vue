@@ -91,7 +91,6 @@ export default {
       }
       this.page()
     },
-  
     page() {
       console.log(this.tableData.length);
       for (

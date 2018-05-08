@@ -1,9 +1,9 @@
 <template>
 
 <el-form id="AddTotalRule" ref="form" :model="form"  label-width="200px">
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
-		<span class="check-basetitle">新增</span>
+		<span class="check-basetitle">新增基本规则</span>
 	</el-col>
 	<el-col :span="8" :push="4" >
 		 <el-form-item>

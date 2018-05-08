@@ -2,11 +2,11 @@
     <div id="ckBeConfirmed">
         <el-row class="Checkinfo" type="flex" justify="space-between">
             <el-col :span="5">
-                <span class="ckBeConfirmed-title">查看</span>
+                <span class="ckBeConfirmed-title">查看待确认客户</span>
             </el-col>
             <el-col :span="4">
-            	<el-button size="small" type="primary" round @click="onSubmit">确认</el-button>
-                <el-button size="small" round @click="back()">关闭</el-button>
+            	<el-button size="small" type="primary"  @click="onSubmit">确认</el-button>
+                <el-button size="small"  @click="back()">关闭</el-button>
             </el-col>
         </el-row>
         <el-row class="ck-state">
@@ -263,6 +263,7 @@
     </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default {
   name: "ckBeConfirmed",
   data() {
@@ -306,30 +307,51 @@ export default {
       disabled: true
     };
   },
+  computed:{
+ 	...mapState({
+ 		project_id:state=>state.beConfirmed.sels
+ 	})
+  },
   methods: {
-    back() {
+    back(){
       this.$router.push({ path: "/index/beConfirmed" });
     },
     onSubmit(){
-    	alert("提交");
-    	this.$http.get("",
-    		ckRuleForminfo
-    	)
-    	.then(function(res){
-    		
+    	let url=this.Rooturl+"'project/client/waitConfirmed";
+    	this.$http.get(url,
+    		this.ckRuleForminfo
+    	).then(res=>{
+    		if(res.code==200){
+    			this.$message.success("提交");
+    		}else{
+    			this.$message.error("提交失败");
+    		}
     	});
     	
+    },
+    getData(){
+    	let url=this.Rooturl+"project/client/waitConfirmedDetail";
+    	console.log(url);
+  		this.$http.get(url,{client_id:this.project_id})
+  	 	   .then(res=>{console.log(res)})
     }
+  },
+  mounted(){
+  	console.log(this.project_id);
+  },
+  created(){
+  	this.getData();
   }
+ 
 };
 </script>
 <style scoped>
 .Checkinfo {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
-  margin-top: -20px;
-  background-color: #dcdfe6;
+  color:#fff;
+  background-color: #545c64;
 }
 .ckBeConfirmed-title {
   display: block;

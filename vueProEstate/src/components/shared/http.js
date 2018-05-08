@@ -35,7 +35,7 @@ const md5 = (data) => {
 
 export default {
     httphead,
-    httpurl
-    //webservicexml,
-    //returndata
+    httpurl,
+    webservicexml,
+    returndata
 }

@@ -1,6 +1,6 @@
 <template>
 <div id="SetRule">
-<el-row style="height:40px;padding-left:40px;background:#333333 ;">	
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;">	
 	<el-col :span="12">
 		<span class="check-basetitle">设置公司</span>
 	</el-col>
@@ -196,7 +196,7 @@
 		line-height:40px;
 		color:#fff;
 	}
-	.el-button{
+	#SetRule .el-button{
 		margin-top:3px!important;
 	}
 </style>

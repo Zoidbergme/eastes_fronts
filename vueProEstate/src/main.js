@@ -1,10 +1,12 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import httpinfo from '@/components/shared/http.js'
+import store from './store'
 import md5 from 'js-md5'; //导入md5加密
 // import SIdentify from "./components/shared/identify.vue";
 // Vue.use(SIdentify)
@@ -26,6 +28,7 @@ Vue.config.productionTip = false
 new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
     template: '<App/>'
 })

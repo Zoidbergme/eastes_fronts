@@ -13,8 +13,8 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="50">
             </el-table-column>
@@ -45,6 +45,7 @@
 </template>
 <script>
 import breadcrumb from "@/components/shared/breadcrumb";
+import {mapMutations} from 'vuex'
 export default {
   name: "beConfirmed",
   components: { breadcrumb },
@@ -57,14 +58,25 @@ export default {
         { breadcrumbname: "无效客户", router: "/index/invalid" },
         { breadcrumbname: "已成交客户", router: "/index/dealed" }
       ],
-       Data: [],
+      Data: [],
       tableData: [],
       pageSize: 6,
-      alltablesize: []
-    };
+      alltablesize: [],
+      sels:[],
+      rules: {
+         name: [
+             { required: true, message: '请输入活动名称', trigger: 'blur' },
+             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+         ],
+         region: [
+             { required: true, message: '请选择活动区域', trigger: 'change' }
+         ]
+       }
+     }
   },
   created() {
     this.getApartmentInfoImgList();
+    this.getData();
   },
   methods: {
     getApartmentInfoImgList() {
@@ -86,7 +98,6 @@ export default {
       this.page();
     },
     page() {
-      console.log(this.tableData.length);
       for (
         let i = 0;
         i < Math.ceil(this.tableData.length / this.pageSize);
@@ -110,7 +121,30 @@ export default {
       this.Data = this.alltablesize[val - 1];
     },
     check(){
-      this.$router.push({path: '/index/ckBeConfirmed'})
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addsels(sels[0].key);
+      	this.$router.push({path: '/index/ckBeConfirmed'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+      
+    },
+    selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
+    },
+    ...mapMutations([
+    	'addsels'
+    ]),
+    getData(){
+    	let url=this.Rooturl+"project/client/waitConfirmedDetail";
+    	console.log(url);
+    	this.$http.get(url,{params:{client_id:1}})
+    	 .then(res=>{console.log(res)});
     }
   }
 };

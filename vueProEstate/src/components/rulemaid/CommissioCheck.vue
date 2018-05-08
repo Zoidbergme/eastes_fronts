@@ -20,7 +20,10 @@
             </el-col>
         	</el-row>
 			<el-table :data="ruleData" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-                <el-table-column type="selection" label="ALL" width="50">
+                <el-table-column prop='rule_id'  width="50">
+                	<template slot-scope="scope">
+     					<input type="checkbox" :checked="checked" @click="showThis($event)" :value="id"></input>
+      			 	</template>
                 </el-table-column>
                 <el-table-column prop="rule_id" label="序号" width="60">
                 </el-table-column>
@@ -138,7 +141,9 @@
 				ruleData:[],
 				introData:[],
 				dellData:[],
-				visitedData:[]
+				visitedData:[],
+				checked:false,
+				id:2
 			}	
 		},
 		created(){
@@ -185,6 +190,13 @@
 				 	this.ruleData=res.data.data.data;
 				 	console.log(this.ruleData);
 				 })
+			},
+			showThis(e){
+				let src=e.currentTarget;
+				this.checked=false;
+				console.log(src.checked);
+
+				console.log(e.value);
 			}
 		}
 		
@@ -206,11 +218,12 @@
 		width:100%;
 		text-align: left;
 		color:#fff;
-		background: #797979;
+		background: #545c64;
 		height:40px;
 		line-height: 40px;
 		font-weight:500;
 		padding-left:20px;
 		font-size: 16px;
+		margin:0px;
 	}
 </style>

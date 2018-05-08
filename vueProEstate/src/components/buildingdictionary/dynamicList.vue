@@ -7,24 +7,22 @@
             <el-col :span="8">
                 <el-button-group>
                     <el-button type="primary" size="small">高级搜索</el-button>
-                    <el-button type="primary" size="small">预览</el-button>
+             
                     <el-button type="primary" size="small" @click="previewVisible = true">查看</el-button>
-                    <el-button type="primary" size="small" @click="addDynamicVisible = true">新增</el-button>
-                    <el-button type="primary" size="small">修改</el-button>
+                    <el-button type="primary" size="small" @click="addDynamic">新增</el-button>
+                    <el-button type="primary" size="small" @click="change">修改</el-button>
                     <el-button type="primary" size="small">删除</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" @selection-change="selsChange"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserve-selection='' label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号">
             </el-table-column>
             <el-table-column prop="dynamicTitle" label="动态标题">
             </el-table-column>
-            <el-table-column prop="contain" label="发布内容">
-            </el-table-column>
-            <el-table-column prop="areaRange" label="产权面积范围">
+            <el-table-column prop="contain" label="简述">
             </el-table-column>
             <el-table-column prop="releasePeople" label="发布人">
             </el-table-column>
@@ -65,44 +63,18 @@
             </span>
         </el-dialog>
         <!-- 新增弹窗 -->
-        <el-dialog title="添加" :visible.sync="addDynamicVisible" class="addDialog">
-            <el-row class="dynamicTitle">
-                <span class="addTitle">添加动态</span>
-            </el-row>
-            <el-form ref="form" :model="ruleFormAdd" label-width="100px" size="small" class="dynamicForm">
-                <el-form-item label="标题:">
-                    <el-input placeholder="请输入内容" v-model="ruleFormAdd.title">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="内容:">
-                    <el-input type="textarea" autosize placeholder="请输入内容" v-model="ruleFormAdd.contain">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="图片:">
-                    <el-upload action="" list-type="picture-card" :before-upload="beforeImgUpload">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="upImgVisible">
-                        <img width="100%" :src="upImgVisibleUrl" alt="">
-                    </el-dialog>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="addDynamicVisible = false">预 览</el-button>
-                <el-button type="primary" @click="addDynamicVisible = false">确 定</el-button>
-                <el-button @click="addDynamicVisible = false">关 闭</el-button>
-            </span>
-        </el-dialog>
+        
     </div>
 </template>
 <script>
 import breadcrumb from "@/components/shared/breadcrumb";
+import  {mapMutations} from 'vuex'
 export default {
   name: "dynamicList",
   components: { breadcrumb },
   data() {
     return {
-      breadcrumbName: [{ breadcrumbname: "户型信息", router: "" }],
+      breadcrumbName: [{ breadcrumbname: "动态列表", router: "" }],
       Data: [],
       tableData: [],
       pageSize: 5,
@@ -121,8 +93,9 @@ export default {
       },
       upImgVisible:false,
       upImgVisibleUrl:"",
-      imgUrl: "/static/img/generalpic.jpg"
-    };
+      imgUrl: "/static/img/generalpic.jpg",
+      sels:[]
+    }
   },
   created() {
     this.getdynamicList();
@@ -156,7 +129,6 @@ export default {
             arr.push(this.tableData[j]);
           }
         }
-
         this.alltablesize.push(arr);
       }
       this.Data = this.alltablesize[0];
@@ -176,7 +148,31 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    addDynamic(){
+    	this.$router.push({path:'/index/AddDynamicList'})
+    },
+    change(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addDynamicList(sels[0].key);
+      	 this.$router.push({path: '/index/ChangeDynamicList'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+    
+    },
+    ...mapMutations([
+    	'addDynamicList'
+    ]),
+    selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
     }
+    
   }
 };
 </script>
@@ -213,8 +209,8 @@ export default {
 .dynamicTitle {
   margin-bottom: 30px;
   font-size: 18px;
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   border-bottom: 1px solid #b3c0d1;
 }
 .addTitle {

@@ -73,7 +73,7 @@ export default {
   methods: {
     // 项目图片列表详情
     getProjectImgList() {
-      this.$http.get('/api/project/img/getNum').then(res=>{
+      this.$http.get('api/project/img/getNum').then(res=>{
         console.log("+++++++++++++++++++++++++++++++++++++++")
         this.tableData=res.data.data;
         this.page();

@@ -73,7 +73,16 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  padding: 20px 0 20px 0 !important;
+  padding: 0px 0 20px 0 !important;
+}
+.el-form{
+	margin-top:0px!important;
+}
+.examine-title,#projectImg,#apartmentInfo,#dynamicList,#allCustomer,#beConfirmed,#effective,#invalid,#dealed{
+	padding-top:10px!important;
+}
+.el-breadcrumb{
+	padding-left:10px!important;
 }
 </style>
 

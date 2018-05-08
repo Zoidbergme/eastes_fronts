@@ -1,3 +1,4 @@
+
 <template>
   <div id="projectInfo">
     <el-row class="buildbaseinfo" type="flex" justify="space-between">
@@ -5,7 +6,7 @@
         <span class="pro-basetitle">项目基础信息</span>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" round @click="submit()">保存</el-button>
+        <el-button type="primary" size="small"  @click="submit()">保存</el-button>
       </el-col>
     </el-row>
     <el-col class="buildinfo">
@@ -70,7 +71,7 @@
  <el-row>   
  	  <el-col :span="12">
       <el-form-item label="项目主图">
-        <el-upload action="" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+        <el-upload action="" list-type="picture-card"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
         <el-dialog :visible.sync="proVisible">
@@ -95,12 +96,7 @@
     <el-form ref="form" :model="ruleFormbuild" label-width="100px" size="small" class="projectInfo-form">
       <el-form-item label="物业类型:">
         <el-checkbox-group v-model="ruleFormbuild.procheckList">
-          <el-checkbox :label="59">住宅</el-checkbox>
-          <el-checkbox :label="60">公寓</el-checkbox>
-          <el-checkbox :label="61">别墅</el-checkbox>
-          <el-checkbox :label="62">商铺</el-checkbox>
-          <el-checkbox :label="63">写字楼</el-checkbox>
-          <el-checkbox :label="64">车位</el-checkbox>
+          <el-checkbox v-for="(item,idx) in realState" :label="item.id" :key="idx" >{{item.name}}</el-checkbox>    
         </el-checkbox-group>
       </el-form-item>
       <el-col :span="12">
@@ -125,12 +121,7 @@
       </el-form-item>
       <el-form-item label="建筑类型:">
         <el-checkbox-group v-model="ruleFormbuild.buicheckList">
-          <el-checkbox :label="65">钢混</el-checkbox>
-          <el-checkbox :label="66">板楼</el-checkbox>
-          <el-checkbox :label="67">砖混</el-checkbox>
-          <el-checkbox :label="68">砖石</el-checkbox>
-          <el-checkbox :label="69">钢结构</el-checkbox>
-          <el-checkbox :label="70">其他</el-checkbox>
+            <el-checkbox v-for="(it,idx) in buildType" :label="it.id" :key="idx">{{it.name}}</el-checkbox>  
         </el-checkbox-group>
       </el-form-item>
       <el-row>
@@ -306,21 +297,34 @@ export default {
       inputValue: "",
       projectInfo: {},
       proVisible: false,
-      proImageUrl: ""
-    };
+      proImageUrl: "",
+      realState:[
+      			{id:'59',name:'住宅'},
+      			{id:'60',name:'公寓'},
+      			{id:'61',name:'别墅'},
+      			{id:'62',name:'商铺'},
+      			{id:'63',name:'写字楼'},
+      			{id:'64',name:'车位'}
+      ],
+      buildType:[
+      			{id:'65',name:'钢混'},
+      			{id:'66',name:'板楼'},
+      			{id:'67',name:'砖混'},
+      			{id:'68',name:'砖石'},
+      			{id:'69',name:'钢结构'},
+      			{id:'70',name:'其他'}	
+      ]
+    }
   },
   created() {
-    // this.$http
-    //   .get("/apo/ysservice.ashx?action=getyh")
-    //   .then(res => {
-    //     console.log(res);
-    //   });
+  	
+    this.$http.get("api/ysservice.ashx?action=getyh")
+       .then(res => {  });
     this.getProvinceList();
     this.getProjectInfo();
-    this.$http.get("http://120.27.21.136:2798/config").then(res => {
-      console.log("++++++++++++++++++++++++++++++++++++++")
-      console.log(res);
-    });
+    this.$http.get("api/config")
+      .then(res => {   });
+    
   },
   methods: {
     handleClose(tag) {
@@ -333,7 +337,6 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
-
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
@@ -351,8 +354,9 @@ export default {
     },
     //查询项目信息
     getProjectInfo() {
-      this.$http.get("http://120.27.21.136:2798/project/project/getProjectInfo").then(res => {
-        console.log(res);
+    	let url=this.Rooturl+"project/project/getProjectInfo";
+      this.$http.get(url).then(res => {
+        console.log(res.data.data);
         this.projectInfo = res.data.data;
         this.ruleForminfo.provalue = this.projectInfo.province;
         this.provinceChange(this.ruleForminfo.provalue);
@@ -391,22 +395,22 @@ export default {
     // 读取省列表
     getProvinceList() {
       let token = sessionStorage.getItem("userinfo");
-      this.$http.get("http://120.27.21.136:2798/getProvinceList").then(res => {
-      	console.log("1");
-        console.log(res);
+      let url=this.Rooturl+"getProvinceList";
+      this.$http.get(url).then(res => {
+        console.log(res.data);
         this.firoptions = res.data;
       });
     },
     // 读取市区列表
     provinceChange(value) {
-      this.$http.get("http://120.27.21.136:2798/getCityList?provinceCode=" + value).then(res => {
+      this.$http.get("api/getCityList?provinceCode=" + value).then(res => {
       	
         this.secoptions = res.data;
       });
     },
     // 读取区县列表
     cityChange(value) {
-      this.$http.get("http://120.27.21.136:2798/getDistrictList?cityCode=" + value).then(res => {
+      this.$http.get("api/getDistrictList?cityCode=" + value).then(res => {
         this.thioptions = res.data;
       });
     },
@@ -450,8 +454,7 @@ export default {
         power_supply: this.ruleFormpro.power_supply,
         water_supply: this.ruleFormpro.water_supply
       };
-      this.$http.post("/api/project/update", qs.stringify(data)).then(res => {
-        console.log("++++++++++++++++++++++++++++");
+      this.$http.post("api/project/update", qs.stringify(data)).then(res => {
         console.log(res);
       });
     },
@@ -459,12 +462,24 @@ export default {
     	var reg=/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
     	if(reg.test(this.projectInfo.href)){
     		  this.$http.get(this.projectInfo.href).then(res => {
-      		  console.log(res);
+    		  	console.log(decodeURI(res.data));
+    		  	this.project_select=true;
     			});
     	}else{
-    		alert("输入不正确");
+    		this.$message.error("云算地址输入不正确")
     	}
-    }
+    },
+    beforeImgUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2 = file.size / 1024 / 1024 < 2;
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2) {
+          this.$message.error('上传头像图片大小不能超过 200kb!');
+        }
+        return isJPG && isLt2M;
+     }
   }
 };
 </script>
@@ -479,14 +494,14 @@ export default {
   padding: 0px 35px 10px 35px;
 }
 .buildbaseinfo {
-  height: 50px;
-  line-height: 50px;
-  margin-top: -20px;
+  height: 40px;
+  line-height: 40px;
+
   background-color: #545c64;
 }
 .buildinfo {
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   margin-bottom: 20px;
   background-color: #dcdfe6;
 }

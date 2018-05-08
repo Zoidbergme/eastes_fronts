@@ -13,8 +13,8 @@
         </el-button-group>
       </el-col>
     </el-row>
-    <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-      <el-table-column type="selection" label="ALL" width="50">
+    <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+      <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
       </el-table-column>
       <el-table-column prop="key" label="序号" width="50">
       </el-table-column>
@@ -46,6 +46,7 @@
   </div>
 </template>
 <script>
+import {mapMutations,mapActions} from 'vuex'
 import breadcrumb from "@/components/shared/breadcrumb";
 export default {
   name: "invalid",
@@ -62,11 +63,14 @@ export default {
       Data: [],
       tableData: [],
       pageSize: 6,
-      alltablesize: []
-    };
+      alltablesize: [],
+      sels:[]
+    }
   },
   created() {
     this.getApartmentInfoImgList();
+
+   
   },
   methods: {
     getApartmentInfoImgList() {
@@ -112,9 +116,26 @@ export default {
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
     },
-    check() {
-      this.$router.push({ path: "/index/ckInvalid" });
-    }
+    check(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addproid(sels[0].key);
+      	this.$router.push({ path: "/index/ckInvalid" });
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+      
+    },
+    selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
+    },
+    ...mapMutations([
+    	'addproid'
+    ])
   }
 };
 </script>

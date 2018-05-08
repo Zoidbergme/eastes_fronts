@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       breadcrumbName: [
-        { breadcrumbname: "公司管理", router: "" },
+        { breadcrumbname: "公司管理", router:"" },
         { breadcrumbname: "待审核", router: "../index/examine" },
         { breadcrumbname: "审核通过", router: "" }
       ],

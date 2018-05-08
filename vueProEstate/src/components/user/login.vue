@@ -86,7 +86,7 @@ export default {
       //let user=sessionStorage.getItem('userinfo');
       this.$http
         .post(
-          "/api/project/user/login",
+          "api/project/user/login",
           qs.stringify(data)
           //this.HEAD("user.token", "user.role")
         )
@@ -107,7 +107,7 @@ export default {
       console.log(JSON.stringify(data));
     },
     code() {
-      this.$http.get("/api/project/user/captcha").then(res => {
+      this.$http.get("api/project/user/captcha").then(res => {
         this.valicodeurl = res.data;
       });
     }
