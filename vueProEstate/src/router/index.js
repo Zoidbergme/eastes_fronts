@@ -7,6 +7,7 @@ import projectInfo from '@/components/buildingdictionary/projectinfo'
 import ChangeDynamicList from '@/components/buildingdictionary/ChangeDynamicList'
 import BuildingDetail from '@/components/buildingdictionary/BuildingDetail'
 import AddDynamicList from '@/components/buildingdictionary/AddDynamicList'
+import autoLoaction from '@/components/buildingdictionary/autoLoaction'
 import palnPho from '@/components/buildingdictionary/palnPho'
 import generalLayout from '@/components/buildingdictionary/generalLayout'
 import AddInfo  from '@/components/buildingdictionary/AddInfo'
@@ -260,6 +261,10 @@ export default new Router({
         	path:'/index/AddInfo',
         	component:AddInfo,
         	name:'AddInfo'
+        },
+        {
+        	path:'/index/autoLoaction',
+        	component:autoLoaction
         }
         
         ]

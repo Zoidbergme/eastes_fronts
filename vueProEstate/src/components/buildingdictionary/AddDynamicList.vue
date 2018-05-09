@@ -90,19 +90,19 @@ export default{
 	.m_top{
 		margin-top:50px;
 	}
-	.Commissio_title{
+#AddDynamicList 	.Commissio_title{
 		line-height:32px;
 	}
-	.check-basetitle{
+	#AddDynamicList .check-basetitle{
 		height:40px;
 		line-height:40px;
 		color:#fff;
 	}
-	.el-button{
+	#AddDynamicList .el-button{
 		margin-top:3px!important;
 	}
 	
-	.info{
+	#AddDynamicList .info{
     border-radius: 10px;
     line-height: 20px;
     padding: 10px;

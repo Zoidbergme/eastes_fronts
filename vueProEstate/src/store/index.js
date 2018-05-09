@@ -10,6 +10,7 @@ import CommissionManage from './modules/CommissionManage'
 import dynamicList from './modules/dynamicList'
 import CheckCompanyRule from './modules/CheckCompanyRule'
 import generalLayout from './modules/generalLayout'
+import autoLoaction from './modules/autoLoaction'
 
 Vue.use(Vuex)
 
@@ -23,6 +24,7 @@ export default new Vuex.Store({
  		CommissionManage,
  		dynamicList,
  		CheckCompanyRule,
- 		generalLayout
+ 		generalLayout,
+ 		autoLoaction
   }
 })

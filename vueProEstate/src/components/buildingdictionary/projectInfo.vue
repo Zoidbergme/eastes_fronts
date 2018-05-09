@@ -28,19 +28,20 @@
           <el-form-item label="项目地址:">
             <el-col :span="8">
               <el-select v-model="ruleForminfo.provalue" placeholder="请选择" @change="provinceChange($event)">
-                <el-option v-for="item in firoptions" :key="item.code" :label="item.name" :value="item.code">
+                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.code">
+             
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="8">
               <el-select v-model="ruleForminfo.cityvalue" placeholder="请选择" @change="cityChange($event)">
-                <el-option v-for="item in secoptions" :key="item.code" :label="item.name" :value="item.code">
+                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item.name"  :value="item.code" >
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="8">
               <el-select v-model="ruleForminfo.disvalue" placeholder="请选择">
-                <el-option v-for="item in thioptions" :key="item.code" :label="item.name" :value="item.code">
+                <el-option v-for="(item,id) in thioptions" :key="id" :label="item.name"  :value="item.code">      
                 </el-option>
               </el-select>
             </el-col>
@@ -56,11 +57,14 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12">
+        <el-col :span="11">
           <el-form-item>
-            <!-- <el-input v-model="projectInfo.absolute_address"></el-input> -->
+				 <!-- <el-input v-model="projectInfo.absolute_address"></el-input> -->
             <el-input v-model="ruleForminfo.add"></el-input>
           </el-form-item>
+        </el-col>
+        <el-col :span="1">
+        	<i style="height:32px;line-height:32px;width:32px;text-align: center;" class="el-icon-location" @click="localBtn"  ></i>
         </el-col>
         <el-col :span="12">
           <el-form-item label="云算地址:">
@@ -248,6 +252,7 @@
   </div>
 </template>
 <script>
+import {mapState,mapMutations} from 'vuex'
 export default {
   name: "projectInfo",
   data() {
@@ -317,12 +322,12 @@ export default {
     }
   },
   created() {
-  	
-    this.$http.get("api/ysservice.ashx?action=getyh")
+  	let this_=this;
+    this.$http.get(this_.Rooturl+"ysservice.ashx?action=getyh")
        .then(res => {  });
     this.getProvinceList();
     this.getProjectInfo();
-    this.$http.get("api/config")
+    this.$http.get(this_.Rooturl+"config")
       .then(res => {   });
     
   },
@@ -330,7 +335,6 @@ export default {
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
     },
-
     showInput() {
       this.inputVisible = true;
       this.$nextTick(_ => {
@@ -356,7 +360,7 @@ export default {
     getProjectInfo() {
     	let url=this.Rooturl+"project/project/getProjectInfo";
       this.$http.get(url).then(res => {
-        console.log(res.data.data);
+        localStorage.setItem("info",JSON.stringify(res));
         this.projectInfo = res.data.data;
         this.ruleForminfo.provalue = this.projectInfo.province;
         this.provinceChange(this.ruleForminfo.provalue);
@@ -397,21 +401,24 @@ export default {
       let token = sessionStorage.getItem("userinfo");
       let url=this.Rooturl+"getProvinceList";
       this.$http.get(url).then(res => {
-        console.log(res.data);
-        this.firoptions = res.data;
+    
+        localStorage.setItem("prov",JSON.stringify(res));
+        this.firoptions = res.data.data;
       });
     },
     // 读取市区列表
     provinceChange(value) {
       this.$http.get("api/getCityList?provinceCode=" + value).then(res => {
-      	
-        this.secoptions = res.data;
+      	localStorage.setItem("city",JSON.stringify(res));
+        this.secoptions = res.data.data;  
       });
     },
     // 读取区县列表
-    cityChange(value) {
+    cityChange(value){
       this.$http.get("api/getDistrictList?cityCode=" + value).then(res => {
-        this.thioptions = res.data;
+        this.thioptions = res.data.data;
+        localStorage.setItem("distri",JSON.stringify(res));
+
       });
     },
     // 修改项目信息
@@ -455,7 +462,6 @@ export default {
         water_supply: this.ruleFormpro.water_supply
       };
       this.$http.post("api/project/update", qs.stringify(data)).then(res => {
-        console.log(res);
       });
     },
     testUrl(){
@@ -479,9 +485,34 @@ export default {
           this.$message.error('上传头像图片大小不能超过 200kb!');
         }
         return isJPG && isLt2M;
-     }
+    },
+    localBtn(){
+    	if(this.ruleForminfo.cityvalue){
+    		this.sencityName(this.ruleForminfo.cityvalue);
+  			this.$router.push({path:'/index/autoLoaction'})
+    	}else{
+    		this.$message.error("请先选择您所在城市")
+    	}
+    	
+ 	  },
+ 	  ...mapMutations([
+ 	  		'sencityName'
+ 	  ]),
+ 	  addcityname(e){
+ 	  	let src=e.currentTarget;
+ 	  	console.log(src.innerHTML);
+ 	  }
+  },
+  computed:{
+  	...mapState({
+  		 areaAdrss:state=>state.autoLoaction.street,
+  		 address:state=>state.autoLoaction.address
+  	}) 
+  },
+  mounted(){
+  	setTimeout(()=>{this.address==""?this.ruleForminfo.add=this.ruleForminfo.add:this.ruleForminfo.add=this.address;},400)
   }
-};
+}
 </script>
 <style scoped>
 .projectInfo-form {
@@ -530,6 +561,10 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+#projectInfo .el-icon-location:before{
+	width:24px!important;
+	height:24px!important;
 }
 </style>
  

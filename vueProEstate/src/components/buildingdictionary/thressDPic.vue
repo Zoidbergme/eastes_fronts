@@ -7,15 +7,15 @@
                     <el-col :span="7" :offset="13">
                         <el-button-group>
                             <el-button type="primary" size="mini">预览</el-button>
-                            <el-button type="primary"  @click="checkImgVisible = true" size="mini">查看</el-button>
+                            <el-button type="primary"  @click="checkTable" size="mini">查看</el-button>
                             <el-button type="primary" size="mini" @click="addImgVisible = true">新增</el-button>
-                            <el-button type="primary" size="mini">修改</el-button>
+                            <el-button type="primary" @click="changeTable" size="mini">修改</el-button>
                             <el-button type="primary" size="mini">删除</el-button>
                         </el-button-group>
                     </el-col>
                 </el-row>
-                <el-table :data="Data" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table">
-                    <el-table-column type="selection" label="ALL" width="50" prop="chk">
+                <el-table :data="Data" border @selection-change="selsChange" style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table">
+                    <el-table-column type="selection" reserve-selection="" label="ALL" width="50" prop="chk">
                     </el-table-column>
                     <el-table-column prop="pictureOrder" label="图片顺序">
                     </el-table-column>
@@ -36,11 +36,12 @@
                     </el-table-column>
                 </el-table>
             <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="cate-page">
-            </el-pagination>   
+            </el-pagination>  
+            <!--新增效果-->
             <el-dialog title="新增" :visible.sync="addImgVisible">
             <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
                 <el-form-item label="添加文件:">
-                    <el-upload action="/api/project/file/upload" :data="{file_name:'img'}" name="img" list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
+                    <el-upload action="/api/project/file/upload"  :data="{file_name:'img'}" name="img"  list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog :visible.sync="upImgVisible">
@@ -54,19 +55,14 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addImgVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addImgVisible = false">确 定</el-button>
+                <el-button type="primary">确 定</el-button>
             </span>
         </el-dialog>
         <!--查看图片弹窗-->
         <el-dialog title="查看" :visible.sync="checkImgVisible">
             <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
                 <el-form-item label="添加文件:">
-                    <el-upload action="/api/project/file/upload" :data="{file_name:'img'}" name="img" list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="upImgVisible">
-                        <img width="100%" :src="upImgVisibleUrl" alt="">
-                    </el-dialog>
+                    <img width="100%" :src="checkImgurl" alt="">
                 </el-form-item>
                 <el-form-item label="备注:">
                     <el-input type="textarea" autosize placeholder="请输入内容" v-model="ruleFormUplode.remarks">
@@ -74,29 +70,31 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addImgVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addImgVisible = false">确 定</el-button>
+                <el-button @click="checkImgVisible = false">关闭</el-button>
             </span>
         </el-dialog>
         <!-- 修改图片-->
         <el-dialog title="修改" :visible.sync="changeImgVisible">
-            <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
-                <el-form-item label="添加文件:">
-                    <el-upload action="/api/project/file/upload" :data="{file_name:'img'}" name="img" list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
+            <el-form ref="form" :model="change"  label-width="140px" size="small">
+            	<el-form-item label="原来的图片:">
+            		    <img width="146px" height="146px" :src="change.imgPath" alt="">
+            	</el-form-item>	
+                <el-form-item label="添加替换的图片:">
+                    <el-upload action=""   ref="newfile"  :on-change="ChangeCheck" :auto-upload="false"  :on-exceed="exceed" :limit="1"  :data="{file_name:'img'}" name="img" list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
                         <i class="el-icon-plus"></i>
                     </el-upload>
-                    <el-dialog :visible.sync="upImgVisible">
+                 	  <el-dialog :visible.sync="checkAll" >
                         <img width="100%" :src="upImgVisibleUrl" alt="">
                     </el-dialog>
                 </el-form-item>
                 <el-form-item label="备注:">
-                    <el-input type="textarea" autosize placeholder="请输入内容" v-model="ruleFormUplode.remarks">
+                    <el-input type="textarea" max="200" placeholder="请输入内容" v-model="change.remarks">
                     </el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addImgVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addImgVisible = false">确 定</el-button>
+                <el-button @click="changeImgVisible = false">关闭</el-button>
+                <el-button type="primary" @click="AddNew">确 定</el-button>
             </span>
         </el-dialog>
 	</div>
@@ -124,11 +122,18 @@ export default {
       checkAlls: false,
       checkTableAll: false,
       isIndeterminate: false,
+      seeImgVisible:false,
       upImgVisibleUrl: "",
+      change:{},
+      changeData:{},
       upImgVisible: false,
       addImgVisible: false,
       checkImgVisible:false,
-      changeImgVisible:false
+      changeImgVisible:false,
+      checkImgurl:"/static/img/generalpic.jpg",
+      changeImgupUrl:this.Rooturl+"project/file/upload",
+      sels:[],
+      changeVisible:false
     }
   },
   created() {
@@ -179,6 +184,7 @@ export default {
     },
     // 验证图片格式大小
     beforeImgUpload(file) {
+      console.log(file);
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
@@ -191,17 +197,77 @@ export default {
     },
     // 上传图片成功
     addImgSuccess(res, file) {
+      console.log(res);
+      console.log(file);
       let imgUrl = res.data;
-      seeImgVisible = imgUrl;
+      this.seeImgVisible = imgUrl;
     },
     back(){
     	this.$router.push({path:"/index/apartmentInfo"});
+    },
+    exceed(){
+    	this.$message.error("请先删除原来的图片")
+    },
+    AddNew(){
+    	this.$http.get(url,{
+    		params:{
+    			...this.changeData
+    		}
+    	}).then(res=>{
+    		this.changeImgVisible = false;
+    		this.upImgVisible=false;
+    	}).catch(err=>{
+    		
+    	})
+    	
+    },
+    order(){
+    	
+    },
+    checkTable(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.change=this.sels[0];
+
+      	this.checkImgVisible=true;
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+ 
+    },
+    changeTable(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.change=this.sels[0];
+      	this.upImgVisible=true;
+      	this.changeImgVisible=true;
+      	this.changeVisible=true;
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+      
+    },
+    ChangeCheck(file){	
+    	this.changeData={
+    		...this.change
+    	}
+       	this.changeData.imgPath=file.url;
+    },
+    selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
     }
+  
   }    
 }  
 </script>
 <style>
-	.CheckApartinfo {
+.CheckApartinfo {
   height: 40px;
   line-height: 40px;
   margin-bottom: 20px;

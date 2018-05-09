@@ -30,12 +30,62 @@
 		<div class="row" v-for="item in tableData">
 			<div class="asider "><font>{{item.FLOORNUM}}L</font></div>
 			<div v-for="it in item.LIST" class="right_content">
-				<font v-if="it.FJZT<2" class="fontsuccess">{{it.FJMC}}</font>
-				<font v-else-if="it.FJZT==4" class="fontdanger">{{it.FJMC}}</font>
-				<font v-else class="fontinfo">{{it.FJMC}}</font>
+				<font @click="showDetail($event)" v-if="it.FJZT<2" class="fontsuccess">{{it.FJMC}}</font>
+				<font @click="showDetail($event)" v-else-if="it.FJZT==4" class="fontdanger">{{it.FJMC}}</font>
+				<font @click="showDetail($event)" v-else class="fontinfo">{{it.FJMC}}</font>
 			</div>
 		</div>
 	</el-row>
+	<el-dialog :title="title"  :visible.sync="centerDialogVisible"  width="30%">
+		
+		<el-row>
+			<div>
+				<h5>房源</h5>
+				<div class="dislogrows">
+					<div>房号：</div>
+					<div>{{dialogData.FJMC}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>楼栋：</div>
+					<div>{{dialogData.LDMC}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>单元：</div>
+					<div>{{dialogData.DYMC}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>楼层：</div>
+					<div>{{dialogData.FLOORNUM}}</div>
+				</div>
+				<h5>价格</h5>
+				<div class="dislogrows">
+					<div>计价规则：</div>
+					<div>{{dialogData.JJGZ}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>单价：</div>
+					<div>{{dialogData.JZDJ}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>总价：</div>
+					<div>{{dialogData.FJZJ}}</div>
+				</div>
+				<h5>物业&nbsp;住宅参数</h5>
+				<div class="dislogrows">
+					<div>建筑面积：</div>
+					<div>{{dialogData.JZMJ}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>套内面积：</div>
+					<div>{{dialogData.TNMJ}}</div>
+				</div>
+				<div class="dislogrows">
+					<div>户型信息：</div>
+					<div>{{dialogData.HXMC}}</div>
+				</div>
+			</div>
+		</el-row>
+	</el-dialog>
 </div>
 </template>
 
@@ -52,7 +102,10 @@ export default{
 					LDID:'27',
 					DYLIST:[]
 				},
-				tableData:[]
+				tableData:[],
+				dialogData:"",
+				centerDialogVisible:false,
+				title:'云算公馆'
 			}
 		},
 		computed:{
@@ -70,6 +123,7 @@ export default{
          	
        		  }).then(function(res){
         			console.log(res);
+        			
             })},
             getProData(){
             	let url=this.Rooturl+"user/yunsuan/project";
@@ -77,7 +131,7 @@ export default{
             		params:{
             			project_id:1
             		}
-            	}).then(res=>{})
+            	}).then(res=>{ localStorage.setItem("project",JSON.stringify(res));})
             },
             getBuilData(){
             	let url=this.Rooturl+"user/yunsuan/build";
@@ -86,7 +140,7 @@ export default{
             			project_id:1
             		}
             	}).then(res=>{     
-            		console.log(res.data.data)
+            		localStorage.setItem("BuilData",JSON.stringify(res));
             		let todata=res.data.data;
             		for(var i=0;i<todata.length;i++){
             			if(todata[i].LDID==this.buildId){
@@ -106,18 +160,38 @@ export default{
             			build_id:this.build_id,
             			unit_id:this.unit_id
             		}
-            	}).then(res=>{this.tableData=res.data.data;})
+            	}).then(res=>{this.tableData=res.data.data;localStorage.setItem("UnitData",JSON.stringify(res));})
             	  .catch(err=>{console.log(err)})
             },
             selechange(){
             	this.unit_id=this.value;
             	this.getUnitData();
+            },
+            showDetail(e){
+            	let src=e.currentTarget.innerHTML;
+            	for(let i=0;i<this.tableData.length;i++){
+            		for(let y=0;y<this.tableData[i].LIST.length;y++){  			
+            			if(this.tableData[i].LIST[y].FJMC==src){
+            			this.dialogData=this.tableData[i].LIST[y];
+            		}
+            	 }
+            		
+            	}
+            	console.log(this.dialogData);
+            	this.centerDialogVisible=true;
+            },
+            addTotal(){
+            	let res=localStorage.getItem("UnitData");
+            	console.log(res);
+            	this.tableData=res.data.data;
+            	console.log(res.data);
+            	this.centerDialogVisible=true;
             }
 		},
 		created(){
 			this.getProData()
 			this.getBuilData()
-			
+			 //this.addTotal()
 		}
 }
 </script>
@@ -160,6 +234,7 @@ export default{
 		float:left;
 		padding:5px;
 		box-sizing: border-box!important;
+		cursor:pointer;
 	}
 	#BuildingDetail  .asider font{
 		text-align:center;
@@ -169,8 +244,9 @@ export default{
 		float:left;
 		border: 1px solid #999;
 		box-sizing: border-box!important;
+		cursor:pointer;
 	}
-	#BuildingDetail  .right_content,{
+	#BuildingDetail  .right_content{
 		height:40px;
 		width:160px;
 		float:left;
@@ -184,6 +260,7 @@ export default{
 		height:40px;
 		width:160px;
 		border: 1px solid #fff;
+		cursor:pointer;
 	}
 	#BuildingDetail .fontinfo{
 		background: #FBD997!important;
@@ -196,5 +273,52 @@ export default{
 	#BuildingDetail .fontsuccess{
 		background: #ddd!important;
 
+	}
+	#BuildingDetail .dislogrows{
+		float:left;
+		width:100%;
+		display: flex;
+		height:32px;
+		box-sizing: border-box!important;
+	}
+	#BuildingDetail .dislogrows div:nth-child(1){
+		width:100px;
+		height:32px;
+		line-height: 32px;
+		text-align: right;
+		box-sizing: border-box!important;
+	}
+	#BuildingDetail .dislogrows div:nth-child(2){
+		width:100px;
+		height:32px;
+		line-height: 32px;
+		text-align: left;
+		flex: 1;
+		box-sizing: border-box!important;
+		padding-left: 10px;
+	}
+	#BuildingDetail h5{
+		float:left;
+		width:100%;
+		height:32px;
+		line-height: 32px;
+		text-align: left;
+		box-sizing: border-box!important;
+		font-size:16px;
+		margin:0px;
+	}
+	#BuildingDetail  .el-dialog__title{
+		float:left!important;
+		width:100%!important;
+		text-align: center!important;
+		font-weight: 400!important;
+		font-weight:500!important;
+	}
+	#BuildingDetail .el-dialog__header{
+		float:left;
+		padding:15px 0px;
+		border-bottom: 1px solid #999;
+		width:100%!important;
+		margin-bottom:10px;
 	}
 </style>
