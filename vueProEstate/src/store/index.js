@@ -11,6 +11,9 @@ import dynamicList from './modules/dynamicList'
 import CheckCompanyRule from './modules/CheckCompanyRule'
 import generalLayout from './modules/generalLayout'
 import autoLoaction from './modules/autoLoaction'
+import CkPayCommissonDetail from './modules/CkPayCommissonDetail'
+import AddApply from './modules/AddApply'
+import CommissioCheck from './modules/CommissioCheck'
 
 Vue.use(Vuex)
 
@@ -25,6 +28,9 @@ export default new Vuex.Store({
  		dynamicList,
  		CheckCompanyRule,
  		generalLayout,
- 		autoLoaction
+ 		autoLoaction,
+ 		CkPayCommissonDetail,
+ 		AddApply,
+ 		CommissioCheck
   }
 })

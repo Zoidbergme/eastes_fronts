@@ -175,12 +175,12 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 #checkInfo .el-date-picker ,.el-select{
   width: 275px !important;
   text-align: center;
 }
-.el-option{
+#checkInfo {.el-option{
 	 text-align: center!important;
 }
 .checkInfo-form {
@@ -208,7 +208,7 @@ export default {
 }
 .floor{
 	width: 115px !important;
-}
+}}
 </style>
 
 

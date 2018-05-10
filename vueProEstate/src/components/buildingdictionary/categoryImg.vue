@@ -21,19 +21,19 @@
       <el-table-column prop="type_name" label="图片类型">
       </el-table-column>
       <el-table-column prop="imgPath" label="图片">
-        <!-- <template scope="scope"> 子组件报错先注释掉
+        <template slot-scope="scope"> 
           <img :src="url+scope.row.img_url" alt="" class="baseImg">
-        </template> -->
+        </template> 
       </el-table-column>
       <el-table-column prop="img_describe" label="备注">
       </el-table-column>
       <el-table-column prop="update_time" label="更新时间">
       </el-table-column>
       <el-table-column prop="ordering" label="调序">
-        <!-- <template scope="scope">  子组件报错先注释掉
+        <template slot-scope="scope">  
           <i class="el-icon-upload2" @click="order(scope.$index)"></i>
           <i class="el-icon-download" @click="ordertwo(scope.$index)"></i>
-        </template> -->
+        </template> 
       </el-table-column>
     </el-table>
     <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="cate-page">
@@ -134,7 +134,8 @@ export default {
       imgId: "",
       img_url: "",
       seeImg: {},
-      checked: true
+      checked: true,
+      url:''
     };
   },
   created() {
@@ -145,10 +146,10 @@ export default {
            console.log(JSON.parse(decodeURI(res.data)));
         });
     // 配置信息
-    // this.$http.get("/api/config").then(res => {
-    //   console.log("+++++++++++++++++++++++++++++++++++");
-    //   console.log(res);
-    // });
+   this.$http.get("/api/config").then(res => {
+     
+      console.log(res);
+    });
     this.getCategoryImgList();
   },
   methods: {
@@ -289,29 +290,29 @@ export default {
         });
     },
     // 修改图片成功
-    upImgSuccess(response) {},
-    //     console.log(response)
-    //   if (response.code === 200) {
-    //     // 上传图片信息
-    //     var qs = require("qs");
-    //     // 组装参数
-    //     let data = {
-    //       project_img_id:response.project_img_id,
-    //       img_url: response.data,
-    //       img_type: "1",
-    //       house_type_num: "1",
-    //       img_describe: this.ruleFormChange.remarks
-    //     };
-    //     this.$http.post("/api/project/img/update", qs.stringify(data));
-    //     this.$message({
-    //       message: response.msg,
-    //       type: "success"
-    //     });
-    //   } else {
-    //     this.$message.error("上传失败，请稍后再试");
-    //   }
-    // },
-    // 上传图片成功
+    upImgSuccess(response) {
+        console.log(response)
+      if (response.code === 200) {
+         // 上传图片信息
+        var qs = require("qs");
+       // 组装参数
+        let data = {
+           project_img_id:response.project_img_id,
+           img_url: response.data,
+           img_type: "1",
+          house_type_num: "1",
+         img_describe: this.ruleFormChange.remarks
+         };
+        this.$http.post("/api/project/img/update", qs.stringify(data));
+       this.$message({
+           message: response.msg,
+           type: "success"
+         });
+      } else {
+         this.$message.error("上传失败，请稍后再试");
+       }
+    },
+ 
     addImgSuccess(response) {
       if (response.code === 200) {
         // 上传图片信息
@@ -355,7 +356,8 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped scss >
+#categoryImg{
 .categoryImginfo {
   height: 40px;
   line-height: 40px;
@@ -391,6 +393,7 @@ export default {
   font-size: 20px;
   color: #409eff;
   cursor: pointer;
+}
 }
 </style>
 

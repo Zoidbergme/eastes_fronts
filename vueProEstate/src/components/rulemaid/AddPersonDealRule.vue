@@ -124,7 +124,6 @@
      				 this.percentage=true;
      			}else if(this.form.way=="3"){
      				this.unit_price=true;
-     				
      			}
      		},
      		CheckJumpRule(){

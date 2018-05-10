@@ -10,20 +10,17 @@
             <el-col :span="16"   :push="1" class="Commissio_title">
                <font style="font-size:16px;color:#666"> 判定规则</font>
             </el-col>
-            <el-col :span="7">
+            <el-col :span="7" :push="2" >
                 <el-button-group>
-                    <el-button type="primary" @click="CheckTotal" size="small">查看</el-button>
+                    <el-button type="primary" @click="check" size="small">查看</el-button>
                     <el-button type="primary" @click="AddTotal" size="small">新增</el-button>
                     <el-button type="primary" @click="RecomposeTotal" size="small" >修改</el-button>
                     <el-button type="primary" @click="StopTotal" size="small" >终止</el-button>
                 </el-button-group>
             </el-col>
         	</el-row>
-			<el-table :data="ruleData" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-                <el-table-column prop='rule_id'  width="50">
-                	<template slot-scope="scope">
-     					<input type="checkbox" :checked="checked" @click="showThis($event)" :value="id"></input>
-      			 	</template>
+			<el-table :data="ruleData" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+                <el-table-column type="selection" reserve-selection=""  width="50">
                 </el-table-column>
                 <el-table-column prop="rule_id" label="序号" width="60">
                 </el-table-column>
@@ -57,7 +54,7 @@
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666">公司规则</font>
             </el-col>
-            <el-col :span="7">
+            <el-col :span="7" :push="1">
                 <el-button-group>
                 	<el-button type="primary" size="small">审核</el-button>
                     <el-button type="primary" @click="CheckCompanyRule" size="small">查看</el-button>
@@ -97,7 +94,7 @@
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666"> 个人规则</font>
             </el-col>
-            <el-col :span="7">
+            <el-col :span="7" :push="1" >
                 <el-button-group>
                     <el-button type="primary" size="small">审核</el-button>
                     <el-button type="primary" @click="CheckPersonRule" size="small">查看</el-button>
@@ -133,6 +130,7 @@
 </template>
 
 <script>
+	import {mapMutations} from 'vuex'
 	export default{
 		name:'CommissioCheck',
 		data(){
@@ -143,7 +141,8 @@
 				dellData:[],
 				visitedData:[],
 				checked:false,
-				id:2
+				id:2,
+				sels:[]
 			}	
 		},
 		created(){
@@ -157,14 +156,19 @@
 			AddTotal(){
 				 this.$router.push({ path: "/index/AddTotalRule" });
 			},
-			CheckTotal(){
-				this.$router.push({ path: "/index/CheckTotalRule" });
-			},
 			StopTotal(){
 				this.$router.push({ path: "/index/EndTotalRule" });
 			},
 			RecomposeTotal(){
-				this.$router.push({ path: "/index/RecomposeTotalRule" });
+				let sels=this.sels;
+      			if(sels.length>1){
+      				this.$message.error("查看只能单选")
+      			}else if(sels.length==1){
+      				this.CommissioCheck(sels[0].key);
+      				this.$router.push({ path: "/index/RecomposeTotalRule" });
+      			}else{
+      				this.$message.error("请选择查看内容")
+     			}		
 			},
 			CheckCompanyRule(){
 				this.$router.push({ path: "/index/CheckCompanyRule" });	
@@ -191,13 +195,26 @@
 				 	console.log(this.ruleData);
 				 })
 			},
-			showThis(e){
-				let src=e.currentTarget;
-				this.checked=false;
-				console.log(src.checked);
-
-				console.log(e.value);
-			}
+			check(){
+      			let sels=this.sels;
+      			if(sels.length>1){
+      				this.$message.error("查看只能单选")
+      			}else if(sels.length==1){
+      				this.CommissioCheck(sels[0].key);
+      				this.$router.push({path: '/index/AddTotalRule'})
+      			}else{
+      				this.$message.error("请选择查看内容")
+     			}
+      
+    		},
+    		selsChange(sels) {  
+    			if(sels){
+    		   		this.sels=sels; 
+    			}   
+    		},
+    		...mapMutations([
+    			'CommissioCheck'
+    		])
 		}
 		
 	}

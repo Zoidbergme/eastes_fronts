@@ -54,6 +54,13 @@ import RecomposeTotalRule from '@/components/rulemaid/RecomposeTotalRule'
 import PersonCommission from '@/components/CommissionManagement/PersonCommission'
 import CompanyCommission from '@/components/CommissionManagement/CompanyCommission'
 import CkAndCgComDealRule from '@/components/rulemaid/CkAndCgComDealRule'
+import CkPayCommission from '@/components/CommissionManagement/CkPayCommission'
+import CkPayCommissonDetail from '@/components/CommissionManagement/CkPayCommissonDetail'
+import AddApply from '@/components/CommissionManagement/AddApply'
+import SubApplyCount from '@/components/CommissionManagement/SubApplyCount'
+import PayApplyCheck from '@/components/CommissionManagement/PayApplyCheck'
+import CheckPayCheckPayment from '@/components/CommissionManagement/CheckPayCheckPayment'
+import PersonPaymentCheck from '@/components/CommissionManagement/PersonPaymentCheck'
 
 Vue.use(Router)
  
@@ -265,6 +272,35 @@ export default new Router({
         {
         	path:'/index/autoLoaction',
         	component:autoLoaction
+        },
+        {
+        	path:'/index/CkPayCommission',
+        	component:CkPayCommission
+        },
+        {
+        	path:'/index/CkPayCommissonDetail',
+        	component:CkPayCommissonDetail	
+        },
+        {
+
+        	path:'/index/AddApply',
+        	component:AddApply	
+        },
+        {
+        	path:'/index/SubApplyCount',
+        	component:SubApplyCount
+        },
+        {
+        	path:'/index/PayApplyCheck',
+        	component:PayApplyCheck
+        },
+        {
+        	path:'/index/CheckPayCheckPayment',
+        	component:CheckPayCheckPayment
+        },
+        {
+        	path:'/index/PersonPaymentCheck',
+        	component:PersonPaymentCheck
         }
         
         ]

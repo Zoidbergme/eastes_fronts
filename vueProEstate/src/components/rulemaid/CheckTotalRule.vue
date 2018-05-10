@@ -168,9 +168,6 @@ export default{
 	.m_top{
 		margin-top:50px;
 	}
-	.Commissio_title{
-		line-height:32px;
-	}
 	.check-basetitle{
 		color:#fff;
 		height:40px;

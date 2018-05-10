@@ -1,21 +1,21 @@
 <template>
 	<div id="CompanyCommission">
-		  <el-row type="flex" justify="space-between" class="examine-title">
+		  <el-row type="flex" justify="space-between" class="examine-title m_line_bottom">
             <el-col :span="18">
                 <CommissionManageHeader :breadcrumbName="breadcrumbName"></CommissionManageHeader>
             </el-col>
             <el-col :span="6">
                 <el-button-group>
                     <el-button type="primary" size="small">高级搜索</el-button>
-                    <el-button type="primary" size="small">查看</el-button>
+                    <el-button type="primary" @click="check" size="small">查看</el-button>
                     <el-button type="primary" size="small">审核</el-button>
                     <el-button type="primary" size="small">结佣</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-row class="table_row">
-        <el-table :data="Data"  style="width: 100%"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column fixed type="selection" label="ALL" width="50">
+        <el-row class="table_row m_top">
+        <el-table :data="Data"  style="width: 100%" @selection-change="selsChange"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column fixed type="selection" reserve-seletion="" label="ALL" width="50">
             </el-table-column>
             <el-table-column fiexd  prop="key" width="50" label="序号">
             </el-table-column>
@@ -41,9 +41,8 @@
             </el-table-column>
              <el-table-column   prop="changeStateTime" label="结佣状态" width="90">
             </el-table-column>
-             <el-table-column   prop="failCountdown" label="付款状态" width="90">
-            </el-table-column>
-            
+            <el-table-column   prop="failCountdown" label="付款状态" width="90">
+            </el-table-column>  
         </el-table>
         </el-row>    
         <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
@@ -53,6 +52,7 @@
 
 <script>
 import CommissionManageHeader from "@/components/shared/CommissionManageHeader"
+import {mapMutations} from 'vuex'
 export default{
 	name:'CompanyCommission',
 	data(){
@@ -65,7 +65,8 @@ export default{
       			Data: [],
       			tableData: [],
       			pageSize: 6,
-      			alltablesize: []
+      			alltablesize: [],
+      			sels:[]
 			}
 	},
 	components:{CommissionManageHeader},
@@ -90,8 +91,7 @@ export default{
           changeStateTime:"结佣审核待处理",
           failCountdown:"付款审核待处理"
           
-        });
-        
+        }); 
       }
       this.page();
     },
@@ -117,15 +117,66 @@ export default{
     },
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
+    },
+    check(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addsels(sels[0].key);
+      	this.$router.push({path: '/index/CkPayCommission'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+    },
+    change(){
+    	let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addsels(sels[0].key);
+      	this.$router.push({path: '/index/CkPayCommission'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+   	},
+   	...mapMutations([
+   		'addsels'
+   	]),
+   	selsChange(sels) {  
+    	if(sels){
+    		   this.sels=sels; 
+    	}   
     }
     
   } 
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 	#CompanyCommission{
 		margin-top:10px!important;
 		padding-bottom:10px!important;
+		.m_line_bottom{
+			margin-top:10px!important;
+			margin-bottom:10px!important;
+		}
+		.m_top{
+			margin-top:10px!important;
+		}
+		.examine-title {
+  			border-bottom: dashed 1px #b3c0d1;
+  			margin-bottom: 10px;
+ 			padding-bottom: 20px;
+		}
+		.el-table {
+ 			width: 100%;
+ 			margin-top: 30px;
+  			padding: 2px 0px !important;
+		}
+		.m_line_bottom{
+			margin-top:20px!important;
+		
+		}
 	}
 </style>
