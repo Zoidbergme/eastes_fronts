@@ -94,10 +94,6 @@
  	 </el-form-item>
   </el-col>	 
 </el-row> 
- 
- 
- 
- 
 </el-form>
 
 </template>
@@ -130,7 +126,21 @@
       },
       back(){
       	 this.$router.push({ path: "/index/CommissioCheck" });
-      } 
+      },
+      loadData(){
+      	let url=this.Rooturl+"";
+      	this.$http.get(url,{
+      		params:{
+      			
+      		}
+      	}).then(res=>{
+      		if(res.code==2){
+      			this.$message.success(res.msg);
+      		}else{
+      			this.$message.error("提交失败")
+      		}
+      	})
+      }
    	},
 	created(){
 		

@@ -140,7 +140,7 @@
 		},
 		methods:{
    			back(){
-    			this.$router.push({path:"/index/CompanyCommission"})
+    			this.$router.push({path:"/index/CkPayCommissonDetail"})
    			},
     		onSubmit(){
     	

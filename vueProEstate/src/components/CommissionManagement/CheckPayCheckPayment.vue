@@ -6,9 +6,7 @@
 					<el-col :span="12">
 						<span class="check-basetitle">修改、审核</span>
 					</el-col>
-					<el-col :span="8" :push="4" >
-    					<el-button size="small" type="primary" @click="back" >审核通过</el-button>
-    					<el-button size="small" type="warning" @click="back" >审核不通过</el-button>
+					<el-col :span="4" :push="8" > 			
     					<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
     					<el-button size="small" @click="back" >关闭</el-button>
 					</el-col>
@@ -101,7 +99,7 @@
                 <el-button-group>
                     <el-button type="primary" @click="check" size="small">查看</el-button>
                      <el-button type="primary" size="small">添加</el-button>
-              		<el-button type="primary" size="small">修稿</el-button>
+              		<el-button type="primary" size="small">修改</el-button>
                     <el-button type="primary" size="small">删除</el-button>              
                 </el-button-group>
             </el-col>
@@ -131,46 +129,7 @@
          	</el-pagination>
 	    </div>
 		</el-row>
-		<el-row>
-		<div id="CompanyCommission">
-		  <el-row type="flex" justify="space-between" class="examine-title thead_m_bottom">
-            <el-col :span="17" class="thead_title">
-              	附件
-            </el-col>
-            <el-col :span="5">
-                <el-button-group>
-                    <el-button type="primary" @click="check" size="small">查看</el-button>
-                     <el-button type="primary" size="small">添加</el-button>
-              		<el-button type="primary" size="small">修稿</el-button>
-                    <el-button type="primary" size="small">删除</el-button>              
-                </el-button-group>
-            </el-col>
-         </el-row>
-         <el-row class="table_row">
-           <el-table :data="Data" @selection-change="selsChange" style="width: 100%"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="文件名称" >
-            </el-table-column>
-            <el-table-column  label="附件"  >
-            	<template slot-scope="scope">
-     				<a :href="scope.row.planeEndTime" target="_blank" style="color:blue;text-decoration: underline;cursor: pointer;">
-     					查看附件
-     				</a>
-      			</template>
-            </el-table-column>
-            <el-table-column prop="phone" label="上传人员" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="上传时间" >
-            </el-table-column>   
-          </el-table>
-        </el-row>    
-        	<el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-         	</el-pagination>
-	    </div>
-		</el-row>
+		
 	</div>
 </template>
 <script>
@@ -239,7 +198,7 @@
       			this.Data = this.alltablesize[val - 1];
     		}, 	
    			...mapMutations([
-   				'showForm'
+   				
    			])
     		
 		},

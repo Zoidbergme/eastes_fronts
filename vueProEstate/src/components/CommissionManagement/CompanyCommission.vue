@@ -147,6 +147,18 @@ export default{
     	if(sels){
     		   this.sels=sels; 
     	}   
+    },
+    paycheck(){
+    	
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addsels(sels[0].key);
+      	this.$router.push({path: '/index/CkPayCommission'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
     }
     
   } 

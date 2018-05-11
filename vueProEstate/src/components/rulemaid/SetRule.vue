@@ -1,6 +1,6 @@
 <template>
 <div id="SetRule">
-<el-row style="height:40px;padding-left:40px;background:#545c64 ;">	
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;" class="header" >	
 	<el-col :span="12">
 		<span class="check-basetitle">设置公司</span>
 	</el-col>
@@ -180,7 +180,8 @@
 	}
 </script>
 
-<style>
+<style scoped  lang="scss">
+#SetRule{
 	.m_bottom{
 		margin-bottom:20px;
 		border:1px solid #ddd;
@@ -196,7 +197,10 @@
 		line-height:40px;
 		color:#fff;
 	}
-	#SetRule .el-button{
-		margin-top:3px!important;
+	.header{
+		.el-button{
+			margin-top:4px!important;
+		}
 	}
+}		
 </style>

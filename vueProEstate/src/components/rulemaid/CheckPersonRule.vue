@@ -1,18 +1,16 @@
 <template>
 <div id="CheckPersonRule">
 <el-form id="AddTotalRule" ref="form" :model="form" label-width="160px">
-<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
+<el-row style="height:40px;padding-left:40px;background:#545c64 ;" class="header" >
 	<el-col :span="12">
 		<span class="check-basetitle">查看全民经济人规则</span>
 	</el-col>
-	<el-col :span="8" :push="4" >
-		 <el-form-item>
+	<el-col :span="3" :push="8" >	
     		<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
-    		<el-button size="small" @click="back" >取消</el-button>
-  		</el-form-item>
+    		<el-button size="small" @click="back" >取消</el-button>	
 	</el-col>
 </el-row>
-<el-row>
+<el-row class="m_top">
     <el-col :span="11">
     	 <el-form-item label="规则名称：">
     			<el-input v-model="form.name" required placeholder="请输入规则名称" style="width: 100%;"></el-input>
@@ -27,7 +25,7 @@
   		</el-form-item>
     </el-col>
 </el-row>
-<el-row >	
+<el-row  >	
    	<el-col :span="11">
    	  <el-form-item  label="*计划开始日期">
          <el-date-picker type="date"required placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
@@ -132,7 +130,7 @@
         <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
             <el-table-column type="selection" label="ALL" width="50">
             </el-table-column>
-           <el-table-column prop="key" label="序号" width="60">
+            <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
             <el-table-column prop="companyName" label="物业类型" >
             </el-table-column>           
@@ -239,7 +237,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 	.Commissio_title{
 		height:32px;
 		line-height:32px;
@@ -260,10 +258,20 @@ export default{
 		margin-bottom:20px;
 		border:1px solid #ddd;
 	}
-	.m_top{
-		margin-top:50px;
-	}
+
 	.Commissio_title{
 		line-height:32px;
+	}
+	
+	#CheckPersonRule {
+		.header {
+			.el-button{
+				margin-top:4px!important;
+			}
+			
+		}
+		.m_top{
+			margin-top:20px;
+		}
 	}
 </style>

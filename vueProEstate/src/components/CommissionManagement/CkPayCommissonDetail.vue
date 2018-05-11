@@ -118,8 +118,8 @@
                 <el-button-group>
                 	<el-button type="primary" size="small">高级搜索</el-button>
                     <el-button type="primary" @click="check" size="small">查看</el-button>
-              		<el-button type="primary" size="small">扣款</el-button>
-                    <el-button type="primary" size="small">添加</el-button>
+              		<el-button type="primary" @click="check" size="small">扣款</el-button>
+                    <el-button type="primary" @click="add" size="small">添加</el-button>
                     <el-button type="primary" size="small">删除</el-button>
                 </el-button-group>
             </el-col>
@@ -130,21 +130,21 @@
             </el-table-column>
             <el-table-column fiexd  prop="key" width="50" label="序号">
             </el-table-column>
-            <el-table-column  prop="recommendNum" label="申请名称" width="130">
+            <el-table-column  prop="recommendNum" label="推荐编号" width="130">
             </el-table-column>
-            <el-table-column  prop="customerName" label="申请金额(￥)" width="130">
+            <el-table-column  prop="customerName" label="状态" width="130">
             </el-table-column>
-            <el-table-column prop="phone" label="申请笔数" width="130">
+            <el-table-column prop="phone" label="经济人名称" width="130">
             </el-table-column>
-            <el-table-column   prop="state" label="扣款金额" width="130">
+            <el-table-column   prop="state" label="佣金类型" width="130">
             </el-table-column>
-            <el-table-column   prop="recommendPeople" label="审核金额" width="130">
+            <el-table-column   prop="recommendPeople" label="时间" width="130">
             </el-table-column>
-            <el-table-column  prop="type" label="审核笔数" width="130">
+            <el-table-column  prop="type" label="申请金额(￥)" width="130">
             </el-table-column>  
-            <el-table-column   prop="recommendPeople" label="审核金额" width="130">
+            <el-table-column   prop="recommendPeople" label="扣款金额(￥)" width="130">
             </el-table-column>
-            <el-table-column  prop="type" label="审核笔数" width="130">
+            <el-table-column  prop="type" label="审核金额(￥)" width="130">
             </el-table-column>      
           </el-table>
         </el-row>    
@@ -177,7 +177,7 @@
 		},
 		methods:{
    			back(){
-    			this.$router.push({path:"/index/CompanyCommission"})
+    			this.$router.push({path:"/index/CkPayCommissonDetail"})
    			},
     		onSubmit(){
     	
@@ -224,6 +224,17 @@
       			}else if(sels.length==1){
       				this.CkPayDeTailaddsels(sels[0].key);
       				this.$router.push({path: '/index/SubApplyCount'})
+      			}else{
+      				this.$message.error("请选择查看内容")
+      			}
+    		},
+    		add(){
+    			let sels=this.sels;
+     		    if(sels.length>1){
+      				this.$message.error("查看只能单选")
+      			}else if(sels.length==1){
+      				this.CkPayDeTailaddsels(sels[0].key);
+      				this.$router.push({path: '/index/AddApply'})
       			}else{
       				this.$message.error("请选择查看内容")
       			}

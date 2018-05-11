@@ -4,7 +4,7 @@
 			<el-form :model="ProjectInfo" ref="form" label-width="160px" size="small" class="checkInfo-form ">
 				<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 					<el-col :span="12">
-						<span class="check-basetitle">添加结佣</span>
+						<span class="check-basetitle">公司、扣款、查看</span>
 					</el-col>
 					<el-col :span="4" :push="8" >
     					<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
