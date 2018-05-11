@@ -1,142 +1,137 @@
 <template>
-	<div id="PersonPaymentCheck">
+	<div id="PersonCheckAddApplyView">
 		<el-row >
 			<el-form :model="ProjectInfo" ref="form" label-width="160px" size="small" class="checkInfo-form ">
 				<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 					<el-col :span="12">
-						<span class="check-basetitle">全民佣金申请、审核、查看、新增、审核、修改</span>
+						<span class="check-basetitle">修改、审核</span>
 					</el-col>
-					<el-col :span="8" :push="4" >
-						<el-button size="small" type="primary" @click="onSubmit">审核通过</el-button>
-						<el-button size="small" type="waning" @click="onSubmit">审核不通过</el-button>
+					<el-col :span="4" :push="8" > 			
     					<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
-    					<el-button size="small" @click="back" >取消</el-button>
+    					<el-button size="small" @click="back" >关闭</el-button>
 					</el-col>
 				</el-row>
-				<el-row class="m_top">
+				<el-row  class="m_top">
 					<el-col :span="8">
-						<el-form-item label="申请名称：">
-							<el-input v-model="ProjectInfo.name">
-							</el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row >
-					<el-col :span="8">
-					    <el-form-item label="申请金额(￥)：">
+					    <el-form-item label="申请付款名称：">
 							<el-input v-model="ProjectInfo.name">				
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
-					<el-col :span="8">
-					    <el-form-item label="扣款金额(￥)：">
-							<el-input v-model="ProjectInfo.name">
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
-					<el-col :span="8">
-					    <el-form-item label="审核金额(￥)：">
-							<el-input v-model="ProjectInfo.name">					
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-					    <el-form-item label="申请笔数：">
-							<el-input v-model="ProjectInfo.name">				
+					    <el-form-item label="审核金额(￥)：">
+							<el-input v-model="ProjectInfo.name">
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
-					 
+					<el-col :span="8">
+					     <el-form-item label="未结金额(￥)：">
+							<el-input v-model="ProjectInfo.name">
+							
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="7">
+					     <el-form-item label="申请付款金额(￥)：">
+							<el-input v-model="ProjectInfo.name">
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
 				</el-row>
-	
+				<el-row>
+					<el-col :span="8">
+					    <el-form-item label="收款银行：">
+							<el-input v-model="ProjectInfo.name">	
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="8">
+					     <el-form-item label="收款银行卡号：">
+							<el-input v-model="ProjectInfo.name">							
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="7">
+					     <el-form-item label="收款户名：">
+							<el-input v-model="ProjectInfo.name">
+							
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+				</el-row>
 				<el-row>
 					<el-col :span="8">
 					    <el-form-item label="申请类型：">
-							<el-input v-model="ProjectInfo.name">			
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
-					<el-col :span="8">
-					    <el-form-item label="申请人员：">
 							<el-input v-model="ProjectInfo.name">
 							
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 					<el-col :span="8">
-					    <el-form-item label="申请时间：">
-							<el-date-picker v-model="ProjectInfo.startTime" type="date" placeholder="选择日期">
-             	 			</el-date-picker>
+					     <el-form-item label="申请人员：">
+							<el-input v-model="ProjectInfo.name">
+							
+							</el-input>
 					 	</el-form-item>
 					</el-col> 
-				</el-row>
+					<el-col :span="7">
+					     <el-form-item label="申请时间：">
+							<el-input v-model="ProjectInfo.name">
+								
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+				</el-row>	
 			</el-form>
 		</el-row>
 		<el-row>
 		<div id="CompanyCommission">
 		  <el-row type="flex" justify="space-between" class="examine-title thead_m_bottom">
-            <el-col :span="15" class="thead_title">
-              	申请结佣列表
+            <el-col :span="17" class="thead_title">
+              	附件
             </el-col>
-            <el-col :span="7">
+            <el-col :span="5">
                 <el-button-group>
-                	<el-button type="primary" size="small">高级搜索</el-button>
                     <el-button type="primary" @click="check" size="small">查看</el-button>
-              		<el-button type="primary" size="small">扣款</el-button>
                     <el-button type="primary" size="small">添加</el-button>
-                    <el-button type="primary" size="small">删除</el-button>
+              		<el-button type="primary" size="small">修改</el-button>
+                    <el-button type="primary" size="small">删除</el-button>              
                 </el-button-group>
             </el-col>
          </el-row>
          <el-row class="table_row">
            <el-table :data="Data" @selection-change="selsChange" style="width: 100%"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column fixed type="selection" reserve-selection="" label="ALL" width="50">
+            <el-table-column type="selection" label="ALL" width="50">
             </el-table-column>
-            <el-table-column fiexd  prop="key" width="50" label="序号">
+            <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
-            <el-table-column  prop="recommendNum" label="推荐编号" width="130">
+            <el-table-column prop="companyName" label="文件名称" >
             </el-table-column>
-            <el-table-column  prop="customerName" label="状态" width="130">
+            <el-table-column  label="附件"  >
+            	<template slot-scope="scope">
+     				<a :href="scope.row.planeEndTime" target="_blank" style="color:blue;text-decoration: underline;cursor: pointer;">
+     					查看附件
+     				</a>
+      			</template>
             </el-table-column>
-            <el-table-column prop="phone" label="经纪人名称" width="130">
+            <el-table-column prop="phone" label="上传人员" >
             </el-table-column>
-            <el-table-column   prop="state" label="客户名称" width="130">
-            </el-table-column>
-            <el-table-column   prop="recommendPeople" label="成交房号" width="130">
-            </el-table-column>
-            <el-table-column  prop="type" label="物业类型" width="130">
-            </el-table-column>  
-            <el-table-column   prop="recommendPeople" label="合同总价(￥)" width="130">
-            </el-table-column>
-            <el-table-column  prop="type" label="已付金额(￥)" width="130">
-            </el-table-column>  
-            <el-table-column  prop="type" label="付款方式" width="130">
-            </el-table-column>     
-            <el-table-column  prop="type" label="佣金类型" width="130">
+            <el-table-column prop="planeTime" label="上传时间" >
             </el-table-column>   
-            <el-table-column  prop="type" label="时间" width="130">
-            </el-table-column>     
-            <el-table-column  prop="type" label="申请金额(￥)" width="130">
-            </el-table-column>  
-            <el-table-column  prop="type" label="扣款金额(￥)" width="130">
-            </el-table-column>  
-            <el-table-column  prop="type" label="扣款金额(￥)" width="130">
-            </el-table-column>  
           </el-table>
         </el-row>    
         	<el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
          	</el-pagination>
 	    </div>
-		</el-row>
+		</el-row>	
 	</div>
 </template>
-
 <script>
-	import {mapMutations} from 'vuex'
+	import {mapMutations,mapState} from 'vuex'
 	export default{
-		name:'PersonPaymentCheck',
+		name:'PersonCheckAddApplyView',
 		data(){
 			return{
 				ProjectInfo:{
@@ -146,16 +141,19 @@
 					ArcStartTime:'',
 					ArcEndTime:''
 				},
-				Data: [],
+				Data:[],
       			tableData: [],
       			pageSize: 6,
       			alltablesize: [],
-      			sels:[]
+      			sels:[],
+      			visitContent:true,
+      			introContent:true,
+      			dealContent:true
 			}
 		},
 		methods:{
    			back(){
-    			this.$router.push({path:"/index/CompanyCommission"})
+    			this.$router.push({path:"/index/CkPayCommission"})
    			},
     		onSubmit(){
     	
@@ -194,36 +192,25 @@
     		},
     		handleCurrentChange(val) {
       			this.Data = this.alltablesize[val - 1];
-    		}, 
-    		check(){
-      			let sels=this.sels;
-     		    if(sels.length>1){
-      				this.$message.error("查看只能单选")
-      			}else if(sels.length==1){
-      				this.CkPayDeTailaddsels(sels[0].key);
-      				this.$router.push({path: '/index/PersonCheckAddView'})
-      			}else{
-      				this.$message.error("请选择查看内容")
-      			}
-    		},
-    		selsChange(sels) {  
-    			if(sels){
-    		  		this.sels=sels; 
-    			}   
-   			},
+    		}, 	
    			...mapMutations([
-   				'CkPayDeTailaddsels'
+   				
    			])
     		
 		},
 		created(){
 			this.getApartmentInfoImgList()
+		},
+		computed:{
+			...mapState({
+				showForms:state=>state.CkPayCommissonDetail.showForm
+			})
 		}
 	}
 </script>
 
 <style lang='scss' scoped>
-	#PersonPaymentCheck{
+	#PersonCheckAddApplyView{
 		.check-basetitle{
 			height:40px;
 			line-height:40px;
@@ -257,6 +244,9 @@
 			height:35px;
 			line-height:35px;
 			padding-left: 20px;
+		}
+		.el-select{
+			width:226px!important;	
 		}
 	}
 	

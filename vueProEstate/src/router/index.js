@@ -61,7 +61,16 @@ import SubApplyCount from '@/components/CommissionManagement/SubApplyCount'
 import PayApplyCheck from '@/components/CommissionManagement/PayApplyCheck'
 import CheckPayCheckPayment from '@/components/CommissionManagement/CheckPayCheckPayment'
 import PersonPaymentCheck from '@/components/CommissionManagement/PersonPaymentCheck'
-
+import PersonCheckAddView from '@/components/CommissionManagement/PersonCheckAddView'
+import PersonCheckAddApplyView from '@/components/CommissionManagement/PersonCheckAddApplyView'
+import PersonCheckCheckSubView from '@/components/CommissionManagement/PersonCheckCheckSubView'
+import PersonCheckPayApplyView from '@/components/CommissionManagement/PersonCheckPayApplyView'
+import PersonCheckPayCheckView from '@/components/CommissionManagement/PersonCheckPayCheckView'
+import PerCheckOncePayCheckView from '@/components/CommissionManagement/PerCheckOncePayCheckView'
+import PersonCheckPayFaild from '@/components/CommissionManagement/PersonCheckPayFaild'
+import PersonAccessoryAddCheckChange from '@/components/CommissionManagement/PersonAccessoryAddCheckChange'
+ 
+ 
 Vue.use(Router)
  
 export default new Router({
@@ -301,8 +310,41 @@ export default new Router({
         {
         	path:'/index/PersonPaymentCheck',
         	component:PersonPaymentCheck
+        },
+        {
+        	path:'/index/PersonCheckAddView',
+        	component:PersonCheckAddView
+        },
+        {
+        	path:'/index/PersonCheckCheckSubView',
+        	component:PersonCheckCheckSubView 	
+        },
+        {
+        	path:'/index/PersonCheckAddApplyView',
+        	component:PersonCheckAddApplyView	
+        },
+        {       	
+        	path:'/index/PersonCheckPayApplyView',
+        	component:PersonCheckPayApplyView	
+        },
+        {
+        	
+        	path:'/index/PersonCheckPayCheckView',
+        	component:PersonCheckPayCheckView	
+        },
+        {
+        	path:'/index/PerCheckOncePayCheckView',
+        	component:PerCheckOncePayCheckView
+        },
+        {    	
+        	path:'/index/PersonCheckPayFaild',
+        	component:PersonCheckPayFaild
+        },
+        {
+        	path:'/index/PersonAccessoryAddCheckChange',
+        	component:PersonAccessoryAddCheckChange
         }
-        
+     
         ]
     }, ]
 })

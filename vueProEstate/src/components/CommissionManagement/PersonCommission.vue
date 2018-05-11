@@ -12,8 +12,8 @@
                     <el-button type="primary" size="small">修改佣金</el-button>
                     <el-button type="primary" size="small">删除</el-button>
                     <el-button type="primary" size="small">佣金审核</el-button>
-                    <el-button type="primary" size="small">付款申请</el-button>
-                    <el-button type="primary" size="small">付款审核</el-button>
+                    <el-button type="primary" @click="payapply" size="small">付款申请</el-button>
+                    <el-button type="primary" @click="paycheck" size="small">付款审核</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
@@ -132,7 +132,29 @@ export default{
     },
     ...mapMutations([
     	'addsels'
-    ])
+    ]),
+    payapply(){
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addsels(sels[0].key);
+      	this.$router.push({path: '/index/PersonCheckPayApplyView'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+    },
+    paycheck(){
+     let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.addsels(sels[0].key);
+      	this.$router.push({path: '/index/PersonCheckPayCheckView'})
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+    }
   } 
 }
 </script>

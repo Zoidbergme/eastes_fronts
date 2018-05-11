@@ -1,92 +1,98 @@
 <template>
-	<div id="PersonPaymentCheck">
+	<div id="PersonCheckAddView">
 		<el-row >
 			<el-form :model="ProjectInfo" ref="form" label-width="160px" size="small" class="checkInfo-form ">
 				<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 					<el-col :span="12">
-						<span class="check-basetitle">全民佣金申请、审核、查看、新增、审核、修改</span>
+						<span class="check-basetitle">全民经济人、添加结佣信息</span>
 					</el-col>
-					<el-col :span="8" :push="4" >
-						<el-button size="small" type="primary" @click="onSubmit">审核通过</el-button>
-						<el-button size="small" type="waning" @click="onSubmit">审核不通过</el-button>
+					<el-col :span="4" :push="8" >
     					<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
     					<el-button size="small" @click="back" >取消</el-button>
 					</el-col>
 				</el-row>
-				<el-row class="m_top">
+				<el-row  class="m_top">
 					<el-col :span="8">
-						<el-form-item label="申请名称：">
-							<el-input v-model="ProjectInfo.name">
-							</el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row >
-					<el-col :span="8">
-					    <el-form-item label="申请金额(￥)：">
+					    <el-form-item label="推荐编码：">
 							<el-input v-model="ProjectInfo.name">				
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 					<el-col :span="8">
-					    <el-form-item label="扣款金额(￥)：">
+					    <el-form-item label="经济人名称：">
 							<el-input v-model="ProjectInfo.name">
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
+					<el-col :span="7">
+					    <el-form-item label="状态：">
+							<el-select  v-model="ProjectInfo.selects"  >
+								<el-option label="催永" value="1">
+									
+								</el-option>
+								<el-option label="正常" value="2">
+									
+								</el-option>
+							</el-select>
+					 	</el-form-item>
+					</el-col> 
+				</el-row>
+				<el-row>
 					<el-col :span="8">
-					    <el-form-item label="审核金额(￥)：">
-							<el-input v-model="ProjectInfo.name">					
+					    <el-form-item label="物业类型：">
+							<el-select v-model='ProjectInfo.house_type'>
+								<el-option label="住宅" value="1"></el-option>
+								<el-option label="公寓" value="1"></el-option>
+								<el-option label="别墅" value="1"></el-option>
+							</el-select>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="8">
+					    <el-form-item label="批次：">
+							<el-select v-model="ProjectInfo.times">
+								<el-option label="1批次" value="1"></el-option>
+							</el-select>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="7">
+					    <el-form-item label="楼栋：">
+							<el-input v-model="ProjectInfo.name">	
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-					    <el-form-item label="申请笔数：">
-							<el-input v-model="ProjectInfo.name">				
+					    <el-form-item label="单元：">
+							<el-input v-model="ProjectInfo.name">		
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
-					 
-				</el-row>
-	
-				<el-row>
 					<el-col :span="8">
-					    <el-form-item label="申请类型：">
+					    <el-form-item label="房号：">
+							<el-input v-model="ProjectInfo.name">		
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="7">
+					    <el-form-item label="客户名称：">
 							<el-input v-model="ProjectInfo.name">			
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
-					<el-col :span="8">
-					    <el-form-item label="申请人员：">
-							<el-input v-model="ProjectInfo.name">
-							
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
-					<el-col :span="8">
-					    <el-form-item label="申请时间：">
-							<el-date-picker v-model="ProjectInfo.startTime" type="date" placeholder="选择日期">
-             	 			</el-date-picker>
-					 	</el-form-item>
-					</el-col> 
-				</el-row>
+				</el-row>			
 			</el-form>
 		</el-row>
 		<el-row>
 		<div id="CompanyCommission">
 		  <el-row type="flex" justify="space-between" class="examine-title thead_m_bottom">
-            <el-col :span="15" class="thead_title">
+            <el-col :span="19" class="thead_title">
               	申请结佣列表
             </el-col>
-            <el-col :span="7">
+            <el-col :span="3">
                 <el-button-group>
-                	<el-button type="primary" size="small">高级搜索</el-button>
-                    <el-button type="primary" @click="check" size="small">查看</el-button>
-              		<el-button type="primary" size="small">扣款</el-button>
-                    <el-button type="primary" size="small">添加</el-button>
-                    <el-button type="primary" size="small">删除</el-button>
+                    <el-button type="primary" @click="check" size="small">查看</el-button>      
+                    <el-button type="primary" size="small">添加</el-button>           
                 </el-button-group>
             </el-col>
          </el-row>
@@ -96,34 +102,22 @@
             </el-table-column>
             <el-table-column fiexd  prop="key" width="50" label="序号">
             </el-table-column>
-            <el-table-column  prop="recommendNum" label="推荐编号" width="130">
+            <el-table-column  prop="recommendNum" label="推荐编码" width="130">
             </el-table-column>
-            <el-table-column  prop="customerName" label="状态" width="130">
+            <el-table-column  prop="customerName" label="经济人名称" width="130">
             </el-table-column>
-            <el-table-column prop="phone" label="经纪人名称" width="130">
+            <el-table-column prop="phone" label="客户名称" width="130">
             </el-table-column>
-            <el-table-column   prop="state" label="客户名称" width="130">
+            <el-table-column   prop="state" label="成交房号" width="130">
             </el-table-column>
-            <el-table-column   prop="recommendPeople" label="成交房号" width="130">
+            <el-table-column   prop="recommendPeople" label="物业类型" width="130">
             </el-table-column>
-            <el-table-column  prop="type" label="物业类型" width="130">
+            <el-table-column  prop="type" label="合同总价(￥)" width="130">
             </el-table-column>  
-            <el-table-column   prop="recommendPeople" label="合同总价(￥)" width="130">
+            <el-table-column   prop="recommendPeople" label="已付金额(￥)" width="130">
             </el-table-column>
-            <el-table-column  prop="type" label="已付金额(￥)" width="130">
-            </el-table-column>  
             <el-table-column  prop="type" label="付款方式" width="130">
-            </el-table-column>     
-            <el-table-column  prop="type" label="佣金类型" width="130">
-            </el-table-column>   
-            <el-table-column  prop="type" label="时间" width="130">
-            </el-table-column>     
-            <el-table-column  prop="type" label="申请金额(￥)" width="130">
-            </el-table-column>  
-            <el-table-column  prop="type" label="扣款金额(￥)" width="130">
-            </el-table-column>  
-            <el-table-column  prop="type" label="扣款金额(￥)" width="130">
-            </el-table-column>  
+            </el-table-column>      
           </el-table>
         </el-row>    
         	<el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
@@ -136,7 +130,7 @@
 <script>
 	import {mapMutations} from 'vuex'
 	export default{
-		name:'PersonPaymentCheck',
+		name:'PersonCheckAddView',
 		data(){
 			return{
 				ProjectInfo:{
@@ -144,7 +138,10 @@
 					startTime:'',
 					endTime:'',
 					ArcStartTime:'',
-					ArcEndTime:''
+					ArcEndTime:'',
+					selects:"催佣",
+					house_type:'别墅',
+					times:'1批次'
 				},
 				Data: [],
       			tableData: [],
@@ -155,7 +152,7 @@
 		},
 		methods:{
    			back(){
-    			this.$router.push({path:"/index/CompanyCommission"})
+    			this.$router.push({path:"/index/PersonPaymentCheck"})
    			},
     		onSubmit(){
     	
@@ -164,13 +161,13 @@
         		for (let i = 1; i < 20; i++) {
         				this.tableData.push({
          				key: i,
-          				recommendNum: "2018/01/10",
-          				customerName: "2018/05/10",
-         				phone: "xxA公司",
-         				state: "成都-郫都区",
-              			recommendPeople:"张三",
-            			type: "13877729922",
-            			companyName:"2000",
+          				recommendNum: "jjjb12",
+          				customerName: "催佣",
+         				phone: "李四",
+         				state: "张三",
+              			recommendPeople:"成交房号",
+            			type: "住宅",
+            			companyName:"1",
             			recommendTime:"200",
 	            		chargePeople:"1000",
 	            		sureTime:"800",
@@ -200,8 +197,8 @@
      		    if(sels.length>1){
       				this.$message.error("查看只能单选")
       			}else if(sels.length==1){
-      				this.CkPayDeTailaddsels(sels[0].key);
-      				this.$router.push({path: '/index/PersonCheckAddView'})
+      				this.AddApply(sels[0].key);
+      				this.$router.push({path: '/index/PersonCheckCheckSubView'})
       			}else{
       				this.$message.error("请选择查看内容")
       			}
@@ -212,7 +209,7 @@
     			}   
    			},
    			...mapMutations([
-   				'CkPayDeTailaddsels'
+   				 'AddApply'
    			])
     		
 		},
@@ -223,7 +220,7 @@
 </script>
 
 <style lang='scss' scoped>
-	#PersonPaymentCheck{
+	#PersonCheckAddView{
 		.check-basetitle{
 			height:40px;
 			line-height:40px;

@@ -151,8 +151,8 @@
                     <el-button type="primary" size="small">修改佣金</el-button>
                     <el-button type="primary" size="small">删除</el-button>
                     <el-button type="primary" size="small">佣金审核</el-button>
-                    <el-button type="primary" @click="paycheck" size="small">付款申请</el-button>
-                 	<el-button type="primary" size="small">付款审核</el-button>
+                    <el-button type="primary" @click="applycheck" size="small">付款申请</el-button>
+                 	<el-button type="primary"  @click="paycheck" size="small">付款审核</el-button>
                 </el-button-group>
             </el-col>
          </el-row>
@@ -280,13 +280,24 @@
    			CheckDetail(){
    				this.$router.push({path:'/index/CommissioCheck'})
    			},
-   			paycheck(){		
+   			applycheck(){		
    				let sels=this.sels;
      		    if(sels.length>1){
       				this.$message.error("查看只能单选")
       			}else if(sels.length==1){
       				this.CkPayaddsels(sels[0].key);
       				this.$router.push({path:'/index/CheckPayCheckPayment'})
+      			}else{
+      				this.$message.error("请选择查看内容")
+      			}
+   			},
+   			paycheck(){
+   				let sels=this.sels;
+     		    if(sels.length>1){
+      				this.$message.error("查看只能单选")
+      			}else if(sels.length==1){
+      				this.CkPayaddsels(sels[0].key);
+      				this.$router.push({path:'/index/PersonCheckPayCheckView'})
       			}else{
       				this.$message.error("请选择查看内容")
       			}

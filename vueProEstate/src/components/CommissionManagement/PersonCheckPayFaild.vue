@@ -1,110 +1,76 @@
 <template>
-	<div id="PayApplyCheck">
+	<div id="PersonCheckPayFaild">
 		<el-row >
-			<el-form :model="ProjectInfo" ref="form" label-width="160px" size="small" class="checkInfo-form ">
+			<el-form :model="ProjectInfo" ref="form" label-width="130px" size="small" class="checkInfo-form ">
 				<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 					<el-col :span="12">
-						<span class="check-basetitle">付款审核</span>
+						<span class="check-basetitle">付款失败</span>
 					</el-col>
 					<el-col :span="4" :push="8" >
     					<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
     					<el-button size="small" @click="back" >取消</el-button>
 					</el-col>
 				</el-row>
-				<el-row  class="m_top">
+				<el-row class="m_top">
 					<el-col :span="8">
-					    <el-form-item label="申请名称：">
+					    <el-form-item label="推荐编号：">
 							<el-input v-model="ProjectInfo.name">				
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
+				
 					<el-col :span="8">
-					    <el-form-item label="审核金额：">
+					    <el-form-item label="经济人名称：">
 							<el-input v-model="ProjectInfo.name">
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
-					<el-col :span="8">
-					    <el-form-item label="扣款金额(￥)：">
+					<el-col :span="7">
+					    <el-form-item label="审核金额：">
 							<el-input v-model="ProjectInfo.name">				
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
+					
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-					    <el-form-item label="未结金额(￥)：">
-							<el-input v-model="ProjectInfo.name">
-							
+					    <el-form-item label="佣金类型：">
+							<el-input v-model="ProjectInfo.name">				
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
+					
+				</el-row>
+				<el-row>
 					<el-col :span="8">
-					     <el-form-item label="申请付款金额(￥)：">
-							<el-input v-model="ProjectInfo.name">
+						<el-form-item label="付款失败类型：">
+							<el-select v-model="select">
+								<el-option label="银行卡号错误" value="1" ></el-option>
+							</el-select>
+					 	</el-form-item>
+					</el-col>
+					
+				</el-row>		
+				<el-row>
+					<el-col :span="16">
+					    <el-form-item label="付款失败描述：">
+							<el-input type="textarea" v-model="ProjectInfo.name">
 							
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 				</el-row>
-						
+				
 			</el-form>
-		</el-row>
-			<el-row>
-		<div id="CompanyCommission">
-		  <el-row type="flex" justify="space-between" class="examine-title thead_m_bottom">
-            <el-col :span="17" class="thead_title">
-              	审核列表
-            </el-col>
-            <el-col :span="5">
-                <el-button-group>
-                    <el-button type="primary" @click="check" size="small">查看</el-button>
-              		<el-button type="primary" size="small">审核通过</el-button>
-                    <el-button type="primary" size="small">审核不通过</el-button>
-                </el-button-group>
-            </el-col>
-         </el-row>
-         <el-row class="table_row">
-           <el-table :data="Data" @selection-change="selsChange" style="width: 100%"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column fixed type="selection" reserve-selection="" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column fiexd  prop="key" width="50" label="序号">
-            </el-table-column>
-            <el-table-column  prop="recommendNum" label="付款申请名称" width="110">
-            </el-table-column>
-            <el-table-column  prop="customerName" label="未结金额(￥)" width="110">
-            </el-table-column>
-            <el-table-column prop="phone" label="申请付款金额(￥)" width="130">
-            </el-table-column>
-            <el-table-column   prop="state" label="收款银行" width="100">
-            </el-table-column>
-            <el-table-column   prop="recommendPeople" label="收款银行卡号" width="150">
-            </el-table-column>
-            <el-table-column  prop="type" label="收款户名" width="110">
-            </el-table-column>  
-            <el-table-column   prop="recommendPeople" label="申请人员" width="80">
-            </el-table-column>
-            <el-table-column  prop="type" label="申请时间" width="130">
-            </el-table-column>
-             <el-table-column  prop="type" label="审核人员" width="80">
-            </el-table-column>  
-			 <el-table-column  prop="type" label="审核时间" width="100">
-            </el-table-column> 
-             <el-table-column  prop="type" label="状态" width="90">
-            </el-table-column>   
-          </el-table>
-        </el-row>    
-        	<el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-         	</el-pagination>
-	    </div>
-		</el-row>
+		</el-row>		
 	</div>
 </template>
 
 <script>
 	import {mapMutations,mapState} from 'vuex'
 	export default{
-		name:'PayApplyCheck',
+		name:'PersonCheckPayFaild',
 		data(){
 			return{
 				ProjectInfo:{
@@ -121,12 +87,13 @@
       			sels:[],
       			visitContent:true,
       			introContent:true,
-      			dealContent:true
+      			dealContent:true,
+      			select:'银行卡号错误'
 			}
 		},
 		methods:{
    			back(){
-    			this.$router.push({path:"/index/CkPayCommission"})
+    			this.$router.push({path:"/index/PerCheckOncePayCheckView"})
    			},
     		onSubmit(){
     	
@@ -168,7 +135,11 @@
     		}, 	
    			...mapMutations([
    				'showForm'
-   			])
+   			]),
+   			accesscheck(){
+   				
+   			}
+    		
 		},
 		created(){
 			this.getApartmentInfoImgList()
@@ -182,7 +153,7 @@
 </script>
 
 <style lang='scss' scoped>
-	#PayApplyCheck{
+	#PersonCheckPayFaild{
 		.check-basetitle{
 			height:40px;
 			line-height:40px;
@@ -218,7 +189,7 @@
 			padding-left: 20px;
 		}
 		.el-select{
-			width:226px!important;	
+			width:256px!important;	
 		}
 	}
 	

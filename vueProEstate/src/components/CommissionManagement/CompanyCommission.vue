@@ -130,7 +130,7 @@ export default{
       }
     },
     change(){
-    	let sels=this.sels;
+      let sels=this.sels;
       if(sels.length>1){
       	this.$message.error("查看只能单选")
       }else if(sels.length==1){

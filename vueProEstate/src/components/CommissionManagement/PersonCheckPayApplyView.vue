@@ -1,10 +1,10 @@
 <template>
-	<div id="CheckPayCheckPayment">
+	<div id="PersonCheckPayApplyView">
 		<el-row >
 			<el-form :model="ProjectInfo" ref="form" label-width="160px" size="small" class="checkInfo-form ">
 				<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 					<el-col :span="12">
-						<span class="check-basetitle">修改、审核</span>
+						<span class="check-basetitle">付款申请</span>
 					</el-col>
 					<el-col :span="4" :push="8" > 			
     					<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
@@ -28,50 +28,38 @@
 					 	</el-form-item>
 					</el-col> 
 					<el-col :span="8">
+					     <el-form-item label="已结金额(￥)：">
+							<el-input v-model="ProjectInfo.name">
+							
+							</el-input>
+					 	</el-form-item>
+					</el-col> 
+					<el-col :span="7">
 					     <el-form-item label="未结金额(￥)：">
 							<el-input v-model="ProjectInfo.name">
-							
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
-					<el-col :span="7">
-					     <el-form-item label="申请付款金额(￥)：">
-							<el-input v-model="ProjectInfo.name">
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-					    <el-form-item label="收款银行：">
+					    <el-form-item label="本次付款金额：">
 							<el-input v-model="ProjectInfo.name">
 							
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
 					<el-col :span="8">
-					     <el-form-item label="收款银行卡号：">
+					     <el-form-item label="本次付款申请笔数：">
 							<el-input v-model="ProjectInfo.name">
 							
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
-					<el-col :span="7">
-					     <el-form-item label="收款户名：">
-							<el-input v-model="ProjectInfo.name">
-							
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
+					
 				</el-row>
 				<el-row>
-					<el-col :span="8">
-					    <el-form-item label="申请类型：">
-							<el-input v-model="ProjectInfo.name">
-							
-							</el-input>
-					 	</el-form-item>
-					</el-col> 
+				
 					<el-col :span="8">
 					     <el-form-item label="申请人员：">
 							<el-input v-model="ProjectInfo.name">
@@ -79,7 +67,7 @@
 							</el-input>
 					 	</el-form-item>
 					</el-col> 
-					<el-col :span="7">
+					<el-col :span="8">
 					     <el-form-item label="申请时间：">
 							<el-input v-model="ProjectInfo.name">
 							
@@ -92,49 +80,93 @@
 		<el-row>
 		<div id="CompanyCommission">
 		  <el-row type="flex" justify="space-between" class="examine-title thead_m_bottom">
-            <el-col :span="17" class="thead_title">
-              	附件
+            <el-col :span="20" class="thead_title">
+              	付款申请列表
             </el-col>
-            <el-col :span="5">
+            <el-col :span="2"  >
                 <el-button-group>
-                    <el-button type="primary" @click="check" size="small">查看</el-button>
-                     <el-button type="primary" size="small">添加</el-button>
-              		<el-button type="primary" size="small">修改</el-button>
-                    <el-button type="primary" size="small">删除</el-button>              
+                    <el-button type="primary" @click="check" size="small">查看</el-button>       
                 </el-button-group>
             </el-col>
          </el-row>
          <el-row class="table_row">
            <el-table :data="Data" @selection-change="selsChange" style="width: 100%"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+            <el-table-column type="selection" reserv-selectin="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
-            <el-table-column prop="companyName" label="文件名称" >
+            <el-table-column prop="companyName" label="推荐编号" >
             </el-table-column>
-            <el-table-column  label="附件"  >
-            	<template slot-scope="scope">
-     				<a :href="scope.row.planeEndTime" target="_blank" style="color:blue;text-decoration: underline;cursor: pointer;">
-     					查看附件
-     				</a>
-      			</template>
+            <el-table-column  prop="companyName" label="状态"  >
             </el-table-column>
-            <el-table-column prop="phone" label="上传人员" >
+            <el-table-column prop="phone" label="经济人名称" >
             </el-table-column>
-            <el-table-column prop="planeTime" label="上传时间" >
+            <el-table-column prop="planeTime" label="佣金类型" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="时间" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="收款银行" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="银行卡号" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="收款户名" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="应付金额(￥)" >
             </el-table-column>   
           </el-table>
         </el-row>    
         	<el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
          	</el-pagination>
 	    </div>
-		</el-row>	
+		</el-row>
+		<el-row class="row_m_top">
+		<div id="CompanyCommission">
+		  <el-row type="flex" justify="space-between" class="examine-title thead_m_bottom">
+            <el-col :span="20" class="thead_title">
+              	未认证/付款失败列表
+            </el-col>
+            <el-col :span="2"  >
+                <el-button-group>
+                    <el-button type="primary" @click="check" size="small">查看</el-button>       
+                </el-button-group>
+            </el-col>
+         </el-row>
+         <el-row class="table_row">
+           <el-table :data="Data" @selection-change="selsChange" style="width: 100%"  border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserv-selectin="" label="ALL" width="50">
+            </el-table-column>
+            <el-table-column prop="key" label="序号" width="60">
+            </el-table-column>
+            <el-table-column prop="companyName" label="推荐编号" >
+            </el-table-column>
+            <el-table-column  prop="companyName" label="状态"  >
+            </el-table-column>
+            <el-table-column prop="phone" label="经济人名称" >
+            </el-table-column>
+            <el-table-column prop="planeTime" label="佣金类型" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="时间" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="收款银行" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="银行卡号" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="收款户名" >
+            </el-table-column>   
+            <el-table-column prop="planeTime" label="应付金额(￥)" >
+            </el-table-column>   
+          </el-table>
+        </el-row>    
+        	<el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
+         	</el-pagination>
+	    </div>
+		</el-row>
 	</div>
 </template>
 <script>
 	import {mapMutations,mapState} from 'vuex'
 	export default{
-		name:'CheckPayCheckPayment',
+		name:'PersonCheckPayApplyView',
 		data(){
 			return{
 				ProjectInfo:{
@@ -156,7 +188,7 @@
 		},
 		methods:{
    			back(){
-    			this.$router.push({path:"/index/CkPayCommission"})
+    			this.$router.push({path:"/index/PersonCommission"})
    			},
     		onSubmit(){
     	
@@ -197,8 +229,24 @@
       			this.Data = this.alltablesize[val - 1];
     		}, 	
    			...mapMutations([
-   				
-   			])
+   				'addsels'
+   			]),
+   			selsChange(){
+   				if(sels){
+    		  		this.sels=sels; 
+    			}   
+   			},
+   			check(){
+   			   let sels=this.sels;
+     		   if(sels.length>1){
+      	       		this.$message.error("查看只能单选")
+     		  }else if(sels.length==1){
+      				this.addsels(sels[0].key);
+      				this.$router.push({path: '/index/PersonCommission'})
+      		  }else{
+      				this.$message.error("请选择查看内容")
+    		  }
+   			}
     		
 		},
 		created(){
@@ -213,7 +261,7 @@
 </script>
 
 <style lang='scss' scoped>
-	#CheckPayCheckPayment{
+	#PersonCheckPayApplyView{
 		.check-basetitle{
 			height:40px;
 			line-height:40px;
@@ -250,6 +298,9 @@
 		}
 		.el-select{
 			width:226px!important;	
+		}
+		.row_m_top{
+			margin-top:30px!important;
 		}
 	}
 	
