@@ -12,7 +12,7 @@
   		</el-form-item>
 	</el-col>
 </el-row>
-<el-row >	
+<el-row  class="m_top">	
    	<el-col :span="12">
    	  <el-form-item  label="*开始执行时间">
          <el-date-picker type="date"required placeholder="选择日期" v-model="form.date1" style="width: 90%;"></el-date-picker>

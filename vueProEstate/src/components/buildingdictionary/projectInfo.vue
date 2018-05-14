@@ -28,14 +28,14 @@
           <el-form-item label="项目地址:">
             <el-col :span="8">
               <el-select v-model="ruleForminfo.provalue" placeholder="请选择" @change="provinceChange($event)">
-                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.code">
+                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item"  :value="idx">
              
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="8">
               <el-select v-model="ruleForminfo.cityvalue" placeholder="请选择" @change="cityChange($event)">
-                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item.name"  :value="item.code" >
+                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item"  :value="id" >
                 </el-option>
               </el-select>
             </el-col>
@@ -328,8 +328,7 @@ export default {
     this.getProvinceList();
     this.getProjectInfo();
     this.$http.get(this_.Rooturl+"config")
-      .then(res => {   });
-    
+      .then(res => {   }); 
   },
   methods: {
     handleClose(tag) {
@@ -361,6 +360,7 @@ export default {
     	let url=this.Rooturl+"project/project/getProjectInfo";
       this.$http.get(url).then(res => {
         localStorage.setItem("info",JSON.stringify(res));
+        console.log(res.data);
         this.projectInfo = res.data.data;
         this.ruleForminfo.provalue = this.projectInfo.province;
         this.provinceChange(this.ruleForminfo.provalue);
@@ -401,9 +401,9 @@ export default {
       let token = sessionStorage.getItem("userinfo");
       let url=this.Rooturl+"getProvinceList";
       this.$http.get(url).then(res => {
-    
         localStorage.setItem("prov",JSON.stringify(res));
         this.firoptions = res.data.data;
+      
       });
     },
     // 读取市区列表
@@ -411,6 +411,7 @@ export default {
       this.$http.get("api/getCityList?provinceCode=" + value).then(res => {
       	localStorage.setItem("city",JSON.stringify(res));
         this.secoptions = res.data.data;  
+          console.log(res.data);
       });
     },
     // 读取区县列表

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import $http from 'axios'
 
 import allCustomer from './modules/allCustomer'
 import beConfirmed from './modules/beConfirmed'
@@ -14,6 +15,10 @@ import autoLoaction from './modules/autoLoaction'
 import CkPayCommissonDetail from './modules/CkPayCommissonDetail'
 import AddApply from './modules/AddApply'
 import CommissioCheck from './modules/CommissioCheck'
+import BrokersHeader from './modules/BrokersHeader'
+import apartmentInfo from './modules/apartmentInfo'
+import checkInfo from './modules/checkInfo'
+import AddInfo from './modules/AddInfo'
 
 Vue.use(Vuex)
 
@@ -31,6 +36,10 @@ export default new Vuex.Store({
  		autoLoaction,
  		CkPayCommissonDetail,
  		AddApply,
- 		CommissioCheck
+ 		CommissioCheck,
+ 		BrokersHeader,
+ 		apartmentInfo,
+ 		checkInfo,
+ 		AddInfo
   }
 })

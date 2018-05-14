@@ -2,10 +2,10 @@
     <div id="breadcrumb">
         <el-row class="title">
             <el-col>
-                <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb separator-class="el-icon">
                     <el-breadcrumb-item v-for="(name,index) in breadcrumbName" v-bind:key="name.id" :to="name.router">
-                        <i class="el-icon-message" v-if="index===0"></i>
-                        <span @click="addColor($event)" style="cursor: pointer;" v-bind:style="[{fontWeight:src==name.breadcrumbname?'700':'400'}]">{{name.breadcrumbname}}</span>
+                        <i class="el-icon" >|</i>
+                        <span @click="addColor($event)" style="cursor: pointer;" v-bind:style="src==name.breadcrumbname?'fontWeight:700;color:#409EFF':'fontWeight:400;color:#666'">{{name.breadcrumbname}}</span>
                     </el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>

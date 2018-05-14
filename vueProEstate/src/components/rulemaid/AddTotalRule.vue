@@ -28,28 +28,28 @@
 <el-row>
     <el-col :span="12">
     	 <el-form-item prop="valid_visit_time" label="到访确认保护期(分钟)：">
-    			<el-input type="text" v-model="form.valid_visit_time"  placeholder="请输入失效时间,如:60" style="width: 90%;"></el-input>
+    			<el-input    v-model.number="form.valid_visit_time"  placeholder="请输入失效时间,如:60" style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
 <el-row>
     <el-col :span="12">
     	 <el-form-item prop="visit_confirm_time" label="有效来访保护期(天)：">
-    			<el-input type="text" v-model="form.visit_confirm_time" placeholder="请输入失效时间,如:1"  style="width: 90%;"></el-input>
+    			<el-input @blur="CheckTime"   v-model.number="form.visit_confirm_time" placeholder="请输入失效时间,如:1"  style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
 <el-row>
     <el-col :span="12">
     	 <el-form-item  prop="make_bargain_time" label="成交保护期(天)：">
-    			<el-input type="text" v-model="form.make_bargain_time"   placeholder="请输入失效时间,如1"  style="width: 90%;"></el-input>
+    			<el-input  @blur="CheckTime"  v-model.number="form.make_bargain_time"   placeholder="请输入失效时间,如1"  style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
  <el-row>
  	<el-col :span="12">
  	  <el-form-item  label="推荐佣金结款周期">
-    		<el-select v-model="form.intro_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
+    		<el-select @blur="CheckTime" v-model="form.intro_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
               <el-option label="七个工作日后" value="7"></el-option>
@@ -102,6 +102,23 @@
 	export default{
 	name:'AddTotalRule',
 	data() {
+	 const checkNum=(rule,value,callback)=>{
+	 	 if(value != null && value != "") {
+             if(!(typeof(value)==="number"&&value%1==0)) {
+                 callback(new Error('请输入正整数!'))
+             }else if(value>9999){
+                  callback(new Error("不能大于9999"))
+             }else{
+             	callback()
+             }
+         }
+	 	 else if(!value){
+	 	 	callback(new Error("不能为空"));
+	 	 }
+         else{
+              callback();
+         }
+	 }
      return {
      		canUpload:false,
       		form: {
@@ -125,16 +142,13 @@
           		 		{type:'data',required:true,message:'请选择截止日期',trigger:'blur'}
           		 	],
           		 	valid_visit_time:[
-          		 		{type:"number",required:true,message:"保护时间错误",trigger:"blur"},
-          		 		{min:"1",max:"4",message:'时间位数超过1-4位',trigger:'blur'}
+          		 		{validator: checkNum,trigger:'blur'}
           		 	],
           		 	visit_confirm_time:[
-          		 		{type:'number',required:true,message:'有效来访时间错误',trigger:"blur"},
-          		 		{min:1,max:4,message:'时间位数超过1-4位',trigger:'blur'}
+          		 		{validator: checkNum,trigger:'blur'}	         		 	
           		 	],
           		 	make_bargain_time:[
-          		 		{type:"number",required:true,message:"成交保护时间错误",trigger:'blur'},
-          		 		{min:1,max:4,message:'时间位数超过1-4位',trigger:'blur'}
+          		 		{validator: checkNum,trigger:'blur'}
           		 	],
           		 	intro_pay_time:[
           		 		{required:true,message:'请选择推荐结佣周期',trigger:'blur'}
@@ -188,6 +202,10 @@
       	}
       	if(!this.form.end_time){
       		this.$message.error("请选择截止日期");
+      		this.canUpload=false;
+      	}
+      	if(!this.form.visit_confirm_time){
+      		this.$message.error("到访确认保护时间错误");
       		this.canUpload=false;
       	}
       },

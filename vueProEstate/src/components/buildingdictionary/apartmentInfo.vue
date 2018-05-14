@@ -64,6 +64,7 @@
     </div>
 </template>
 <script>
+import {mapState,mapActions} from 'vuex'
 import breadcrumb from "@/components/shared/breadcrumb";
 export default {
   name: "apartmentInfo",
@@ -81,6 +82,8 @@ export default {
   },
   created() {
     this.getApartmentInfoImgList();
+    this.addData();
+
   },
   methods: {
     getApartmentInfoImgList() {
@@ -123,7 +126,19 @@ export default {
     },
     check() {
       this.$router.push({ path:"/index/checkApartment"});
-    }
+    },
+    ...mapActions([
+    	'addData'
+    ])
+   
+  },
+  computed:{
+    	...mapState({
+    		houseData:state=>state.apartmentInfo.houseData
+    	})
+  },
+  mounted(){
+  	console.log(this.houseData)
   }
 };
 </script>

@@ -12,7 +12,7 @@
             </el-col>
             <el-col :span="7" :push="2" >
                 <el-button-group>
-                    <el-button type="primary" @click="check" size="small">查看</el-button>
+                    <el-button type="primary" @click="RecomposeTotal" size="small">查看</el-button>
                     <el-button type="primary" @click="AddTotal" size="small">新增</el-button>
                     <el-button type="primary" @click="RecomposeTotal" size="small" >修改</el-button>
                     <el-button type="primary" @click="StopTotal" size="small" >终止</el-button>

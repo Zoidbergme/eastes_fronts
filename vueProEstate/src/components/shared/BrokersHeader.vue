@@ -1,5 +1,5 @@
 <template>
-    <div id="CommissionManageHeader">
+    <div id="BrokersHeader">
         <el-row class="title">
             <el-col>
                 <el-breadcrumb separator-class="el-icon">
@@ -17,7 +17,7 @@
 import {mapState,mapMutations} from 'vuex'
 
 export default {
-  name: "CommissionManageHeader",
+  name: "BrokersHeader",
   data(){
   	return{
   		
@@ -28,16 +28,16 @@ export default {
   },
   computed:{
   	...mapState({
-  		src:state=>state.CommissionManage.ele
+  		src:state=>state.BrokersHeader.ele
   	})
   },
   methods:{
   	addColor(e){
      let src=e.currentTarget;
-     this.changeCommissionManage(src.innerHTML);
+     this.changeBrokersHeader(src.innerHTML);
    },
    ...mapMutations([
-   		'changeCommissionManage'
+   		'changeBrokersHeader'
    ])
   },
   mounted(){

@@ -1,5 +1,5 @@
 <template>
-  <div id="effective">
+  <div id="invalid">
     <el-row type="flex" justify="space-between" class="beConfirmeed-title">
       <el-col :span="18">
         <breadcrumb :breadcrumbName="breadcrumbName"></breadcrumb>
@@ -139,11 +139,12 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+#invalid{
 .el-breadcrumb__inner {
-  font-size: 18px !important;
+  font-size: 16px !important;
 }
-.beConfirmeed-title {
+.examine-title {
   border-bottom: dashed 1px #b3c0d1;
   margin-bottom: 10px;
   padding-bottom: 10px;
@@ -151,5 +152,16 @@ export default {
 .el-table {
   width: 100%;
   margin-top: 30px;
+  padding: 2px 0px !important;
+}
+::-webkit-scrollbar,::scrollbar{
+	height:8px!important;	
+}
+::-webkit-scrollbar-thumb,::scrollbar-thumb{
+	background:rgba(25,158,216,0.9)!important;
+}
+padding-top:10px!important;
+margin-top:10px!important;
+padding-bottom:10px!important;
 }
 </style>

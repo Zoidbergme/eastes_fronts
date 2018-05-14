@@ -77,7 +77,7 @@
     "menuname": "经纪人管理",
     "menustate": "1",
     "menuico": "",
-    "menurouter": "",
+    "menurouter": "../index/ToBeComfirmed",
     "menutype": 2
 }
 ]

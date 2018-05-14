@@ -84,9 +84,7 @@
             <span class="gen-title">楼栋设置</span>
           </el-col>
           <el-col class="gen-lay-info">
-            <el-button type="primary" @click="buildDetail($event)" id="27" size="mini">一栋</el-button>
-            <el-button type="primary" @click="buildDetail($event)" id="28" size="mini">二栋</el-button>
-            <el-button type="primary" @click="buildDetail($event)" id="29" size="mini">三栋</el-button>
+            <el-button v-for="(item,idx) in YsBuild" type="primary" @click="buildDetail($event)" :key="idx"  :id="item.build_id" size="mini">{{item.build_name}}</el-button>
           </el-col>
           <el-row class="gen-lay-list">
             <el-col :span="5">
@@ -101,32 +99,32 @@
               </el-button-group>
             </el-col>
           </el-row>
-          <el-table :data="Data" border style="width: 100%"  @selection-change="selsChange" ref="multipleTable" tooltip-effect="dark" size='mini'>
+          <el-table :data="builds" border style="width: 100%"  @selection-change="selsChange" ref="multipleTable" tooltip-effect="dark" size='mini'>
             <el-table-column type="selection" reserve-selection="" width="50">
             </el-table-column>
-            <el-table-column prop="key" label="序号" width="55">
+            <el-table-column prop="build_id" label="序号" width="55">
             </el-table-column>
-            <el-table-column prop="name" label="名称" width="85">
+            <el-table-column prop="build_name" label="名称" width="85">
             </el-table-column>
-            <el-table-column prop="preSaleLicenseNumber" label="预售许可证编号" width="155">
+            <el-table-column prop="sale_permit" label="预售许可证编号" width="155">
             </el-table-column>
-            <el-table-column prop="issueTime" label="发证时间" width="90">
+            <el-table-column prop="permit_time" label="发证时间" width="90">
             </el-table-column>
-            <el-table-column prop="openWay" label="开盘方式" width="90">
+            <el-table-column prop="open_way" label="开盘方式" width="90">
             </el-table-column>
-            <el-table-column prop="openTime" label="开盘时间" width="90">
+            <el-table-column prop="open_time" label="开盘时间" width="90">
             </el-table-column>
-            <el-table-column prop="endTime" label="交房时间" width="90">
+            <el-table-column prop="update_time" label="交房时间" width="100">
             </el-table-column>
-            <el-table-column prop="units" label="单元数" width="80">
+            <el-table-column prop="unit_num" label="单元数" width="80">
             </el-table-column>
-            <el-table-column prop="ladderRatio" label="梯户比" width="80">
+            <el-table-column prop="ladder_ratio" label="梯户比" width="80">
             </el-table-column>
-            <el-table-column prop="households" label="总户数" width="80">
+            <el-table-column prop="total_house_num" label="总户数" width="80">
             </el-table-column>
-            <el-table-column prop="floorNumber" label="楼上层数" width="80">
+            <el-table-column prop="uppper_floor_num" label="楼上层数" width="80">
             </el-table-column>
-            <el-table-column prop="downstairsNumber" label="楼下层数" width="80">
+            <el-table-column prop="down_floor_num" label="楼下层数" width="80">
             </el-table-column>
           </el-table>
           <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange">
@@ -138,7 +136,7 @@
   </div>
 </template>
 <script>
-import {mapMutations} from 'vuex'
+import {mapMutations,mapActions,mapState} from 'vuex'
 export default {
   name: "generalLayout",
   data() {
@@ -157,7 +155,8 @@ export default {
     }
   },
   created() {
-    this.getgeneralLayoutlist();
+    this.getYsBuild();
+    this.getBindBuild();
   },
   methods: {
     // 验证图片格式大小
@@ -171,44 +170,6 @@ export default {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
-      },
-    getgeneralLayoutlist() {
-      for (let i = 1; i < 100; i++) {
-        this.tableData.push({
-          key: i,
-          name: i + "栋",
-          preSaleLicenseNumber: "CDSFCZNO_134" + i,
-          issueTime: "2017/12/21",
-          openWay: "网上开盘",
-          openTime: "2017/12/12",
-          endTime: "2017/12/12",
-          units: "4",
-          ladderRatio: "2梯4户",
-          households: "200",
-          floorNumber: "12",
-          downstairsNumber: "2"
-        });
-      }
-      this.page();
-    },
-    page() {
-      for (
-        let i = 0;
-        i < Math.ceil(this.tableData.length / this.pageSize);
-        i++
-      ) {
-        let arr = new Array();
-        for (let j = 0; j < this.tableData.length; j++) {
-          if (
-            j >= (i == 0 ? 0 : i * this.pageSize) &&
-            j < (i + 1) * this.pageSize
-          ) {
-            arr.push(this.tableData[j]);
-          }
-        }
-        this.alltablesize.push(arr);
-      }
-      this.Data = this.alltablesize[0];
     },
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
@@ -219,7 +180,7 @@ export default {
     	this.$router.push({path:"/index/BuildingDetail"})
     },
     ...mapMutations([
-    	 'generalLayout','addProId'
+    	 'generalLayout','addProId','addBuidData'
     ]),
     ToAddInfo(){
     	 this.$router.push({ path: "/index/AddInfo" });
@@ -229,7 +190,8 @@ export default {
       if(sels.length>1){
       	this.$message.error("查看只能单选")
       }else if(sels.length==1){
-      	this.addProId(sels[0].key);
+      	this.addProId(sels[0]);
+      	this.addBuidData(sels[0]);
       	this.$router.push({path: '/index/checkInfo'})
       }else{
       	this.$message.error("请选择查看内容")
@@ -239,6 +201,7 @@ export default {
     selsChange(sels) {  
     	if(sels){
     		   this.sels=sels; 
+    		   console.log(sels)
     	}   
     },
     DeleteInfo(){
@@ -247,7 +210,7 @@ export default {
       if(sels.length>1){
       	this.$message.error("查看只能单选")
       }else if(sels.length==1){
-      	this.addProId(sels[0].key);
+      	this.addProId(sels);
       	this.$http.get(url,{
       		params:{
       			
@@ -260,7 +223,16 @@ export default {
       }else{
       	this.$message.error("请选择删除内容")
       }
-    }
+    },
+    ...mapActions([
+    	'getYsBuild','getBindBuild'
+    ])
+  },
+  computed:{
+    	...mapState({
+    		YsBuild:state=>state.generalLayout.YsBuild,
+    		builds:state=>state.generalLayout.builds
+    	})
   }
 };
 </script>

@@ -69,8 +69,12 @@ import PersonCheckPayCheckView from '@/components/CommissionManagement/PersonChe
 import PerCheckOncePayCheckView from '@/components/CommissionManagement/PerCheckOncePayCheckView'
 import PersonCheckPayFaild from '@/components/CommissionManagement/PersonCheckPayFaild'
 import PersonAccessoryAddCheckChange from '@/components/CommissionManagement/PersonAccessoryAddCheckChange'
- 
- 
+import ToBeComfirmed from '@/components/BrokersManagement/ToBeComfirmed' 
+import VerifiedPerson  from '@/components/BrokersManagement/VerifiedPerson'  
+import AuditFailure  from '@/components/BrokersManagement/AuditFailure' 
+import ToBeConfirmCheck  from '@/components/BrokersManagement/ToBeConfirmCheck' 
+import ToBeConfilmAudit  from '@/components/BrokersManagement/ToBeConfilmAudit'  
+
 Vue.use(Router)
  
 export default new Router({
@@ -343,8 +347,35 @@ export default new Router({
         {
         	path:'/index/PersonAccessoryAddCheckChange',
         	component:PersonAccessoryAddCheckChange
+        },
+        {
+        	path:'/index/ToBeComfirmed',
+        	component:ToBeComfirmed
+        },
+        {
+        	path:'/index/VerifiedPerson',
+        	component:VerifiedPerson 
+        },
+        {
+        	path:'/index/AuditFailure',
+        	component:AuditFailure
+        },
+        {
+        	path:'/index/ToBeConfirmCheck',
+        	component:ToBeConfirmCheck
+        },
+        {
+        	path:'/index/ToBeConfilmAudit',
+        	component:ToBeConfilmAudit
+        },
+        {
+        	path:"/index/ToBeConfirmCheck",
+        	component:ToBeConfirmCheck
+        },
+        {
+        	path:"/index/ToBeConfilmAudit",
+        	component:ToBeConfilmAudit
         }
-     
         ]
     }, ]
 })

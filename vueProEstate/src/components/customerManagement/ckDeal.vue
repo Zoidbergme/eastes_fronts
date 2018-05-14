@@ -502,7 +502,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+#ckDeal{
 .Checkinfo {
   height: 40px;
   line-height: 40px;
@@ -558,6 +559,10 @@ img {
 }
 .makeSureinfo {
   border-right: 1px solid #b3c0d1;
+}
+padding-top:10px!important;
+margin-top:10px!important;
+padding-bottom:10px!important;
 }
 </style>
 

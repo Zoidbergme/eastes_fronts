@@ -149,7 +149,8 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+#beConfirmed{
 .el-breadcrumb__inner {
   font-size: 18px !important;
 }
@@ -161,5 +162,9 @@ export default {
 .el-table {
   width: 100%;
   margin-top: 30px;
+}
+padding-top:10px!important;
+margin-top:10px!important;
+padding-bottom:10px!important;
 }
 </style>

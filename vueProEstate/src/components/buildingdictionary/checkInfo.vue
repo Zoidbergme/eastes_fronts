@@ -9,34 +9,35 @@
         <el-button  size="small" @click="back" >取消</el-button>
       </el-col>
     </el-row>
-    <el-form :model="ruleFormcheck" ref="form" label-width="100px" size="small" class="checkInfo-form">
+    <el-form :model="sels" ref="form" label-width="100px" size="small" class="checkInfo-form">
       <el-row>
         <el-col :span="12">
           <el-form-item label="名称:">
-            <el-input v-model="ruleFormcheck.name">
+            <el-input v-model="sels.build_name">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="绑定楼栋:">
-         				<el-select v-model="ruleFormcheck.building">
-         					 <el-option label="1栋" :value="27"></el-option>
-         					 <el-option label="2栋" :value="28"></el-option>
-         				</el-select>  
+        <el-col v-if="builds" :span="12">
+           <el-form-item label="梯户比:">
+          			<el-input class="floor"  v-model.number="floorId"></el-input>
+            <font>梯</font>
+            		<el-input class="floor" v-model.number="houseId"></el-input>
+            <font>户</font>
           </el-form-item>
+          
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="预售许可证:">
-            <el-input v-model="ruleFormcheck.permit">
+            <el-input v-model="sels.sale_permit">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="发证时间:">
             <div class="block">
-              <el-date-picker v-model="ruleFormcheck.issueTime" type="date" placeholder="选择日期">
+              <el-date-picker v-model="sels.permit_time" type="date" placeholder="选择日期">
               </el-date-picker>
             </div>
           </el-form-item>
@@ -45,14 +46,14 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="开盘方式:">
-            <el-input v-model="ruleFormcheck.openWay">
+            <el-input v-model="sels.open_way">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="开盘时间:">
             <div class="block">
-              <el-date-picker v-model="ruleFormcheck.openTime" type="date" placeholder="选择日期">
+              <el-date-picker v-model="sels.open_time" type="date" placeholder="选择日期">
               </el-date-picker>
             </div>
           </el-form-item>
@@ -62,14 +63,14 @@
         <el-col :span="12">
           <el-form-item label="交房时间:">
             <div class="block">
-              <el-date-picker v-model="ruleFormcheck.othersTime" type="date" placeholder="选择日期">
+              <el-date-picker v-model="sels.handing_room_time" type="date" placeholder="选择日期">
               </el-date-picker>
             </div>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="单元数:">
-            <el-input v-model="ruleFormcheck.unit">
+            <el-input v-model="sels.unit_num">
             </el-input>
           </el-form-item>
         </el-col>
@@ -77,13 +78,13 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="楼上层数:">
-            <el-input v-model="ruleFormcheck.floorNumber">
+            <el-input v-model="sels.down_floor_num">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="楼下层数:">
-            <el-input v-model="ruleFormcheck.downstairsNumber">
+            <el-input v-model="sels.uppper_floor_num">
             </el-input>
           </el-form-item>
         </el-col>
@@ -91,12 +92,12 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="梯户比:">
-            <el-select class="floor" v-model="ruleFormcheck.floorId">
+            <el-select class="floor" v-model="sels.project_id">
             		<el-option label="1" :value="1"></el-option>
          				<el-option label="2" :value="2"></el-option>
             </el-select>
             <font>梯</font>
-            <el-select class="floor" v-model="ruleFormcheck.houseId">
+            <el-select class="floor" v-model="sels.state">
             		<el-option label="1" :value="1"></el-option>
          				<el-option label="2" :value="2"></el-option>
             </el-select>
@@ -105,7 +106,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="总户数:">
-            <el-input v-model="ruleFormcheck.households">
+            <el-input v-model="sels.total_house_num">
             </el-input>
           </el-form-item>
         </el-col>
@@ -114,35 +115,25 @@
   </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState,mapActions} from 'vuex'
 export default {
   name: "checkInfo",
   data() {
     return {
-      ruleFormcheck: {
-        name: "",
-        building: "1栋",
-        permit: "",
-        issueTime: "",
-        openWay: "",
-        openTime: "",
-        othersTime: "",
-        unit: "",
-        floorNumber: "",
-        downstairsNumber: "",
-        ladderRatio: "",
-        households: "",
-        houseId:1,
-       	floorId:1
-      }
+     
     }
   },
   created(){
  			//load();等待接口，未对接
+ 			this.getBuild();
+ 		
   },
   computed:{
  			...mapState({
- 			project_id:state=>state.beConfirmed.sels
+ 			project_id:state=>state.checkInfo.sels,
+ 			builds:state=>state.checkInfo.builds,
+ 			totalData:state=>state.checkInfo.totalData,
+ 			sels:state=>state.checkInfo.sels
  		})
   },
   methods:{
@@ -171,7 +162,14 @@ export default {
   	 	 			this.$message.error("网络错误")
   	 	 		}
   	 	 	})
-  	 }
+  	 },
+  	 ...mapActions([
+  	 	 'getBuild'
+  	 ])
+  	
+  },
+  mounted(){
+  		console.log(this.totalData);
   }
 }
 </script>

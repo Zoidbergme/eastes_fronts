@@ -133,9 +133,10 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+#allCustomer{
 .el-breadcrumb__inner {
-  font-size: 18px !important;
+  font-size: 16px !important;
 }
 .examine-title {
   border-bottom: dashed 1px #b3c0d1;
@@ -152,6 +153,10 @@ export default {
 }
 ::-webkit-scrollbar-thumb,::scrollbar-thumb{
 	background:rgba(25,158,216,0.9)!important;
+}
+padding-top:10px!important;
+margin-top:10px!important;
+padding-bottom:10px!important;
 }
 </style>
 
