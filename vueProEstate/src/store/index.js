@@ -19,6 +19,10 @@ import BrokersHeader from './modules/BrokersHeader'
 import apartmentInfo from './modules/apartmentInfo'
 import checkInfo from './modules/checkInfo'
 import AddInfo from './modules/AddInfo'
+import categoryImg from './modules/categoryImg'
+import projectImg from './modules/projectImg'
+import palnPho from './modules/palnPho'
+
 
 Vue.use(Vuex)
 
@@ -40,6 +44,9 @@ export default new Vuex.Store({
  		BrokersHeader,
  		apartmentInfo,
  		checkInfo,
- 		AddInfo
+ 		AddInfo,
+ 		categoryImg,
+ 		projectImg,
+ 		palnPho
   }
 })

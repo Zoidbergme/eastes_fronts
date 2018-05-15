@@ -16,13 +16,13 @@
     <el-table :data="Data" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table" @select="a($event)">
       <el-table-column type="selection" label="all" width="50">
       </el-table-column>
-      <el-table-column type="index" label="图片顺序" width="50">
+      <el-table-column type="index" label="图片顺序" width="100">
       </el-table-column>
-      <el-table-column prop="type_name" label="图片类型">
+      <el-table-column prop="type_name" label="图片类型" width="120" >
       </el-table-column>
-      <el-table-column prop="imgPath" label="图片">
+      <el-table-column prop="imgPath" label="图片" width="120">
         <template slot-scope="scope"> 
-          <img :src="url+scope.row.img_url" alt="" class="baseImg">
+          <img :src="url+scope.row.img_url" alt="" class="baseImg" >
         </template> 
       </el-table-column>
       <el-table-column prop="img_describe" label="备注">

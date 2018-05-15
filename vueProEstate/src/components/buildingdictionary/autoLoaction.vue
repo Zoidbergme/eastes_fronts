@@ -30,7 +30,7 @@ export default{
 				var lat='';
 				var map = new BMap.Map("allmap");
 				var geo=new BMap.Geocoder();	
-				map.centerAndZoom("成都市",18);
+				map.centerAndZoom(this.cityName,18);
 				map.enableScrollWheelZoom(true);
 				map.addEventListener("click",function(e){
 					map.clearOverlays();
@@ -64,7 +64,7 @@ export default{
 			
 		},
 		created(){
-			
+			console.log(this.cityName)
 		},
 		mounted(){
 			this.load();

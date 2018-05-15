@@ -122,7 +122,7 @@
             </el-table-column>
             <el-table-column prop="total_house_num" label="总户数" width="80">
             </el-table-column>
-            <el-table-column prop="uppper_floor_num" label="楼上层数" width="80">
+            <el-table-column prop="upper_floor_num" label="楼上层数" width="80">
             </el-table-column>
             <el-table-column prop="down_floor_num" label="楼下层数" width="80">
             </el-table-column>

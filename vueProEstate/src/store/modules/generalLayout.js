@@ -4,7 +4,7 @@ import Rooturl from '../../../static/Rooturl'
 const state={
 	project_id:'',
 	build_id:'',
-	YsBuild:'',
+	YsBuild:{},
 	builds:[],
 	totalData:''
 }

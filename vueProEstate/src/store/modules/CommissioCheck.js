@@ -1,9 +1,10 @@
 const state={
-	project_id:''
+	project_id:'',
+	sels:[]
 }
 const mutations={
 	CommissioCheck(state,payload){
-		state.project_id=payload
+		state.sels=payload
 	}
 }
 

@@ -7,16 +7,16 @@
             <el-col :span="8">
                 <el-button-group>
                     <el-button type="primary" size="small">高级搜索</el-button>
-                    <el-button type="primary" size="small">预览</el-button>
-                    <el-button type="primary" size="small" @click="check()">查看</el-button>
-                    <el-button type="primary" size="small" @click="addImgTypeVisible = true">新增</el-button>
-                    <el-button type="primary" size="small" @click="changeImgTypeVisible = true">修改</el-button>
+                    <el-button type="primary" size="small" >预览</el-button>
+                    <el-button type="primary" size="small" @click="check">查看</el-button>
+                    <el-button type="primary" size="small" @click="add">新增</el-button>
+                    <el-button type="primary" size="small" @click="check">修改</el-button>
                     <el-button type="primary" size="small">删除</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border  ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" border @selection-change="selsChange"  ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号">
             </el-table-column>
@@ -64,7 +64,7 @@
     </div>
 </template>
 <script>
-import {mapState,mapActions} from 'vuex'
+import {mapState,mapActions,mapMutations} from 'vuex'
 import breadcrumb from "@/components/shared/breadcrumb";
 export default {
   name: "apartmentInfo",
@@ -77,7 +77,8 @@ export default {
       pageSize: 5,
       alltablesize: [],
       addImgTypeVisible: false,
-      changeImgTypeVisible: false
+      changeImgTypeVisible: false,
+      sels:[]
     };
   },
   created() {
@@ -125,11 +126,31 @@ export default {
       this.Data = this.alltablesize[val - 1];
     },
     check() {
-      this.$router.push({ path:"/index/checkApartment"});
+      let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.PhoAddSels(sels);
+      	this.$router.push({ path:"/index/checkApartment"});
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
+     
+    },
+    add(){
+      	this.$router.push({ path:"/index/addHouseInfo"});
     },
     ...mapActions([
     	'addData'
-    ])
+    ]),
+    ...mapMutations([
+    	'PhoAddSels','PhoAddId','PhoHouseTypeName'
+    ]),
+    selsChange(sels){
+    	if(sels){
+    		this.sels=sels
+    	}
+    }
    
   },
   computed:{

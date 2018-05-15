@@ -52,6 +52,7 @@
   </div>
 </template>
 <script>
+import {mapState,mapActions} from 'vuex'
 import breadcrumb from "@/components/shared/breadcrumb";
 export default {
   name: "projectImg",
@@ -68,7 +69,9 @@ export default {
     };
   },
   created() {
-    this.getProjectImgList();
+    //this.getProjectImgList();
+    this.addImgs();
+    this.getImgList();
   },
   methods: {
     // 项目图片列表详情
@@ -77,7 +80,6 @@ export default {
         console.log("+++++++++++++++++++++++++++++++++++++++")
         this.tableData=res.data.data;
         this.page();
-        console.log(res)
       })
     },
     page() {
@@ -104,7 +106,10 @@ export default {
     },
     check() {
       this.$router.push({ path: "/index/categoryImg" });
-    }
+    },
+    ...mapActions([
+    	'addImgs','getImgList'
+    ])
   }
 };
 </script>
