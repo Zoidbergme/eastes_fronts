@@ -1,5 +1,4 @@
 <template>
-
 <el-form id="AddTotalRule" ref="form" :rules="rules" :model="form"  label-width="200px">
 <el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
@@ -14,13 +13,13 @@
 </el-row>
 <el-row >	
    	<el-col :span="12">
-   	  <el-form-item   label="*开始执行时间">
-         <el-date-picker @blur="CheckTime"  @change="CheckTime" type="date"required placeholder="选择日期" v-model="form.begin_time" style="width: 90%;"></el-date-picker>
+   	  <el-form-item  prop="begin_time"  label="*开始执行时间">
+         <el-date-picker   @change="CheckTime" type="date"required placeholder="选择日期" v-model="form.begin_time" style="width: 90%;"></el-date-picker>
       </el-form-item>
    	</el-col>
     <el-col :span="12">
-    	 <el-form-item   label="*截止执行时间">
-         <el-date-picker  @blur="CheckTime" @change="CheckTime" type="date" required placeholder="选择日期" v-model="form.end_time" style="width: 90%;"></el-date-picker> 
+    	 <el-form-item  prop="end_time"  label="*截止执行时间">
+         <el-date-picker   @change="CheckTime" type="date" required placeholder="选择日期" v-model="form.end_time" style="width: 90%;"></el-date-picker> 
  	    </el-form-item>
  	</el-col>    
 </el-row> 	    
@@ -48,7 +47,7 @@
 </el-row>
  <el-row>
  	<el-col :span="12">
- 	  <el-form-item  label="推荐佣金结款周期">
+ 	  <el-form-item  prop="intro_pay_time" label="推荐佣金结款周期">
     		<el-select @blur="CheckTime" v-model="form.intro_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
@@ -59,8 +58,8 @@
  </el-row>
   <el-row>
  	<el-col :span="12">
- 	  <el-form-item  label="到访佣金结款周期">
-    		<el-select v-model="form.visit" style="width: 90%;" placeholder="请选择结佣时间">
+ 	  <el-form-item prop="visit_pay_time"  label="到访佣金结款周期">
+    		<el-select v-model="form.visit_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
               <el-option label="七个工作日后" value="7"></el-option>
@@ -70,8 +69,8 @@
  </el-row>
  <el-row>
  	<el-col :span="12">
- 	  <el-form-item  label="成交佣金结款周期">
-    		<el-select  v-model="form.deel" style="width: 90%;" placeholder="请选择结佣时间">
+ 	  <el-form-item prop="deal_pay_time"  label="成交佣金结款周期">
+    		<el-select  v-model="form.deal_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
               <el-option label="七个工作日后" value="7"></el-option>
@@ -79,8 +78,8 @@
      </el-form-item>
  	</el-col>
  	<el-col :span="12">
- 	  <el-form-item  label="成交结款条件">
-    		<el-select @change="isUpload" v-model="form.region" style="width: 90%;" placeholder="请选择结佣条件">
+ 	  <el-form-item  prop="deal_pay_condition" label="成交结款条件">
+    		<el-select  v-model="form.deal_pay_condition" style="width: 90%;" placeholder="请选择结佣条件">
               <el-option label="已签订单，且付定金" value="1"></el-option>
               <el-option label="签订购房合同，且付房款" value="2"></el-option>      
            </el-select>
@@ -90,7 +89,7 @@
  <el-row>
   <el-col :span="23" >
   	 <el-form-item prop="remark" label="备注：">
-    	<el-input @change="isUpload" type="textarea" v-model="form.remark"></el-input>
+    	<el-input  type="textarea" v-model="form.remark"></el-input>
  	 </el-form-item>
   </el-col>	 
 </el-row> 
@@ -136,10 +135,10 @@
         	},
         	rules:{
           		 	begin_time:[
-          		 		{type:"data",required:true,message:'请选择开始日期',trigger:'blur'},
+          		 		{required:true,message:'请选择开始日期',trigger:'blur'},
           		 	],
           		 	end_time:[
-          		 		{type:'data',required:true,message:'请选择截止日期',trigger:'blur'}
+          		 		{required:true,message:'请选择截止日期',trigger:'blur'}
           		 	],
           		 	valid_visit_time:[
           		 		{validator: checkNum,trigger:'blur'}
@@ -165,28 +164,33 @@
           		 	remark:[
           		 		{required:true,message:'请输入备注',trigger:'blur'},
           		 		{min:1,max:200,message:'输入字数超过1-200字',trigger:'change'}
+          		 	],
+          		 	region:[
+          		 		{reqruired:true,message:'不能为空',trigger:'blur'}
+          		 	],
+          		 	visit:[
+          		 		{reqruired:true,message:'不能为空',trigger:'blur'}
           		 	]
           	}
         }
     },
     methods: {
       onSubmit() {
-        if(this.canUpload){
-      		let url=this.Rooturl+"project/ruleBasic/create";
-      		this.$http.post(url,{
-      			...this.form  
-      		}).then(res=>{
-      		if(res.code==2){
-      			this.$message.success(res.msg);
-      			this.$router.push({path:'/index/CommissioCheck'})
-      		}else{
-      			this.$message.error("提交失败")
-      		}
-      		})
-      	 }else{
-      	 	this.$message.error("请核对所有选项");
-      	 }
-         
+      	this.$refs.form.validate(()=>{	
+  		  if(valid){
+      			let url=this.Rooturl+"project/ruleBasic/create";
+      			this.$http.post(url,{
+      				...this.form  
+      			}).then(res=>{
+      				if(res.code==2){
+      					this.$message.success(res.msg);
+      					this.$router.push({path:'/index/CommissioCheck'})
+      				}else{
+      					this.$message.error("提交失败")
+      				}	
+      			})
+      		}	
+        })
       },
       back(){
       	 this.$router.push({ path: "/index/CommissioCheck" });

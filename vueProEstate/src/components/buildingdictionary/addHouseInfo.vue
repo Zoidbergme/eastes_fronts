@@ -1,5 +1,5 @@
 <template>
-	<div id="planPho">
+	<div id="addHouseInfo">
 		<el-row class="apart-lay-list">
                     <el-col :span="4">
                         <el-checkbox v-model="checkAlls" @change="handleCheckAllChange" class="apart-title">平面图</el-checkbox>
@@ -102,7 +102,7 @@
 <script>
 import {mapState,mapActions,mapMutations} from 'vuex'	
 export default {
-  name: "palnPho",
+  name: "addHouseInfo",
   data() {
     return {
       ruleFormcheckApart: {

@@ -9,16 +9,16 @@
         <el-button  size="small" @click="back" >取消</el-button>
       </el-col>
     </el-row>
-    <el-form :model="ruleFormcheck" ref="form" label-width="100px" size="small" class="checkInfo-form">
+    <el-form :model="ruleFormcheck" :rules="rules" ref="form" label-width="100px" size="small" class="checkInfo-form">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="名称:">
-            <el-input v-model="build_name">
+          <el-form-item prop="build_name" label="名称:">
+            <el-input v-model="ruleFormcheck.build_name">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="绑定楼栋:">
+          <el-form-item prop="ys_build_id" label="绑定楼栋:">
          				<el-select ref="select" v-model="ruleFormcheck.ys_build_id">
          					 <el-option v-for="(item,idx) in YsBuild"  :key="idx"  :value="item.build_id" :label="item.build_name" ></el-option>
          				</el-select>  
@@ -27,13 +27,13 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="预售许可证:">
+          <el-form-item  prop="sale_permit" label="预售许可证:">
             <el-input v-model="ruleFormcheck.sale_permit">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="发证时间:">
+          <el-form-item prop="permit_time" label="发证时间:">
             <div class="block">
               <el-date-picker v-model="ruleFormcheck.permit_time" type="date" placeholder="选择日期">
               </el-date-picker>
@@ -43,13 +43,14 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="开盘方式:">
-            <el-input v-model="ruleFormcheck.open_way">
-            </el-input>
+          <el-form-item prop="open_way" label="开盘方式:">
+          		<el-select v-model="ruleFormcheck.open_way">
+          			<el-option v-for="(item,idx) in open_ways" :key="idx" :label="item.param" :value="item.id" ></el-option>
+          		</el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="开盘时间:">
+          <el-form-item prop="open_time" label="开盘时间:">
             <div class="block">
               <el-date-picker v-model="ruleFormcheck.open_time" type="date" placeholder="选择日期">
               </el-date-picker>
@@ -59,7 +60,7 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="交房时间:">
+          <el-form-item prop="handing_room_time" label="交房时间:">
             <div class="block">
               <el-date-picker v-model="ruleFormcheck.handing_room_time" type="date" placeholder="选择日期">
               </el-date-picker>
@@ -89,16 +90,16 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="梯户比:">
-          			<el-input class="floor"  v-model.number="floorId"></el-input>
+          <el-form-item   label="梯户比:">
+          		<el-input  type="number" required class="floor"  v-model.number="floorId"></el-input>
             <font>梯</font>
-            		<el-input class="floor" v-model.number="houseId"></el-input>
+            	<el-input class="floor" type="number" required  v-model.number="houseId"></el-input>
             <font>户</font>
-          </el-form-item>
+           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="总户数:">
-            <el-input v-model="ruleFormcheck.total_house_num">
+          <el-form-item prop="total_house_num" label="总户数:">
+            <el-input v-model.number="ruleFormcheck.total_house_num">
             </el-input>
           </el-form-item>
         </el-col>
@@ -130,6 +131,7 @@ export default {
   	};
     return {
       ruleFormcheck: {
+      	build_name:'',
  				ys_build_id:'',
   		  sale_permit:'',
  		    permit_time:'',
@@ -142,11 +144,12 @@ export default {
 		    ladder_ratio:'',
 		    total_house_num:''
       },
-      floorId:'',
-      build_name:'',
-      houseId:'',
-      canUpload:true,
+      floorId:'1',
+      houseId:'2',
       rules:{
+      	unit_num:[
+      		{validator:checkNum,trigger:'blur'}
+      	],
       	down_floor_num:[
       		{validator:checkNum,trigger:'blur'}
       	],
@@ -163,7 +166,27 @@ export default {
       		{validator:checkNum,trigger:'blur'}
       	],
       	handing_room_time:[
-      		{type:'date',required:true,message:'交房时间错误',trigger:'blur'}
+      			{type:'date',required:true,message:'时间错误',trigger:'change'}
+      	],
+      	sale_permit:[
+      		{required:true,message:'预收许可证不能为空',trigger:'change'},
+      		{min:1,max:50,message:'长度不对',trigger:'blur'}
+      	],
+      	permit_time:[
+      		{type:'date',required:true,message:'时间错误',trigger:'change'}
+      	],
+      	open_time:[
+      		{type:'date',required:true,message:'时间错误',trigger:'change'}
+      	],
+      	open_way:[
+      		{required:true,message:'开盘方式错误',trigger:'blur'}
+      	],
+      	build_name:[
+      		{required:true,message:"名称不能为空",trigger:'blur'},
+      		{min:1,max:10,message:'超出10个字',trigger:"change"}
+      	],
+      	ys_build_id:[
+      		{required:true,message:"不能为空",trigger:'change'}
       	]
       }
     
@@ -171,11 +194,13 @@ export default {
   },
   created(){
  		this.getYsBuild();
+ 		this.config();
   },
   computed:{
  			...mapState({
  			YsBuild:state=>state.generalLayout.YsBuild,
- 			formData:state=>state.AddInfo.formData
+ 			formData:state=>state.AddInfo.formData,
+ 			open_ways:state=>state.AddInfo.open_ways
  		})
   },
   methods:{
@@ -183,17 +208,24 @@ export default {
   	 		this.$router.push({path:'/index/generalLayout'});
   	 },
  		 ...mapActions([
- 		 		'getYsBuild','UpdateBuildDetail'
+ 		 		'getYsBuild','AddBuildDetail','config'
  		 ]),
  		 add(){
- 		 		if(this.canUpload){
+ 		 		this.$refs.form.validate((valid) => {
+ 		 			if(valid){
  		 				this.ruleFormcheck.ys_build_id=this.$refs.select.value;
  		 				this.ruleFormcheck.ladder_ratio=`${this.floorId},${this.houseId}`;
- 		 			  this.UpdateBuildDetail(this.ruleFormcheck);
- 		 				this.ruleFormcheck=this.formData;
- 		 		}
- 		 
+ 		 			  this.AddBuildDetail(this.ruleFormcheck);
+ 		 				if(this.formData==200){
+ 		 						this.$refs.form.resetFields();
+ 		 				}
+ 		 			}	
+ 		 		})
+ 		 	
  		 }
+  },
+  mounted(){
+  	console.log(this.open_ways)
   }
  }
 

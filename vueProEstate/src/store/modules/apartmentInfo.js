@@ -1,9 +1,10 @@
 import $http from 'axios'
 import Rooturl from '../../../static/Rooturl'
-
+import qs from 'qs'
 
 const state={
-	houseData:""
+	houseData:"",
+	Isdelete:''
 }
 
 
@@ -15,13 +16,26 @@ const mutations={
 
 
 const actions={
-	addData({commit}){
+	addData({commit},payload){
 		let url=Rooturl.Rooturl+"project/houseType/list";
 		$http.get(url,{
 			params:{
-		
+				state:'1'
 			}
 		}).then(res=>{
+			console.log(res.data)
+			if(res.code==200){
+				commit({
+					type:'addData',
+					data:res.data
+				})
+			}
+		});
+	},
+	deleteHouse({commit},payload){
+		let url=Rooturl.Rooturl+"project/houseType/delete";
+		$http.post(url,qs.stringify(payload)).then(res=>{
+			console.log(res.data)
 			if(res.code==200){
 				commit({
 					type:'addData',

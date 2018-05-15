@@ -3,46 +3,48 @@ import Rooturl from '../../../static/Rooturl'
 import qs from 'qs'
 
 const state={
-	clearData:{
- 		 ys_build_id:'',
-  		 sale_permit:'',
- 		 permit_time:'',
-		 open_way:'',
-		 open_time:'',
-		 handing_room_time:'',
-		 unit_num:'',
-		 uppper_floor_num:'',
- 		 down_floor_num:'',
-		ladder_ratio:'',
-		total_house_num:''
-	},
-	formData:''
+	formData:[],
+	open_ways:[]
 }
 
 const mutations={
 	clearData(state,payload){
 		state.formData={...payload.clear}
+	},
+	config(state,payload){
+		state.open_ways=payload.config
 	}
 }
 
 const actions={
-	UpdateBuildDetail({commit,state},payload){
+	AddBuildDetail({commit,state},payload){
 		let url =Rooturl.Rooturl+"project/build/add";
 		$http.post(url, qs.stringify({
 			...payload
 		})).then(res=>{
 			console.log(res.data);
 			if(res.data.code=='200'){
-				alert(res.data.data.msg);
+				alert(res.data.msg);
 				commit({
 					type:"clearData",
-					clear:state.clearData
+					clear:'200'
 				})
 			}else if(res.data.code=='400'){
-				alert(res.data.msg)
+				alert(res.data.msg);
+				state.formData=payload;
 			}
 		}).catch(err=>{
 			console.log(err);
+		})
+	},
+	config({commit,state},payload){
+		let url =Rooturl.Rooturl+"config";
+		$http.get(url).then(res=>{
+			console.log(res.data.data[11].param);
+			commit({
+				type:'config',
+				config:res.data.data[11].param
+			})
 		})
 	}
 }

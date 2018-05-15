@@ -74,6 +74,8 @@ import VerifiedPerson  from '@/components/BrokersManagement/VerifiedPerson'
 import AuditFailure  from '@/components/BrokersManagement/AuditFailure' 
 import ToBeConfirmCheck  from '@/components/BrokersManagement/ToBeConfirmCheck' 
 import ToBeConfilmAudit  from '@/components/BrokersManagement/ToBeConfilmAudit'  
+import addHouseInfo from  '@/components/buildingdictionary/addHouseInfo'
+
 
 Vue.use(Router)
  
@@ -375,6 +377,10 @@ export default new Router({
         {
         	path:"/index/ToBeConfilmAudit",
         	component:ToBeConfilmAudit
+        },
+        {
+        	path:"/index/addHouseInfo",
+        	component:addHouseInfo
         }
         ]
     }, ]

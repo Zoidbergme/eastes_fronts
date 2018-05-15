@@ -200,7 +200,7 @@
       			if(sels.length>1){
       				this.$message.error("查看只能单选")
       			}else if(sels.length==1){
-      				this.CommissioCheck(sels[0].key);
+      				this.CommissioCheck(sels);
       				this.$router.push({path: '/index/AddTotalRule'})
       			}else{
       				this.$message.error("请选择查看内容")

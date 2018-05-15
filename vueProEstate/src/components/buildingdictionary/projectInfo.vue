@@ -1,4 +1,3 @@
-
 <template>
   <div id="projectInfo">
     <el-row class="buildbaseinfo" type="flex" justify="space-between">
@@ -28,14 +27,14 @@
           <el-form-item label="项目地址:">
             <el-col :span="8">
               <el-select v-model="ruleForminfo.provalue" placeholder="请选择" @change="provinceChange($event)">
-                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item"  :value="idx">
+                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.code">
              
                 </el-option>
               </el-select>
             </el-col>
-            <el-col :span="8">
-              <el-select v-model="ruleForminfo.cityvalue" placeholder="请选择" @change="cityChange($event)">
-                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item"  :value="id" >
+            <el-col  :span="8">
+              <el-select ref="cityName" v-model="ruleForminfo.cityvalue" placeholder="请选择" @change="cityChange($event)">
+                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item.name"  :value="item.code" >
                 </el-option>
               </el-select>
             </el-col>
@@ -100,7 +99,7 @@
     <el-form ref="form" :model="ruleFormbuild" label-width="100px" size="small" class="projectInfo-form">
       <el-form-item label="物业类型:">
         <el-checkbox-group v-model="ruleFormbuild.procheckList">
-          <el-checkbox v-for="(item,idx) in realState" :label="item.id" :key="idx" >{{item.name}}</el-checkbox>    
+          <el-checkbox v-for="(item,idx) in realState"  :label="item.id" :key="idx" >{{item.param}}</el-checkbox>    
         </el-checkbox-group>
       </el-form-item>
       <el-col :span="12">
@@ -114,9 +113,9 @@
         </el-form-item>
       </el-col>
       <el-form-item label="项目标签:">
-        <el-col :span="12">
+       <el-col :span="22">
           <el-tag :key="tag" v-for="tag in projectTags" closable :disable-transitions="false" @close="handleClose(tag)">
-            {{tag}}
+            {{tag.param}}
           </el-tag>
           <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
           </el-input>
@@ -125,7 +124,7 @@
       </el-form-item>
       <el-form-item label="建筑类型:">
         <el-checkbox-group v-model="ruleFormbuild.buicheckList">
-            <el-checkbox v-for="(it,idx) in buildType" :label="it.id" :key="idx">{{it.name}}</el-checkbox>  
+            <el-checkbox v-for="(it,idx) in buildType" :label="it.id" :key="idx">{{it.param}}</el-checkbox>  
         </el-checkbox-group>
       </el-form-item>
       <el-row>
@@ -303,32 +302,15 @@ export default {
       projectInfo: {},
       proVisible: false,
       proImageUrl: "",
-      realState:[
-      			{id:'59',name:'住宅'},
-      			{id:'60',name:'公寓'},
-      			{id:'61',name:'别墅'},
-      			{id:'62',name:'商铺'},
-      			{id:'63',name:'写字楼'},
-      			{id:'64',name:'车位'}
-      ],
-      buildType:[
-      			{id:'65',name:'钢混'},
-      			{id:'66',name:'板楼'},
-      			{id:'67',name:'砖混'},
-      			{id:'68',name:'砖石'},
-      			{id:'69',name:'钢结构'},
-      			{id:'70',name:'其他'}	
-      ]
+      realState:[],
+      buildType:[]
     }
   },
   created() {
   	let this_=this;
-    this.$http.get(this_.Rooturl+"ysservice.ashx?action=getyh")
-       .then(res => {  });
     this.getProvinceList();
     this.getProjectInfo();
-    this.$http.get(this_.Rooturl+"config")
-      .then(res => {   }); 
+   	this.getconfig();
   },
   methods: {
     handleClose(tag) {
@@ -408,18 +390,26 @@ export default {
     },
     // 读取市区列表
     provinceChange(value) {
-      this.$http.get("api/getCityList?provinceCode=" + value).then(res => {
+    	let url=this.Rooturl+"getCityList";
+      this.$http.get(url,{
+      			params:{
+      				provinceCode:value
+      			}
+      	}).then(res => {
       	localStorage.setItem("city",JSON.stringify(res));
         this.secoptions = res.data.data;  
-          console.log(res.data);
       });
     },
     // 读取区县列表
     cityChange(value){
-      this.$http.get("api/getDistrictList?cityCode=" + value).then(res => {
+    	let url=this.Rooturl+"getDistrictList";
+      this.$http.get(url,{
+      			params:{
+      				cityCode:value
+      			}
+      	}).then(res => {
         this.thioptions = res.data.data;
         localStorage.setItem("distri",JSON.stringify(res));
-
       });
     },
     // 修改项目信息
@@ -501,16 +491,27 @@ export default {
  	  ]),
  	  addcityname(e){
  	  	let src=e.currentTarget;
- 	  	console.log(src.innerHTML);
- 	  }
+ 	  },
+ 	  getconfig(){
+  		let url=this.Rooturl+"config";
+    	this.$http.get(url,{
+    	}).then(res=>{
+    		console.log(res.data.data)
+    		 this.realState=res.data.data[16].param;
+    		 this.buildType=res.data.data[17].param;
+    		 this.projectTags=res.data.data[15].param
+    	})
+  	}
   },
   computed:{
   	...mapState({
   		 areaAdrss:state=>state.autoLoaction.street,
   		 address:state=>state.autoLoaction.address
-  	}) 
+  	})
+  	
   },
   mounted(){
+  	console.log(this.realState);
   	setTimeout(()=>{this.address==""?this.ruleForminfo.add=this.ruleForminfo.add:this.ruleForminfo.add=this.address;},400)
   }
 }

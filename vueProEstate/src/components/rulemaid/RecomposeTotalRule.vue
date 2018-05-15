@@ -13,13 +13,13 @@
 </el-row>
 <el-row >	
    	<el-col :span="12">
-   	  <el-form-item   label="*开始执行时间">
+   	  <el-form-item  prop="begin_time"  label="*开始执行时间">
          <el-date-picker   @change="CheckTime" type="date"required placeholder="选择日期" v-model="form.begin_time" style="width: 90%;"></el-date-picker>
       </el-form-item>
    	</el-col>
     <el-col :span="12">
-    	 <el-form-item   label="*截止执行时间">
-         <el-date-picker @change="CheckTime" type="date" required placeholder="选择日期" v-model="form.end_time" style="width: 90%;"></el-date-picker> 
+    	 <el-form-item  prop="end_time"  label="*截止执行时间">
+         <el-date-picker   @change="CheckTime" type="date" required placeholder="选择日期" v-model="form.end_time" style="width: 90%;"></el-date-picker> 
  	    </el-form-item>
  	</el-col>    
 </el-row> 	    
@@ -27,28 +27,28 @@
 <el-row>
     <el-col :span="12">
     	 <el-form-item prop="valid_visit_time" label="到访确认保护期(分钟)：">
-    			<el-input  v-model.number="form.valid_visit_time" required placeholder="请输入失效时间,如:60" style="width: 90%;"></el-input>
+    			<el-input    v-model.number="form.valid_visit_time"  placeholder="请输入失效时间,如:60" style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
 <el-row>
     <el-col :span="12">
     	 <el-form-item prop="visit_confirm_time" label="有效来访保护期(天)：">
-    			<el-input  v-model.number="form.visit_confirm_time" placeholder="请输入失效时间,如:1"  style="width: 90%;"></el-input>
+    			<el-input @blur="CheckTime"   v-model.number="form.visit_confirm_time" placeholder="请输入失效时间,如:1"  style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
 <el-row>
     <el-col :span="12">
     	 <el-form-item  prop="make_bargain_time" label="成交保护期(天)：">
-    			<el-input v-model.number="form.make_bargain_time" required  placeholder="请输入失效时间,如1"  style="width: 90%;"></el-input>
+    			<el-input  @blur="CheckTime"  v-model.number="form.make_bargain_time"   placeholder="请输入失效时间,如1"  style="width: 90%;"></el-input>
   		</el-form-item>
     </el-col> 
 </el-row>
  <el-row>
  	<el-col :span="12">
- 	  <el-form-item  label="推荐佣金结款周期">
-    		<el-select v-model="form.intro_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
+ 	  <el-form-item  prop="intro_pay_time" label="推荐佣金结款周期">
+    		<el-select @blur="CheckTime" v-model="form.intro_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
               <el-option label="七个工作日后" value="7"></el-option>
@@ -58,8 +58,8 @@
  </el-row>
   <el-row>
  	<el-col :span="12">
- 	  <el-form-item  label="到访佣金结款周期">
-    		<el-select v-model="form.visit" style="width: 90%;" placeholder="请选择结佣时间">
+ 	  <el-form-item prop="visit_pay_time"  label="到访佣金结款周期">
+    		<el-select v-model="form.visit_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
               <el-option label="七个工作日后" value="7"></el-option>
@@ -69,8 +69,8 @@
  </el-row>
  <el-row>
  	<el-col :span="12">
- 	  <el-form-item  label="成交佣金结款周期">
-    		<el-select  v-model="form.deel" style="width: 90%;" placeholder="请选择结佣时间">
+ 	  <el-form-item prop="deal_pay_time"  label="成交佣金结款周期">
+    		<el-select  v-model="form.deal_pay_time" style="width: 90%;" placeholder="请选择结佣时间">
               <el-option label="一个工作日后" value="1"></el-option>
               <el-option label="两个工作日后" value="2"></el-option>
               <el-option label="七个工作日后" value="7"></el-option>
@@ -78,8 +78,8 @@
      </el-form-item>
  	</el-col>
  	<el-col :span="12">
- 	  <el-form-item  label="成交结款条件">
-    		<el-select @change="isUpload" v-model="form.region" style="width: 90%;" placeholder="请选择结佣条件">
+ 	  <el-form-item  prop="deal_pay_condition" label="成交结款条件">
+    		<el-select  v-model="form.deal_pay_condition" style="width: 90%;" placeholder="请选择结佣条件">
               <el-option label="已签订单，且付定金" value="1"></el-option>
               <el-option label="签订购房合同，且付房款" value="2"></el-option>      
            </el-select>
@@ -88,8 +88,8 @@
  </el-row>
  <el-row>
   <el-col :span="23" >
-  	 <el-form-item prop="remark" label="备注：">
-    	<el-input @change="isUpload" type="textarea" v-model="form.desc"></el-input>
+  	 <el-form-item prop="comment" label="备注：">
+    	<el-input  type="textarea" v-model="form.comment"></el-input>
  	 </el-form-item>
   </el-col>	 
 </el-row> 
@@ -98,6 +98,8 @@
 </template>
 
 <script>
+	import qs from 'qs'
+	import {mapState} from 'vuex'
 	export default{
 	name:'RecomposeTotalRule',
 	data() {
@@ -119,19 +121,17 @@
          }
 	 }
      return {
-     		canUpload:false,
       		form: {
          		 visit_confirm_time: '',
          		 valid_visit_time:'',
-         		 make_bargain_time:'',
-         		 comment:'1',		
+         		 make_bargain_time:'',	
          		 begin_time: '',
           		 end_time: '',
           		 intro_pay_time:"",
           		 visit_pay_time:'',
           		 deal_pay_time:'',
           		 deal_pay_condition:'',
-          		 remark:""
+          		 comment:""
         	},
         	rules:{
           		 	begin_time:[
@@ -161,7 +161,7 @@
           		 	deal_pay_condition:[
           		 		{required:true,message:'请选择成交结款条件',trigger:'blur'}
           		 	],
-          		 	remark:[
+          		 	comment:[
           		 		{required:true,message:'请输入备注',trigger:'blur'},
           		 		{min:1,max:200,message:'输入字数超过1-200字',trigger:'blur'}
           		 	]
@@ -170,22 +170,21 @@
     },
     methods: {
       onSubmit() {
-        if(this.canUpload){
-      		let url=this.Rooturl+"project/ruleBasic/create";
-      		this.$http.post(url,{
-      			...this.form  
-      		}).then(res=>{
+      this.$refs.form.validate((valid)=>{    
+        if(valid){
+      		let url=this.Rooturl+"project/ruleBasic/update";
+      		this.$http.post(url,
+      			qs.stringify({...this.form})
+      		).then(res=>{
       		if(res.code==200){
       			this.$message.success(res.msg);
       			this.$router.push({path:'/index/CommissioCheck'})
       		}else{
       			this.$message.error("提交失败")
       		}
-      		})
-      	 }else{
-      	 	this.$message.error("请核对所有选项");
-      	 }
-         
+      	 })
+      	}
+      })  
       },
       back(){
       	 this.$router.push({ path: "/index/CommissioCheck" });
@@ -213,8 +212,14 @@
    	},
 	created(){
 		
-        
-	}
+        this.form=this.sels;
+	},
+	computed:{
+		...mapState({
+			sels:state=>state.CommissioCheck.sels
+		})
+	},
+	
 }
 </script>
 	
