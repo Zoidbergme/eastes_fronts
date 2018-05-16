@@ -13,7 +13,7 @@
     </el-col>
     <el-form :model="ruleForminfo" ref="form" label-width="100px" size="small" class="projectInfo-form">
       <el-col :span="12">
-        <el-form-item label="公司名称:">
+        <el-form-item label="项目名称:">
           <span>{{projectInfo.project_name}}</span>
         </el-form-item>
       </el-col>
@@ -26,21 +26,21 @@
         <el-col :span="12">
           <el-form-item label="项目地址:">
             <el-col :span="8">
-              <el-select v-model="ruleForminfo.provalue" placeholder="请选择" @change="provinceChange($event)">
-                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.code">
-             
+              <el-select v-model="ruleForminfo.province" placeholder="请选择" @change="provinceChange($event)">
+                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item"  :value="idx">
+       
                 </el-option>
               </el-select>
             </el-col>
             <el-col  :span="8">
-              <el-select ref="cityName" v-model="ruleForminfo.cityvalue" placeholder="请选择" @change="cityChange($event)">
-                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item.name"  :value="item.code" >
+              <el-select ref="cityName" v-model="ruleForminfo.city" placeholder="请选择" @change="cityChange($event)">
+                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item"  :value="id" >
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="8">
-              <el-select v-model="ruleForminfo.disvalue" placeholder="请选择">
-                <el-option v-for="(item,id) in thioptions" :key="id" :label="item.name"  :value="item.code">      
+              <el-select v-model="ruleForminfo.district" placeholder="请选择">
+                <el-option v-for="(item,id) in thioptions" :key="id" :label="item"  :value="id">      
                 </el-option>
               </el-select>
             </el-col>
@@ -67,14 +67,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="云算地址:">
-            <el-input v-model="projectInfo.href" @blur="testUrl"></el-input>  
+            <el-input v-model="projectInfo.href" @blur="testUrl" placeholder="输入运算IP地址如：'120.20.212.11'" ></el-input>  
           </el-form-item>
         </el-col>
       </el-row>
  <el-row>   
  	  <el-col :span="12">
       <el-form-item label="项目主图">
-        <el-upload action="" list-type="picture-card"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+        <el-upload action="" list-type="picture-card"   :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
         <el-dialog :visible.sync="proVisible">
@@ -114,7 +114,7 @@
       </el-col>
       <el-form-item label="项目标签:">
        <el-col :span="22">
-          <el-tag :key="tag" v-for="tag in projectTags" closable :disable-transitions="false" @close="handleClose(tag)">
+          <el-tag :key="tag.id" v-for="tag in projectTags" closable :disable-transitions="false" @close="handleClose(tag)">
             {{tag.param}}
           </el-tag>
           <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
@@ -303,7 +303,9 @@ export default {
       proVisible: false,
       proImageUrl: "",
       realState:[],
-      buildType:[]
+      buildType:[],
+      project_id:'',
+      projects:''
     }
   },
   created() {
@@ -385,7 +387,7 @@ export default {
       this.$http.get(url).then(res => {
         localStorage.setItem("prov",JSON.stringify(res));
         this.firoptions = res.data.data;
-      
+        console.log(res.data);
       });
     },
     // 读取市区列表
@@ -397,7 +399,7 @@ export default {
       			}
       	}).then(res => {
       	localStorage.setItem("city",JSON.stringify(res));
-        this.secoptions = res.data.data;  
+        this.secoptions = res.data.data; 
       });
     },
     // 读取区县列表
@@ -456,11 +458,16 @@ export default {
       });
     },
     testUrl(){
-    	var reg=/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+    	var reg=/^((25[0-5]|2[0-4]\\d|[1]{1}\\d{1}\\d{1}|[1-9]{1}\\d{1}|\\d{1})($|(?!\\.$)\\.)){4}$/;
     	if(reg.test(this.projectInfo.href)){
-    		  this.$http.get(this.projectInfo.href).then(res => {
-    		  	console.log(decodeURI(res.data));
+    			let url=this.Rooturl+"project/build/getYsBuild";
+    		  this.$http.get(url,{
+    		  	params:{
+    		  		url:this.projectInfo.href
+    		  	}
+    		  }).then(res => {
     		  	this.project_select=true;
+    		  	this.projects=res.content.rows;
     			});
     	}else{
     		this.$message.error("云算地址输入不正确")
@@ -484,7 +491,6 @@ export default {
     	}else{
     		this.$message.error("请先选择您所在城市")
     	}
-    	
  	  },
  	  ...mapMutations([
  	  		'sencityName'
@@ -496,7 +502,6 @@ export default {
   		let url=this.Rooturl+"config";
     	this.$http.get(url,{
     	}).then(res=>{
-    		console.log(res.data.data)
     		 this.realState=res.data.data[16].param;
     		 this.buildType=res.data.data[17].param;
     		 this.projectTags=res.data.data[15].param
@@ -511,7 +516,7 @@ export default {
   	
   },
   mounted(){
-  	console.log(this.realState);
+
   	setTimeout(()=>{this.address==""?this.ruleForminfo.add=this.ruleForminfo.add:this.ruleForminfo.add=this.address;},400)
   }
 }

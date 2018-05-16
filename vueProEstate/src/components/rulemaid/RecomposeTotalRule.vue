@@ -88,7 +88,7 @@
  </el-row>
  <el-row>
   <el-col :span="23" >
-  	 <el-form-item prop="comment" label="备注：">
+  	 <el-form-item prop="remark_comment" label="备注：">
     	<el-input  type="textarea" v-model="form.comment"></el-input>
  	 </el-form-item>
   </el-col>	 
@@ -135,10 +135,10 @@
         	},
         	rules:{
           		 	begin_time:[
-          		 		{type:"data",required:true,message:'请选择开始日期',trigger:'blur'},
+          		 		{required:true,message:'请选择开始日期',trigger:'blur'},
           		 	],
           		 	end_time:[
-          		 		{type:'data',required:true,message:'请选择截止日期',trigger:'blur'}
+          		 		{required:true,message:'请选择截止日期',trigger:'blur'}
           		 	],
           		 	valid_visit_time:[
           		 		{validator:checkNum,trigger:"blur"}
@@ -161,9 +161,9 @@
           		 	deal_pay_condition:[
           		 		{required:true,message:'请选择成交结款条件',trigger:'blur'}
           		 	],
-          		 	comment:[
+          		 	remark_comment:[
           		 		{required:true,message:'请输入备注',trigger:'blur'},
-          		 		{min:1,max:200,message:'输入字数超过1-200字',trigger:'blur'}
+          		 		{min:1,max:200,message:'输入字数超过1-200字',trigger:'change'}
           		 	]
           	}
         }
@@ -211,15 +211,16 @@
       
    	},
 	created(){
-		
-        this.form=this.sels;
+
 	},
 	computed:{
 		...mapState({
 			sels:state=>state.CommissioCheck.sels
 		})
 	},
-	
+	mounted(){
+		
+	}
 }
 </script>
 	

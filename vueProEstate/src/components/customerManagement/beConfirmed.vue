@@ -130,7 +130,6 @@ export default {
       }else{
       	this.$message.error("请选择查看内容")
       }
-      
     },
     selsChange(sels) {  
     	if(sels){

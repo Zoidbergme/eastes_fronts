@@ -1,13 +1,13 @@
 <template>
-	<div id="planPho">
+	<div id="thressDPic">
 		<el-row class="apart-lay-list">
                     <el-col :span="4">
-                        <el-checkbox v-model="checkAlls" @change="handleCheckAllChange" class="apart-title">3D图</el-checkbox>
+                        <el-checkbox v-model="TcheckAlls"  @change="TChange($event)" class="apart-title">3D图</el-checkbox>
                     </el-col>
                     <el-col :span="7" :offset="13">
                         <el-button-group>
                             <el-button type="primary" size="mini">预览</el-button>
-                            <el-button type="primary"  @click="checkTable" size="mini">查看</el-button>
+                            <el-button type="primary"  @click="tcheckTable" size="mini">查看</el-button>
                             <el-button type="primary" size="mini" @click="addImgVisible = true">新增</el-button>
                             <el-button type="primary" @click="changeTable" size="mini">修改</el-button>
                             <el-button type="primary" size="mini">删除</el-button>
@@ -41,7 +41,7 @@
             <el-dialog title="新增" :visible.sync="addImgVisible">
             <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
                 <el-form-item label="添加文件:">
-                    <el-upload action="/api/project/file/upload"  :data="{file_name:'img'}" name="img"  list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
+                    <el-upload action="/api/project/file/upload"   :data="{file_name:'img'}" name="img"  list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog :visible.sync="upImgVisible">
@@ -119,7 +119,7 @@ export default {
       pageSize: 5,
       alltablesize: [],
       checkAll: false,
-      checkAlls: false,
+      TcheckAlls: false,
       checkTableAll: false,
       isIndeterminate: false,
       seeImgVisible:false,
@@ -133,27 +133,14 @@ export default {
       checkImgurl:"/static/img/generalpic.jpg",
       changeImgupUrl:this.Rooturl+"project/file/upload",
       sels:[],
-      changeVisible:false
+      changeVisible:false,
+      TisShow:false
     }
   },
   created() {
-    this.getCheckApartmentList();
+ 
   },
   methods: {
-    getCheckApartmentList() {
-      for (let i = 1; i <20; i++) {
-        this.tableData.push({
-          chk: false,
-          pictureOrder: i,
-          imgPath: "",
-          remarks: "******",
-          update: "张三",
-          ordering: "",
-          imgPath: "/static/img/generalpic.jpg"
-        });
-      }
-      this.page();
-    },
     page() {
       for (
         let i = 0;
@@ -176,15 +163,15 @@ export default {
     handleCurrentChange(val) {
       this.Data = this.alltablesize[val - 1];
     },
-    handleCheckAllChange() {
-      //this.checkAlls = true;
-      this.Data[0].chk = true;
-      console.log(this.Data);
-      console.log(this.Data[0].chk);
+    TChange(e){
+		if(this.TcheckAlls){
+			this.TisShow = true;
+		}else{
+			this.TisShow = false;
+		}
     },
     // 验证图片格式大小
     beforeImgUpload(file) {
-      console.log(file);
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
@@ -209,6 +196,7 @@ export default {
     	this.$message.error("请先删除原来的图片")
     },
     AddNew(){
+    	let url=this.Rooturl+
     	this.$http.get(url,{
     		params:{
     			...this.changeData
@@ -224,13 +212,12 @@ export default {
     order(){
     	
     },
-    checkTable(){
+    tcheckTable(){
       let sels=this.sels;
       if(sels.length>1){
       	this.$message.error("查看只能单选")
       }else if(sels.length==1){
       	this.change=this.sels[0];
-
       	this.checkImgVisible=true;
       }else{
       	this.$message.error("请选择查看内容")
@@ -256,6 +243,7 @@ export default {
     		...this.change
     	}
        	this.changeData.imgPath=file.url;
+       	this.$message.sucess(file.msg);
     },
     selsChange(sels) {  
     	if(sels){
@@ -263,7 +251,8 @@ export default {
     	}   
     }
   
-  }    
+  }
+  
 }  
 </script>
 <style>

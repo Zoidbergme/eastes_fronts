@@ -1,8 +1,8 @@
 <template>
   <div id="categoryImg">
     <el-row class="categoryImginfo" type="flex" justify="space-between">
-      <el-col :span="5">
-        <span class="img-basetitle">项目基础信息</span>
+      <el-col :span="17">
+        		项目图片信息
       </el-col>
       <el-col :span="5">
         <el-button-group>
@@ -108,6 +108,8 @@
   </div>
 </template>
 <script>
+import {mapState,mapActions,mapMutations}  from 'vuex'
+
 export default {
   name: "categoryImg",
   data() {
@@ -135,22 +137,25 @@ export default {
       img_url: "",
       seeImg: {},
       checked: true,
-      url:''
+      url:'',
+      sels:[]
     };
+  },
+  computed:{
+  		...mapState({
+  				ImgList:state=>state.categoryImg.ImgList
+  		})
   },
   created() {
     // 云算接口
-    this.$http
-      .get("http://39.108.60.120:10009/ysservice.ashx?action=getxm")
-        .then(res => {
-           console.log(JSON.parse(decodeURI(res.data)));
-        });
+    //this.$http
+     // .get("http://39.108.60.120:10009/ysservice.ashx?action=getxm")
+     //   .then(res => {
+       //    console.log(JSON.parse(decodeURI(res.data)));
+     //  });
     // 配置信息
-   this.$http.get("/api/config").then(res => {
-     
-      console.log(res);
-    });
-    this.getCategoryImgList();
+    this.AddImgList();
+    
   },
   methods: {
     // 图片详情接口
@@ -158,7 +163,6 @@ export default {
       this.$http.get("/api/project/img/getList").then(res => {
         console.log("+++++++++++++++++++++++++++++++++++++++");
         this.tableData = res.data.data;
-        console.log(res.data.data);
         this.page();
       });
     },
@@ -200,14 +204,12 @@ export default {
           id = this.Data[i].project_img_id;
         }
       }
-      this.$http
-        .get(
+      this.$http.get(
           "/api/project/img/changeSort?project_img_id=" +
             id +
             "&project_img_id_another=" +
             parseInt(beijiaohuanid)
-        )
-        .then(res => {
+       ).then(res => {
           this.$http.get("/api/project/img/getList").then(ress => {
             console.log("+++++++++++++++++++++++++++++++++++++++");
             this.tableData = ress.data.data;
@@ -291,25 +293,25 @@ export default {
     },
     // 修改图片成功
     upImgSuccess(response) {
-        console.log(response)
-      if (response.code === 200) {
-         // 上传图片信息
-        var qs = require("qs");
-       // 组装参数
-        let data = {
-           project_img_id:response.project_img_id,
-           img_url: response.data,
-           img_type: "1",
+       console.log(response)
+       if(response.code === 200) {
+         //上传图片信息
+       var qs = require("qs");
+         // 组装参数
+       let data = {
+          project_img_id:response.project_img_id,
+          img_url: response.data,
+          img_type: "1",
           house_type_num: "1",
-         img_describe: this.ruleFormChange.remarks
-         };
-        this.$http.post("/api/project/img/update", qs.stringify(data));
+          img_describe: this.ruleFormChange.remarks
+       };
+       this.$http.post("/api/project/img/update", qs.stringify(data));
        this.$message({
            message: response.msg,
            type: "success"
          });
-      } else {
-         this.$message.error("上传失败，请稍后再试");
+       }else {
+          this.$message.error("上传失败，请稍后再试");
        }
     },
  
@@ -352,17 +354,40 @@ export default {
             this.Data.splice(index[i], 1);
           }
         });
+    },
+    ...mapActions([
+    	'AddImgList'
+    ]),
+    selsChange(sels){
+    	if(sels){
+    		this.sels=sels
+    	}
     }
+  },
+  mounted(){
+  	this.AddImgList(this.type_id);
+  },
+  computed:{
+  	...mapState({
+  		 type_id:state=>state.categoryImg.type_id,
+  		 ImgList:state=>state.categoryImg.ImgList
+  	})
   }
 };
 </script>
-<style scoped scss >
+<style scoped lang="scss" >
 #categoryImg{
-.categoryImginfo {
+
+
+.categoryImginfo{
   height: 40px;
   line-height: 40px;
-
   background-color: #545c64;
+	padding-left:20px ;
+	color:#fff;
+}
+.el-button{
+	margin-top:3px!important;
 }
 .img-basetitle {
   display: block;

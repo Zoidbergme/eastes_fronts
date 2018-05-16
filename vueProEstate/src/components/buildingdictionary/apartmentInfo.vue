@@ -15,24 +15,29 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border @selection-change="selsChange"  ref="multipleTable" tooltip-effect="dark" class="apart-table">
+        <el-table :data="houseData" border @selection-change="selsChange"  ref="multipleTable" tooltip-effect="dark" class="apart-table">
             <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
             </el-table-column>
-            <el-table-column prop="key" label="序号">
+            <el-table-column prop="id" label="序号" width='60'>
             </el-table-column>
-            <el-table-column prop="houseNum" label="户型编号">
+            <el-table-column prop="house_type_name" label="户型编号">
             </el-table-column>
-            <el-table-column prop="house" label="户型">
+            <el-table-column prop="house_type" label="户型">
             </el-table-column>
-            <el-table-column prop="areaRange" label="产权面积范围">
+            <el-table-column prop="houseData" width='140' label="产权面积范围">
+            	<template slot-scope="scope">
+            		{{scope.row.property_area_min+'-'+scope.row.property_area_max}}
+            	</template>
             </el-table-column>
-            <el-table-column prop="plan" label="平面图">
+            <el-table-column prop="imgCount[3].count" label="平面图">
             </el-table-column>
-            <el-table-column prop="threeDImg" label="3D图">
+            <el-table-column prop="imgCount[1].count" label="3D图">
             </el-table-column>
-            <el-table-column prop="designImg" label="效果图">
+            <el-table-column prop="imgCount[2].count" label="效果图">
             </el-table-column>
-            <el-table-column prop="viewImg" label="实景图">
+            <el-table-column prop="imgCount[4].count" label="实景图">
+            </el-table-column>
+            <el-table-column prop="imgCount[0].count" label="户型图">
             </el-table-column>
         </el-table>
         <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
@@ -81,27 +86,13 @@ export default {
       sels:[]
     };
   },
+  beforeCreated(){
+  	 
+  },
   created() {
-    this.getApartmentInfoImgList();
-    this.addData();
-
+  	this.addData();
   },
   methods: {
-    getApartmentInfoImgList() {
-      for (let i = 1; i < 100; i++) {
-        this.tableData.push({
-          key: i,
-          houseNum: "A型",
-          house: "三室两厅两卫",
-          areaRange: "110㎡ - 120㎡",
-          plan: i,
-          threeDImg: i,
-          designImg: i,
-          viewImg: i
-        });
-      }
-      this.page();
-    },
     page() {
       for (
         let i = 0;
@@ -151,7 +142,6 @@ export default {
     		this.sels=sels
     	}
     }
-   
   },
   computed:{
     	...mapState({
@@ -159,7 +149,6 @@ export default {
     	})
   },
   mounted(){
-  	console.log(this.houseData)
   }
 };
 </script>

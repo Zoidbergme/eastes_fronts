@@ -39,6 +39,7 @@ export default {
   methods: {
     getMenuList() {
       let data = {};
+      let url=""
       this.$http
         .get("../../static/mockdata/menulist.json")
         .then(res => {

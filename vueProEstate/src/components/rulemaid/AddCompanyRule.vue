@@ -1,9 +1,9 @@
 <template>
-<div id="CheckCompanyRule">	
+<div id="AddCompanyRule">	
 <el-form id="AddTotalRule" ref="form" :rules="rules"  :model="form"  label-width="160px">
 <el-row style="height:40px;padding-left:40px;background:#545c64 ;">
 	<el-col :span="12">
-		<span class="check-basetitle">查看公司规则</span>
+		<span class="check-basetitle">新增公司规则</span>
 	</el-col>
 	<el-col :span="7" :push="5" >
 		 <el-form-item>
@@ -72,7 +72,6 @@
  	    </el-form-item>
  	</el-col>    
 </el-row> 	    
- 
 </el-form>
     <div class="attachment m_top" >
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
@@ -254,7 +253,7 @@
 <script>
 import {mapMutations,mapState,mapActions} from 'vuex'
 export default {
- 	 name: "CheckCompanyRule",
+ 	 name: "AddCompanyRule",
  	 data(){
  	 	const checkPho=(rule,value,callback)=>{
  	 		let Regex= /^1\d{10}$/;

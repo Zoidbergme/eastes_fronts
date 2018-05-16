@@ -196,7 +196,7 @@
 				 })
 			},
 			check(){
-      			let sels=this.sels;
+      			let sels=this.sels;	
       			if(sels.length>1){
       				this.$message.error("查看只能单选")
       			}else if(sels.length==1){
@@ -205,11 +205,11 @@
       			}else{
       				this.$message.error("请选择查看内容")
      			}
-      
     		},
     		selsChange(sels) {  
     			if(sels){
     		   		this.sels=sels; 
+    		   		console.log(this.sels)
     			}   
     		},
     		...mapMutations([

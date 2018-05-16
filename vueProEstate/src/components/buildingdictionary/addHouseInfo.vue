@@ -1,116 +1,107 @@
 <template>
-	<div id="addHouseInfo">
-		<el-row class="apart-lay-list">
-                    <el-col :span="4">
-                        <el-checkbox v-model="checkAlls" @change="handleCheckAllChange" class="apart-title">平面图</el-checkbox>
+    <div id="addHouseInfo">
+        <el-container>
+            <el-header>
+                <el-row class="CheckApartinfo" type="flex" justify="space-between">
+                    <el-col :span="5">
+                        <span class="CheckApart-title">新增户型信息</span>
                     </el-col>
-                    <el-col :span="7" :offset="13">
-                        <el-button-group>
-                            <el-button type="primary" size="mini">预览</el-button>
-                            <el-button type="primary"  @click="checkTable" size="mini">查看</el-button>
-                            <el-button type="primary" size="mini" @click="addImgVisible = true">新增</el-button>
-                            <el-button type="primary" @click="changeTable" size="mini">修改</el-button>
-                            <el-button type="primary" size="mini">删除</el-button>
-                        </el-button-group>
+                    <el-col :span="4">
+                    	<el-button type="primary" @click="add" size="small" >新增</el-button>
+                        <el-button @click="back" size="small" >关闭</el-button>
                     </el-col>
                 </el-row>
-                <el-table :data="Data" border @selection-change="selsChange" style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table">
-                    <el-table-column type="selection" reserve-selection="" label="ALL" width="50" prop="chk">
-                    </el-table-column>
-                    <el-table-column prop="pictureOrder" label="图片顺序">
-                    </el-table-column>
-                    <el-table-column prop="imgPath" label="图片">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.imgPath" alt="" class="baseImg">
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="remarks" label="备注">
-                    </el-table-column>
-                    <el-table-column prop="update" label="更新人员">
-                    </el-table-column>
-                    <el-table-column prop="ordering" label="调序">
-                        <template slot-scope="scope">
-                            <i class="el-icon-upload2" @click="order(scope.row.pictureOrder)"></i>
-                            <i class="el-icon-download"></i>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="cate-page">
-            </el-pagination>  
-            <!--新增效果-->
-            <el-dialog title="新增" :visible.sync="addImgVisible">
-            <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
-                <el-form-item label="添加文件:">
-                    <el-upload action="/api/project/file/upload"  :data="{file_name:'img'}" name="img"  list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="upImgVisible">
-                        <img width="100%" :src="upImgVisibleUrl" alt="">
-                    </el-dialog>
-                </el-form-item>
-                <el-form-item label="备注:">
-                    <el-input type="textarea" autosize placeholder="请输入内容" v-model="ruleFormUplode.remarks">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addImgVisible = false">取 消</el-button>
-                <el-button type="primary">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!--查看图片弹窗-->
-        <el-dialog title="查看" :visible.sync="checkImgVisible">
-            <el-form ref="form" :model="ruleFormUplode" label-width="100px" size="small">
-                <el-form-item label="添加文件:">
-                    <img width="100%" :src="checkImgurl" alt="">
-                </el-form-item>
-                <el-form-item label="备注:">
-                    <el-input type="textarea" autosize placeholder="请输入内容" v-model="ruleFormUplode.remarks">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="checkImgVisible = false">关闭</el-button>
-            </span>
-        </el-dialog>
-        <!-- 修改图片-->
-        <el-dialog title="修改" :visible.sync="changeImgVisible">
-            <el-form ref="form" :model="change"  label-width="140px" size="small">
-            	<el-form-item label="原来的图片:">
-            		    <img width="146px" height="146px" :src="change.imgPath" alt="">
-            	</el-form-item>	
-                <el-form-item label="添加替换的图片:">
-                    <el-upload action=""   ref="newfile"  :on-change="ChangeCheck" :auto-upload="false"  :on-exceed="exceed" :limit="1"  :data="{file_name:'img'}" name="img" list-type="picture-card" :before-upload="beforeImgUpload" :on-success="addImgSuccess">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                 	  <el-dialog :visible.sync="checkAll" >
-                        <img width="100%" :src="upImgVisibleUrl" alt="">
-                    </el-dialog>
-                </el-form-item>
-                <el-form-item label="备注:">
-                    <el-input type="textarea" max="200" placeholder="请输入内容" v-model="change.remarks">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="changeImgVisible = false">关闭</el-button>
-                <el-button type="primary" @click="AddNew">确 定</el-button>
-            </span>
-        </el-dialog>
-	</div>
+            </el-header>
+            <el-main class="check-con">  
+                <el-form :model="ruleFormcheckApart" :rules="rules" ref="form" label-width="100px" class="checkInfo-form">
+                    <el-form-item  prop="houseID" label="户型编号:">
+                        <el-input v-model="ruleFormcheckApart.houseNum">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="houseType" label="户型:">
+                        <el-input v-model="ruleFormcheckApart.house">
+                        </el-input>
+                    </el-form-item>
+                    <el-row>
+                    <el-col :span="11">
+                    <el-form-item prop="min_squre" label="产权面积:">
+                            <el-input  v-model="ruleFormcheckApart.min_area">
+                                <template slot="append">m
+                                    <sup>2</sup>
+                                </template>
+                            </el-input>
+                 
+                     </el-form-item>  
+                     </el-col>
+                        <el-col :span="2">
+                            <i style="height:40px;width:100%;line-height:40px;text-align: center;" class="el-icon-minus"></i>
+                        </el-col>
+                    <el-form-item prop="max_squre" >    
+                        <el-col :span="11">
+                            <el-input v-model="ruleFormcheckApart.max_area">
+                                <template slot="append">m
+                                    <sup>2</sup>
+                                </template>
+                            </el-input>
+                        </el-col>
+                    </el-form-item>
+                    </el-row>
+                    <el-form-item prop="sell_point" label="户型卖点:">
+                        <el-input type="textarea" autosize v-model="ruleFormcheckApart.sell">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+            </el-main>
+            <el-row class="row_m_top">
+            	<palnPho></palnPho>
+            </el-row>
+            <el-row class="row_m_top">
+            	<thressDPic></thressDPic>
+            </el-row>
+  			<el-row class="row_m_top">
+  				<LivePic></LivePic>
+  			</el-row>
+  			<el-row class="row_m_top">
+  				<effectPic></effectPic>
+  			</el-row>
+				
+        </el-container>
+        <!-- 新增图片弹窗 -->
+    </div>
 </template>
 <script>
-import {mapState,mapActions,mapMutations} from 'vuex'	
+import palnPho from './palnPho'	 
+import thressDPic from './thressDPic'
+import LivePic  from './LivePic'
+import effectPic from './effectPic'
+import {mapState,mapActions} from 'vuex'
 export default {
   name: "addHouseInfo",
   data() {
+  	const checkNum=(rule,value,callback)=>{
+  			 if(value != null && value != "") {
+             if(!(typeof(value)==="number"&&value%1==0)) {
+                 callback(new Error('请输入正整数!'))
+             }else if(value>999){
+                  callback(new Error("不能大于9999"))
+             }else{
+             	callback()
+             }
+         }
+	 			 else if(!value){
+	 	 				callback(new Error("不能为空"));
+	 	 		 }
+         else{
+              callback();
+         }
+  	};
     return {
       ruleFormcheckApart: {
         houseNum: "",
         house: "",
         min_area: "",
         max_area: "",
-        sell: ""
+        sell_point: ""
       },
       ruleFormUplode: {
         remarks: ""
@@ -123,24 +114,35 @@ export default {
       checkAlls: false,
       checkTableAll: false,
       isIndeterminate: false,
-      seeImgVisible:false,
       upImgVisibleUrl: "",
-      change:{},
-      changeData:{},
       upImgVisible: false,
       addImgVisible: false,
       checkImgVisible:false,
       changeImgVisible:false,
-      checkImgurl:"/static/img/generalpic.jpg",
-      changeImgupUrl:this.Rooturl+"project/file/upload",
-      sels:[],
-      changeVisible:false
+      rules:{
+      	houseID:[
+      		{required:true,message:'错误',trigger:'blur'},
+      		{min:1,max:10,message:'长度超出范围',trigger:'blur'}
+      	],
+      	houseType:[
+      		{required:true,message:'错误',trigger:'blur'}
+      	],
+      	min_squre:[
+      		{validator:checkNum,trigger:'blur'}
+      	],
+      	max_squre:[
+      		{validator:checkNum,trigger:'blur'}
+      	],
+      	sell_point:[
+      		{required:true,message:'不能为空',trigger:'blur'},
+      		{min:1,max:200,message:'长度不对',trigger:'change'}
+      	]
+      }
+      
     }
   },
   created() {
-  	this.order();
-   // this.getCheckApartmentList();
-    
+    this.getCheckApartmentList();
   },
   methods: {
     getCheckApartmentList() {
@@ -187,7 +189,6 @@ export default {
     },
     // 验证图片格式大小
     beforeImgUpload(file) {
-      console.log(file);
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
@@ -199,93 +200,74 @@ export default {
       return isJPG && isLt2M;
     },
     // 上传图片成功
-    addImgSuccess(res, file) {
+    addImgSuccessP(res,file){
+      let imgUrlP = res.data;
+      seeImgVisible = imgUrl;
       console.log(res);
-      console.log(file);
-      let imgUrl = res.data;
-      this.seeImgVisible = imgUrl;
+    },
+    addImgSuccessS(res,file){
+      let imgUrlS = res.data;
+      seeImgVisible = imgUrl;
+      console.log(res);
+    },
+    addImgSuccessT(res,file){
+      let imgUrlT = res.data;
+      seeImgVisible = imgUrl;
+      console.log(res);
+    },
+    addImgSuccessX(res,file){
+      let imgUrlX = res.data;
+      seeImgVisible = imgUrl;
+      console.log(res);
     },
     back(){
     	this.$router.push({path:"/index/apartmentInfo"});
     },
-    exceed(){
-    	this.$message.error("请先删除原来的图片")
-    },
-    AddNew(){
-    	let url=this.Rooturl+"project/houseType/update"
-    	this.$http.get(url,{
-    		params:{
-    			...this.changeData
+    add(){
+    	this.$refs.form.validate((valid)=>{
+    		if(valid){
+    			this.houseAdd(this.ruleFormcheckApart);
+    			if(this.clear==200){
+    				this.$refs.form.resetFields();
+    				this.$message.success('新增成功')
+    			}
+    			if(this.clear==400){
+    				this.$message.error(this.msg)
+    			}
     		}
-    	}).then(res=>{
-    		this.changeImgVisible = false;
-    		this.upImgVisible=false;
-    	}).catch(err=>{
-    		
-    	})
-    	
-    },
-    order(){
-    	let url=this.Rooturl+"config";
-    	this.$http.get(url,{
-    		params:{
-    		   
-    		}
-    	}).then(res=>{
-    		console.log(res.data);
     	})
     },
-    checkTable(){
-      let sels=this.sels;
-      if(sels.length>1){
-      	this.$message.error("查看只能单选")
-      }else if(sels.length==1){
-      	this.change=this.sels[0];
-
-      	this.checkImgVisible=true;
-      }else{
-      	this.$message.error("请选择查看内容")
-      }
- 
-    },
-    changeTable(){
-      let sels=this.sels;
-      if(sels.length>1){
-      	this.$message.error("查看只能单选")
-      }else if(sels.length==1){
-      	this.change=this.sels[0];
-      	this.upImgVisible=true;
-      	this.changeImgVisible=true;
-      	this.changeVisible=true;
-      }else{
-      	this.$message.error("请选择查看内容")
-      }
-      
-    },
-    ChangeCheck(file){	
-    	this.changeData={
-    		...this.change
-    	}
-       	this.changeData.imgPath=file.url;
-    },
-    selsChange(sels) {  
-    	if(sels){
-    		   this.sels=sels; 
-    	}   
-    }
-  
-  }    
-}  
+    ...mapActions([
+    	'houseAdd'
+    ])
+  },
+  components:{
+  	palnPho,
+  	thressDPic,
+  	LivePic,
+  	effectPic
+  },
+  computed:{
+  	...mapState({
+  		clear:state=>state.addHouseInfo.clear,
+  		msg:state=>state.addHouseInfo.msg
+  	})
+  }
+};
 </script>
-<style>
-.CheckApartinfo {
+<style scoped lang="scss">
+#addHouseInfo{
+ .CheckApartinfo {
   height: 40px;
   line-height: 40px;
   margin-bottom: 20px;
   color:#fff;
   background-color: #545c64;
 }
-.checkInfo-form {
+.row_m_top{
+	margin-top:40px!important;
+}
+ .checkInfo-form {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   -moz-border-radius: 5px;
@@ -297,7 +279,7 @@ export default {
 .el-main {
   padding: 0;
 }
-.apart-title {
+ .apart-title {
   display: block;
   margin-left: 20px;
 }
@@ -305,11 +287,11 @@ export default {
   display: block;
   margin-left: 20px;
 }
-#checkApartment .check-con {
+.check-con {
 
   border: 1px solid #d3dce6;
 }
-.apart-lay-list {
+ .apart-lay-list {
   line-height: 50px;
   height: 50px;
   margin-bottom: 20px;
@@ -325,7 +307,27 @@ export default {
   color: #409eff;
   cursor: pointer;
 }
-#checkApartment .el-header{
+.el-header{
 	padding: 0px!important;
 }
+.nav{
+	height:40px;
+	box-sizing: border-box;
+	padding-left:20px;
+}
+.nav  a{
+	margin-left:10px;
+	padding:3px 9px;
+	border:1px solid #ddd;
+	color:#409EFF;
+	background: #fff;
+}
+.nav  a:hover{
+	color:#fff;
+	background: #409EFF;
+	
+}
+}
 </style>
+
+

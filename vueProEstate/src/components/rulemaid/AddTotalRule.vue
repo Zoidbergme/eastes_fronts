@@ -22,8 +22,7 @@
          <el-date-picker   @change="CheckTime" type="date" required placeholder="选择日期" v-model="form.end_time" style="width: 90%;"></el-date-picker> 
  	    </el-form-item>
  	</el-col>    
-</el-row> 	    
-    
+</el-row> 	     
 <el-row>
     <el-col :span="12">
     	 <el-form-item prop="valid_visit_time" label="到访确认保护期(分钟)：">

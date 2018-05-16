@@ -4,13 +4,17 @@ import qs from 'qs'
 
 
 const state={	
-	ImgCount:[]
+	ImgCount:[],
+	sels:[]
 }
 
 
 const mutations={
 	addImgs(state,payload){
-		state.ImgCoun=payload.res
+		state.ImgCount=payload.res
+	},
+	AddProSels(state,payload){
+		state.sels=payload
 	}
 }
 
@@ -18,10 +22,10 @@ const actions={
 	addImgs({commit},payload){
 		let url=Rooturl.Rooturl+"project/img/getTypeListCount";
 		$http.get(url).then(res=>{
-			console.log(res.data);
+			console.log(res.data.data);
 			commit({
 				type:'addImgs',
-				res:res.data
+				res:res.data.data
 			})
 		})
 	},

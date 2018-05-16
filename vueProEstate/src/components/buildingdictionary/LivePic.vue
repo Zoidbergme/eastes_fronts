@@ -137,23 +137,9 @@ export default {
     }
   },
   created() {
-    this.getCheckApartmentList();
+    
   },
   methods: {
-    getCheckApartmentList() {
-      for (let i = 1; i <20; i++) {
-        this.tableData.push({
-          chk: false,
-          pictureOrder: i,
-          imgPath: "",
-          remarks: "******",
-          update: "张三",
-          ordering: "",
-          imgPath: "/static/img/generalpic.jpg"
-        });
-      }
-      this.page();
-    },
     page() {
       for (
         let i = 0;

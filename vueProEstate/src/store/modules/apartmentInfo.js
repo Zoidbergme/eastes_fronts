@@ -3,7 +3,7 @@ import Rooturl from '../../../static/Rooturl'
 import qs from 'qs'
 
 const state={
-	houseData:"",
+	houseData:[],
 	Isdelete:''
 }
 
@@ -23,19 +23,16 @@ const actions={
 				state:'1'
 			}
 		}).then(res=>{
-			console.log(res.data)
-			if(res.code==200){
+				console.log(res.data.data)
 				commit({
 					type:'addData',
-					data:res.data
+					data:res.data.data
 				})
-			}
 		});
 	},
 	deleteHouse({commit},payload){
 		let url=Rooturl.Rooturl+"project/houseType/delete";
 		$http.post(url,qs.stringify(payload)).then(res=>{
-			console.log(res.data)
 			if(res.code==200){
 				commit({
 					type:'addData',

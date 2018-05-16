@@ -138,7 +138,7 @@ export default {
     }
   },
   created() {
-  	this.order();
+  	
    // this.getCheckApartmentList();
     
   },

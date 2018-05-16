@@ -10,17 +10,17 @@
             </el-col>
         </el-row>
         <el-form  :model="proAnalyForm" ref="form" :rules="rules" label-width="120px" class="analyForm">
-            <el-form-item  prop="advange" label="项目优势:">
-                <el-input type="textarea" autosize v-model="proAnalyForm.advange"></el-input>
+            <el-form-item  prop="advantage" label="项目优势:">
+                <el-input type="textarea" autosize v-model="proAnalyForm.advantage"></el-input>
             </el-form-item>
-             <el-form-item  prop="sell_point" label="周边分析:">
-                <el-input type="textarea" autosize v-model="proAnalyForm.sell_point"></el-input>
+             <el-form-item  prop="rim" label="周边分析:">
+                <el-input type="textarea" autosize v-model="proAnalyForm.rim"></el-input>
             </el-form-item>
              <el-form-item prop="increase_value" label="升值空间:">
                 <el-input type="textarea" autosize v-model="proAnalyForm.increase_value"></el-input>
             </el-form-item>
-             <el-form-item prop="rim" label="适合人群:">
-                <el-input type="textarea" autosize v-model="proAnalyForm.rim"></el-input>
+             <el-form-item prop="fetch" label="适合人群:">
+                <el-input type="textarea" autosize v-model="proAnalyForm.fetch"></el-input>
             </el-form-item>
         </el-form>
     </div>
@@ -32,48 +32,62 @@ export default {
   data() {
     return {
         proAnalyForm: {
-            advange:"房子二梯三户边套，南北通透户型，产证面积89平实用95平，可谈朝南带阳台，厨房朝北带很大生活阳台，一个卧室朝南，二个朝南。非常方正，没有一点浪费空间。",
-            sell_point:"位于高新区繁华地段临学校，步行街三十米，大型超市菜市场，今年刚刚精装家具，家电刚刚买有车位拎包入住。带车位停车方便",
+            advantage:"房子二梯三户边套，南北通透户型，产证面积89平实用95平，可谈朝南带阳台，厨房朝北带很大生活阳台，一个卧室朝南，二个朝南。非常方正，没有一点浪费空间。",
+            rim:"位于高新区繁华地段临学校，步行街三十米，大型超市菜市场，今年刚刚精装家具，家电刚刚买有车位拎包入住。带车位停车方便",
             increase_value:"位于高新区繁华地段临学校，步行街三十米，大型超市菜市场，今年刚刚精装家具，家电刚刚买有车位拎包入住。带车位停车方便",
-            rim:"此房子适合得到文人雅士的推崇，如教授学者，小资情调白领人员等，特别是英式田园赢得很多女性的喜爱。"
+            fetch:"此房子适合得到文人雅士的推崇，如教授学者，小资情调白领人员等，特别是英式田园赢得很多女性的喜爱。"
         },
         rules:{
         	rim:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
         	],
-        	advange:[
+        	advantage:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
         	],
         	increase_value:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
         	],
-        	sell_point:[
+        	fetch:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
         	]
+        },
+        Froms:{
+        	advantage:'',
+        	rim:'',
+        	fetch:'',
+        	increase_valu:''
         }
     }
-    
   },
   methods:{
     	getdisc(){
     		let url=this.Rooturl+"project/analyse/get";
     		this.$http.get(url)
     			.then(res=>{
-    				console.log(res.data);
+    				this.proAnalyForm=res.data.data;
     			})
     	},
     	changedisc(){
-    		let url=this.Rooturl+"project/analyse/update";
+    		let url=this.Rooturl+"project/analyse/update";		
     		this.$refs.form.validate((valid)=>{
 				if(valid){
     				this.$http.post(url,
-    					qs.stringify({...this.proAnalyForm})
+    					qs.stringify({
+    						advantage:this.proAnalyForm.advantage,
+    						fetch:this.proAnalyForm.fetch,
+    						increase_value:this.proAnalyForm.increase_value,
+    						rim:this.proAnalyForm.rim
+    					})
     				).then(res=>{
-    					console.log(res.data);
+    					if(res.data.code==200){
+    						this.$message.success(res.data.msg);
+    					}else{
+    						this.$message.error("修改失败");
+    					}
     				})
     			}	
     		})	
@@ -85,7 +99,7 @@ export default {
     				this.$http.post(url,
     					qs.stringify({...this.proAnalyForm})
     				).then(res=>{
-    				console.log(res.data);
+
     				})
     			}	
     		})	

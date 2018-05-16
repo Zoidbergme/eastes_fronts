@@ -15,13 +15,16 @@
         </el-button-group>
       </el-col>
     </el-row>
-    <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="project-table">
-      <el-table-column type="selection" width="50">
+    <el-table :data="ImgCount" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="project-table">
+      <el-table-column  reserve-selection="" type="selection" width="50">
       </el-table-column>
-      <el-table-column prop="param" label="图片类别">
+       <el-table-column v-if="false" prop="type_id" width="60" label="序号">
+      </el-table-column>
+      <el-table-column prop="type_name" label="图片类别">
       </el-table-column>
       <el-table-column prop="count" label="图片总数">
       </el-table-column>
+      
     </el-table>
     <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
     </el-pagination>
@@ -52,7 +55,7 @@
   </div>
 </template>
 <script>
-import {mapState,mapActions} from 'vuex'
+import {mapState,mapActions,mapMutations} from 'vuex'
 import breadcrumb from "@/components/shared/breadcrumb";
 export default {
   name: "projectImg",
@@ -65,7 +68,8 @@ export default {
       pageSize: 5,
       alltablesize: [],
       addImgTypeVisible: false,
-      changeImgTypeVisible: false
+      changeImgTypeVisible: false,
+      sels:[]
     };
   },
   created() {
@@ -87,7 +91,7 @@ export default {
         let i = 0;
         i < Math.ceil(this.tableData.length / this.pageSize);
         i++
-      ) {
+      ){
         let arr = new Array();
         for (let j = 0; j < this.tableData.length; j++) {
           if (
@@ -105,11 +109,33 @@ export default {
       this.Data = this.alltablesize[val - 1];
     },
     check() {
-      this.$router.push({ path: "/index/categoryImg" });
+    	let sels=this.sels;
+      if(sels.length>1){
+      	this.$message.error("查看只能单选")
+      }else if(sels.length==1){
+      	this.AddImgTypeId(sels[0].type_id);
+      	this.$router.push({ path: "/index/categoryImg" });
+      }else{
+      	this.$message.error("请选择查看内容")
+      }
     },
     ...mapActions([
     	'addImgs','getImgList'
-    ])
+    ]),
+    ...mapMutations([
+    	'AddImgTypeId'
+    ]),
+    selsChange(sels){
+    	if(sels){
+    		this.sels=sels;
+    		console.log(sels);
+    	}
+    }
+  },
+  computed:{
+  	...mapState({
+  		ImgCount:state=>state.projectImg.ImgCount
+  	})
   }
 };
 </script>

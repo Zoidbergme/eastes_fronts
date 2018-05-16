@@ -22,7 +22,7 @@ import AddInfo from './modules/AddInfo'
 import categoryImg from './modules/categoryImg'
 import projectImg from './modules/projectImg'
 import palnPho from './modules/palnPho'
-
+import addHouseInfo from  './modules/addHouseInfo'
 
 Vue.use(Vuex)
 
@@ -47,6 +47,7 @@ export default new Vuex.Store({
  		AddInfo,
  		categoryImg,
  		projectImg,
- 		palnPho
+ 		palnPho,
+ 		addHouseInfo
   }
 })

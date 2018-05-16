@@ -137,34 +137,7 @@ export default new Router({
             component: apartmentInfo
         }, {
             path: '/index/checkApartment',
-            component: checkApartment,
-            name:'checkApartment',
-            children:[
-            	{
-            		 path: '/',
-           			 redirect: '/index/palnPho'
-            	},
-            	{
-            		path: '/index/palnPho',
-           			name:'palnPho',
-           			component:palnPho
-            	},
-            	{
-            		path: '/index/effectPic',
-           			name:'effectPic',
-           			component:effectPic
-            	},
-            	{
-            		path: '/index/thressDPic',
-           			name:'thressDPic',
-           			component:thressDPic
-            	},
-            	{
-            		path: '/index/LivePic',
-           			name:'LivePic',
-           			component:LivePic
-            	}
-            ]
+            component: checkApartment
         }, {
             path: '/index/proAnaly',
             component: proAnaly
