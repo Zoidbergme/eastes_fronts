@@ -1,5 +1,6 @@
 //const httphead = { 'headers': { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'Accept': '*/*', 'ACCESS_ROLE':'provide','ACCESS_TOKEN':'1332132'} }
-const httpurl = '' //localStorage.getItem('http')
+const httpurl = '' //localStorage.getItem('http');
+import axios from 'axios'
 const httphead = (token, role) => {
     return { 'headers': { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'Accept': '*/*', 'ACCESS_ROLE': token, 'ACCESS_TOKEN': role } }
 }
@@ -32,6 +33,7 @@ const getrandomstring = (data) => {
 const md5 = (data) => {
     return this.MD5(data);
 }
+
 
 export default {
     httphead,

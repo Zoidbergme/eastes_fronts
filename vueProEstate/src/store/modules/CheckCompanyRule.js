@@ -30,7 +30,7 @@ const actions={
 				alert(res.data.msg)
 			}
 			commit({
-					type:"",
+					type:"AddComRules",
 					res:res.data.code
 			})
 		})

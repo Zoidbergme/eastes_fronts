@@ -87,10 +87,10 @@ export default {
              }else{
              	callback()
              }
-         }
-	 			 else if(!value){
-	 	 				callback(new Error("不能为空"));
-	 	 		 }
+        }
+	 	else if(!value){
+	 	 	callback(new Error("不能为空"));
+	 	}
          else{
               callback();
          }
@@ -257,7 +257,7 @@ export default {
 </script>
 <style scoped lang="scss">
 #addHouseInfo{
- .CheckApartinfo {
+ .CheckApartinfo{
   height: 40px;
   line-height: 40px;
   margin-bottom: 20px;
@@ -267,7 +267,7 @@ export default {
 .row_m_top{
 	margin-top:40px!important;
 }
- .checkInfo-form {
+ .checkInfo-form{
   -webkit-border-radius: 5px;
   border-radius: 5px;
   -moz-border-radius: 5px;
@@ -276,33 +276,33 @@ export default {
   width: 750px;
   padding: 0px 35px 10px 35px;
 }
-.el-main {
+.el-main{
   padding: 0;
 }
- .apart-title {
+ .apart-title{
   display: block;
   margin-left: 20px;
 }
-.CheckApart-title {
+.CheckApart-title{
   display: block;
   margin-left: 20px;
 }
-.check-con {
+.check-con{
 
   border: 1px solid #d3dce6;
 }
- .apart-lay-list {
+ .apart-lay-list{
   line-height: 50px;
   height: 50px;
   margin-bottom: 20px;
   border-top: 1px solid #d3dce6;
   border-bottom: 1px solid #d3dce6;
 }
-.baseImg {
+.baseImg{
   width: 50px;
 }
 .el-icon-upload2,
-.el-icon-download {
+.el-icon-download{
   font-size: 20px;
   color: #409eff;
   cursor: pointer;
@@ -327,6 +327,7 @@ export default {
 	background: #409EFF;
 	
 }
+
 }
 </style>
 

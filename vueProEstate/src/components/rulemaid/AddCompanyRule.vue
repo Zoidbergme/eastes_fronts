@@ -35,7 +35,6 @@
     			<el-input v-model="form.sell_id"  placeholder="请输入乙方单位" style="width: 73%;"></el-input>
   				<el-button @click="chosseCompanyRule" type="primary" size="small" >选择</el-button>
     	 </el-form-item>
-  		
     </el-col> 
     <el-col :span="8">
     	 <el-form-item  prop="sell_docker" label="乙方对接人：">
@@ -81,7 +80,7 @@
             <el-col  :span="5">
                 <el-button-group>            
                     <el-button type="primary" size="small">查看</el-button>
-                    <el-button type="primary" size="small">新增</el-button>
+                    <el-button type="primary" @click="showDialog" size="small">新增</el-button>
                     <el-button type="primary" size="small" >修改</el-button>
                     <el-button type="primary" size="small" >删除</el-button>
                 </el-button-group>
@@ -215,10 +214,8 @@
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666">合作项目记录</font>
- 
             </el-col>
-            <el-col :span="5">
-                
+            <el-col :span="5">  
             </el-col>
         </el-row>
         <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
@@ -246,7 +243,55 @@
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
         </el-pagination>
     </div> 
-
+	<div class="dialoag_content" v-if="show">
+		<el-row>
+			<el-form :data="checkForm"   label-width="140px">
+			<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
+				<el-col :span="11">
+					<span class="check-basetitle">查看修改附件</span>
+				</el-col>
+				<el-col :span="10" :push="1"  >
+		 			<el-form-item>
+    					<el-button size="small" type="primary" @click="change">确认</el-button>
+    					<el-button size="small" @click="hide" >取消</el-button>
+  					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row  class="m_top">
+			<el-col  :span="22">
+				<el-form-item prop="file_name" label="文件名称：">
+					<el-input v-model="checkForm.file_name" ></el-input>
+				</el-form-item>
+				<el-form-item prop="file_url" label="附件：">
+					<el-upload
+ 						class="upload-demo"
+  						action="https://jsonplaceholder.typicode.com/posts/"
+  						:on-preview="handlePreview"
+  						:on-remove="handleRemove"
+  						:before-remove="beforeRemove"
+  						:before-upload="beforeImgUpload"
+  						multiple
+  						:limit="3"
+ 						:on-exceed="handleExceed"
+  						:file-list="fileList">
+ 						 <el-button size="small" type="primary">点击上传</el-button>
+  						<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2m</div>
+					</el-upload>
+				</el-form-item>
+				<el-form-item prop="file_remark" label="备注：">
+					<el-input type="textarea" v-model="checkForm.file_remark" ></el-input>
+				</el-form-item>
+				<el-form-item prop="file_remark" label="上传人员：" >
+					<el-input  v-model="checkForm.file_remark" ></el-input>
+				</el-form-item>
+				<el-form-item prop="upload_time"  label="上传时间：">
+					<el-input v-model="checkForm.upload_time"></el-input>
+				</el-form-item>
+			</el-col>	
+			</el-row>
+			</el-form>		
+		</el-row>
+	</div>
 </div>
 </template>
 
@@ -266,6 +311,8 @@ export default {
  	 		}
  	 	};
  	 	return{
+ 	 		canUpload:false,
+ 	 		show:false,
  	 		title:"结佣规则",
  	 		Data: [],
      		tableData: [],
@@ -315,7 +362,29 @@ export default {
         		],
         		arc_end_time:[
         			{required:true,message:'不能为空',trigger:'blur'}
+        		],
+        		file_name:[
+        			{required:true,message:'不能为空',trigger:'blur'}
+        		],
+        		file_url:[
+        			{required:true,message:'不能为空',trigger:'blur'}
+        		],
+        		file_remark:[
+        			{required:true,message:'不能为空',trigger:'blur'}
+        		],
+        		upload_person:[
+        			{required:true,message:'不能为空',trigger:'blur'}
+        		],
+        		upload_time:[
+        			{required:true,message:'不能为空',trigger:'blur'}
         		]
+        	},
+        	checkForm:{
+        		file_name:'',
+        		file_url:'',
+        		file_remark:'',
+        		upload_person:'',
+        		upload_time:''
         	}
            
         }
@@ -340,7 +409,7 @@ export default {
        this.page();
        },
        page() {
-         for (let i = 0;i < Math.ceil(this.tableData.length / this.pageSize); i++){
+        for (let i = 0;i < Math.ceil(this.tableData.length / this.pageSize); i++){
                  let arr = new Array();
        			 for (let j = 0; j < this.tableData.length; j++) {
          			 if (
@@ -348,7 +417,7 @@ export default {
             				j < (i + 1) * this.pageSize
           			 ) {
            			 arr.push(this.tableData[j]);
-          }
+        }
         }
         this.alltablesize.push(arr);
       	}
@@ -361,9 +430,10 @@ export default {
       	 this.$router.push({ path:"/index/CommissioCheck"});
       },
       onSubmit() {
+      	checkArtureTime();
         this.$refs.form.validate((valid)=>{
-        	if(valid){
-        		
+        	if(valid&&this.canUpload){
+        		this.AddComRules(this.form);
         	}
         })
       },
@@ -386,23 +456,79 @@ export default {
         }else{
       	  this.$message.error("请选择查看内容")
         }
-      
       },
       selsChange(sels) {  
     	if(sels){
     		   this.sels=sels; 
     	}   
       },
-    ...mapMutations([
-    	'addsels'
+      ...mapMutations([
+    	 'addsels'
       ]),
       ...mapActions([
-      	'GetComRules',
-      ])
+      	'AddComRules'
+      ]),
+      change(){
+      	
+      },
+      hide(){
+      	this.show=false;
+      },
+      showDialog(){
+      	this.show=true;
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
+      beforeImgUpload(file) {
+      	 const isLt2M = file.size / 1024 / 1024 < 2;
+      	 if (!isLt2M) {
+        	this.$message.error("上传头像图片大小不能超过 2MB!");
+     	 }
+      	 return isLt2M;
+   	  },
+   	  checkOrderTime(){
+   	  	if(this.compact_begin>this.compact_end){
+   	  		this.$message.error("合同的开始时间不能大于合同结束时间");
+   	  		this.canUpload=false;
+   	  	}else if(!this.compact_begin){
+   	  		this.$message.error("合同的开始时间不能为空");
+   	  		this.canUpload=false;
+   	  	}else if(!this.compact_end){
+   	  		this.$message.error("合同的结束时间不能为空");
+   	  		this.canUpload=false;
+   	  	}else{
+   	  		this.canUpload=true;
+   	  	}
+   	  },
+   	  checkArtureTime(){
+   	  	if(this.compact_begin>this.compact_end){
+   	  		this.$message.error("合同的开始时间不能大于合同结束时间");
+   	  		this.canUpload=false;
+   	  	}else if(!this.compact_begin){
+   	  		this.$message.error("合同的开始时间不能为空");
+   	  		this.canUpload=false;
+   	  	}else if(!this.compact_end){
+   	  		this.$message.error("合同的结束时间不能为空");
+   	  		this.canUpload=false;
+   	  	}else{
+   	  		this.canUpload=true;
+   	  	}
+   	  },
+   	  
  	},
  	created(){
  		this.getApartmentInfoImgList();	
- 		this.form=this.ComRules;
+ 		
  	},
  	computed:{
  		...mapState({
@@ -412,7 +538,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+	
 	.Commissio_title{
 		height:32px;
 		line-height:32px;
@@ -421,10 +548,10 @@ export default {
 		margin-bottom:20px;
 	}
 	
-	#AddTotalRule el-date-picker {
+	.el-date-picker {
  		 width: 275px !important;
 	}
-	#AddTotalRule .check-basetitle{
+	.check-basetitle{
 		height:40px;
 		line-height:40px;
 		color:#fff;
@@ -442,4 +569,21 @@ export default {
 	#CheckCompanyRule .el-form{
 		margin-top:0px;
 	}
+	.dialoag_content{
+		position:fixed;
+   		margin:0 auto 50px;
+    	background:#fff;
+   		border-radius:2px;
+    	-webkit-box-shadow:0 1px 3px rgba(0,0,0,.3);
+    	box-shadow:0 1px 3px rgba(0,0,0,.3);
+    	-webkit-box-sizing:border-box;
+    	box-sizing:border-box;
+    	width: 50%;
+    	z-index:1000;
+    	top:50px;
+    	left:30%;
+    }
+	
+	
+	
 </style>

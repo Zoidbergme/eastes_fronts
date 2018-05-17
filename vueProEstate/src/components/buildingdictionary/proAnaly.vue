@@ -40,19 +40,19 @@ export default {
         rules:{
         	rim:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur'}
         	],
         	advantage:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur'}
         	],
         	increase_value:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur'}
         	],
         	fetch:[
         		{required:true,message:'不能为空',trigger:'blur'},
-        		{min:1,max:200,message:'不能超过200',trigger:'blur change'}
+        		{min:1,max:200,message:'不能超过200',trigger:'blur'}
         	]
         },
         Froms:{

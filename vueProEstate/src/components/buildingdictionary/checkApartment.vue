@@ -140,8 +140,8 @@ export default {
   
   },
   created() {
-    this.houseMesGet(this.sels[0].id);
-   
+   // this.houseMesGet(this.sels[0].id);
+   this.getdata(this.sels[0].id);
   },
   methods: {
     getCheckApartmentList() {
@@ -236,7 +236,17 @@ export default {
     },
     ...mapActions([
     	'houseMesGet','houseMeschange'
-    ])
+    ]),
+    getdata(payload){
+    	let url=this.Rooturl+"project/houseType/detail";
+		this.$http.get(url,{
+			params:{
+				id:payload
+			}
+		}).then(res=>{
+			this.ruleFormcheckApart=res.data.data.baseInfo	
+		})
+    }
   },
   components:{
   	palnPho,
@@ -255,7 +265,7 @@ export default {
   	})
   },
   mounted(){
- 	setTimeout(()=>{this.ruleFormcheckApart=this.houseMes.baseInfo},300)
+
   },
   beforeMount(){
   	
@@ -264,7 +274,7 @@ export default {
 </script>
 <style scoped lang="scss">
 #checkApartment{
- .CheckApartinfo {
+ .CheckApartinfo{
   height: 40px;
   line-height: 40px;
   margin-bottom: 20px;
@@ -283,22 +293,22 @@ export default {
   width: 750px;
   padding: 0px 35px 10px 35px;
 }
-.el-main {
+.el-main{
   padding: 0;
 }
- .apart-title {
+ .apart-title{
   display: block;
   margin-left: 20px;
 }
-.CheckApart-title {
+.CheckApart-title{
   display: block;
   margin-left: 20px;
 }
-.check-con {
+.check-con{
 
   border: 1px solid #d3dce6;
 }
- .apart-lay-list {
+ .apart-lay-list{
   line-height: 50px;
   height: 50px;
   margin-bottom: 20px;

@@ -22,6 +22,8 @@ Vue.prototype.HOST = '/api'
 Vue.prototype.webservicexml = httpinfo.webservicexml
 Vue.prototype.returndata = httpinfo.returndata
 
+	
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

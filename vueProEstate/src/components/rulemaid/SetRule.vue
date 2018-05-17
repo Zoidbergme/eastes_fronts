@@ -5,15 +5,15 @@
 		<span class="check-basetitle">设置公司</span>
 	</el-col>
 	<el-col :span="4" :push="8" >	
-    		<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
-    		<el-button size="small" @click="back" >取消</el-button>
+    	<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
+    	<el-button size="small" @click="back" >取消</el-button>
 	</el-col>
 </el-row>
 <el-form ref="form" :model="form" style="margin-top:40px;" label-width="120px">
 		<el-row style="height:40px;">
 			<el-form-item label="物业类型：">
             	<el-checkbox-group v-model="form.type">
-             		<el-checkbox label="住宅" name="type"></el-checkbox>
+             		<el-checkbox label="住宅"  name="type"></el-checkbox>
              		<el-checkbox label="公寓" name="type"></el-checkbox>
              		<el-checkbox label="别墅" name="type"></el-checkbox>
              		<el-checkbox label="商铺" name="type"></el-checkbox>
@@ -25,22 +25,22 @@
   	   	<el-row style="margin-top:40px">
   	   		<el-col :span="8">
 				<el-form-item label="*跳点：">
-          	 		<el-select v-model="form.desc" placeholder="">
-            			<el-option label="是" value="是"></el-option>
-           				<el-option checked selected label="否" value="否"></el-option>
+          	 		<el-select @change="JumpChange" v-model="form.jump_point_id" placeholder="">
+            			<el-option label="是" value="1"></el-option>
+           				<el-option  label="否" value="0"></el-option>
          			</el-select>
   	   			</el-form-item>
 			</el-col>
 			<el-col :span="8">
-				<el-form-item label="*跳点提成积累">
-           			<el-select v-model="form.resource" placeholder="">
-            			<el-option label="是" value="是"></el-option>
-           				<el-option selected label="否" value="否"></el-option>
+				<el-form-item label="*跳点提成积累：">
+           			<el-select  v-model="form.is_include" placeholder="">
+            			<el-option label="是" value="1"></el-option>
+           				<el-option  label="否" value="0"></el-option>
         			</el-select>
   	   			</el-form-item>
 			</el-col>
 			<el-col :span="8">
-				<el-form-item label="*单位">
+				<el-form-item label="*单位：">
            			<el-select v-model="form.resource" placeholder="人民币">
             			<el-option label="人民币" value="shanghai"></el-option>			
          			</el-select>
@@ -50,7 +50,7 @@
   	   	<el-row>
   	   		<el-col :span="8">
   	   			<el-form-item label="*提成方式：">
-           			<el-select @change="change" v-model="form.way" placeholder="提成方式">
+           			<el-select @change="change" v-model="form.way" placeholder="提成方式：">
             			<el-option checked label="固定金额x套数" value="1"></el-option>
            				<el-option label="销售总价x比例" value="2"></el-option>
            				<el-option label="建筑面积x单价" value="3"></el-option>
@@ -58,19 +58,19 @@
   	 			</el-form-item>
   	   		</el-col>
   	   		<el-col :span="8">
-  	   			<el-form-item v-if="fixed_amount" label="固定定额">
-           			<el-input v-model="form.fixed_amount"  type="number"  :disabled="!fixed_amount"  placeholder="输入固定金额1000" ></el-input>
+  	   			<el-form-item prop="fixed_amount" v-if="fixed_amount" label="固定定额：">
+           			<el-input v-model.number="form.fixed_amount"    :disabled="!fixed_amount"  placeholder="输入固定金额1000" ></el-input>
   	 			</el-form-item>
-  	 			<el-form-item v-if="percentage" label="比例">
-           			<el-input v-model="form.percentage"  type="number"   :disabled="!percentage" placeholder="比例3%" ></el-input>
+  	 			<el-form-item prop="percentage" v-if="percentage" label="比例：">
+           			<el-input v-model.number="form.percentage"    :disabled="!percentage" placeholder="比例3%" ></el-input>
   	 			</el-form-item>
-  	 			<el-form-item v-if="unit_price"  label="单价">
-           			<el-input  v-model="form.unit_price" type="number"  :disabled="!unit_price" placeholder="输入单价如" ></el-input>
+  	 			<el-form-item prop="unit_price" v-if="unit_price"  label="单价：">
+           			<el-input  v-model.number="form.unit_price"   :disabled="!unit_price" placeholder="输入单价如" ></el-input>
   	 			</el-form-item>
   	   		</el-col>
   	   	</el-row>
 </el-form>
- <div class="attachment m_top" >
+ <div class="attachment m_top" v-show="JumpPointBox" >
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
                 <font style="font-size:16px;color:#666">跳点规则</font>
@@ -107,12 +107,31 @@
 </template>
 
 <script>
+	import qs from 'qs'
 	export default{
 		name:'SetRule',
 		data(){
+			const checkNum=(rule,value,callback)=>{
+  			 if(value != null && value != ""){
+            	 if(!(typeof(value)==="number"&&value%1==0)) {
+                	 callback(new Error('请输入正整数!'))
+            	 }else if(value>9999){
+                  	callback(new Error("不能大于9999"))
+            	 }else{
+             		callback()
+           		 }
+         	 }
+	 	   	else if(!value){
+	 	 		callback(new Error("不能为空"));
+	 	 	}
+        	else{
+              callback();
+        	}
+  		};
 			return{
 				form: {
-         		  name: '',
+         		  company_rule_id:'',
+         		  name:'',
                   region: '',
                   date1: '',
                   date2: '',
@@ -123,11 +142,14 @@
                   way:'1',
                   fixed_amount:'',
                	  percentage:'',
-                  unit_price:''
+                  unit_price:'',
+                  jump_point_id:'0',
+                  is_include:'0'
                },
                fixed_amount:true,
                percentage:false,
                unit_price:false,
+               JumpPointBox:false,
                tableData:[
                		{
                			key: 1,
@@ -142,18 +164,29 @@
           				sureTime:"2017/01/08",
          				sureEndTime:"2017/01/08"  
                		}
-               ]
+               ],
+               rules:{
+               	name:[
+               		{required:true,message:"不能为空",trigger:'blur'}
+               	],
+               	ump_point_id:[
+               		{required:true,message:"不能为空",trigger:'blur'}
+               	],
+               	is_include:[
+               		{required:true,message:"不能为空",trigger:'blur'}
+               	]
+               }
 
 			}
 		},
 		methods:{
 			onSubmit(){
-			  let url=this.Rooturl+"project/ruleCompany/getList";
-         	  this.$http.get(url,{
-         	
-       		  }).then(function(res){
-        			console.log(res);
-             })},
+			   let url=this.Rooturl+"project/ruleCompany/getList";
+         	   this.$http.post(url,qs.stringify({
+         	  	 ...this.form
+         	   })).then(function(res){
+        			console.log(res.data);
+               })},
      		back(){
       	 		this.$router.push({ path: "/index/CheckCompanyRule" });
      		},
@@ -175,6 +208,13 @@
      		},
      		addJumpRule(){
      			
+     		},
+     		JumpChange(value){
+     			if(value==1){
+     				this.JumpPointBox=true;
+     			}else if(value==0){
+     				this.JumpPointBox=false;
+     			}
      		}
 		}
 	}

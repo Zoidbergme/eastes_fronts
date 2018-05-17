@@ -203,10 +203,15 @@
       		this.canUpload=false;
       	}
       },
-      isUpload(){
-      	if(!this.form.remark){
-      		this.canUpload=true;
-      	}
+      Upload(id){
+      	let url=this.Rooturl+"";
+      	this.$http.get(url,{
+      		params:{
+      			
+      		}
+      	}).then(res=>{
+      		this.from=res.data.data;
+      	})
       }
       
    	},

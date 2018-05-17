@@ -1,6 +1,5 @@
-import Vue from 'vue'
 import Router from 'vue-router'
-//导入组件
+import Vue from 'vue'
 import login from '@/components/user/login'
 import forgetPassword from '@/components/user/forgetPassword'
 import projectInfo from '@/components/buildingdictionary/projectinfo'
@@ -40,6 +39,7 @@ import examineCheck from '@/components/companymanagement/examineCheck'
 import Commissio from '@/components/rulemaid/Commissio'
 import CommissioCheck from '@/components/rulemaid/CommissioCheck'
 import AddTotalRule from '@/components/rulemaid/AddTotalRule'
+import AddCompanyRule from '@/components/rulemaid/AddCompanyRule'
 import CheckCompanyRule from '@/components/rulemaid/CheckCompanyRule'
 import choseCompany from '@/components/rulemaid/choseCompany'
 import SetRule from '@/components/rulemaid/SetRule'
@@ -354,6 +354,10 @@ export default new Router({
         {
         	path:"/index/addHouseInfo",
         	component:addHouseInfo
+        },
+        {	
+        	path:'/index/AddCompanyRule',
+        	component:AddCompanyRule
         }
         ]
     }, ]

@@ -211,12 +211,8 @@
       		this.$message.error("到访确认保护时间错误");
       		this.canUpload=false;
       	}
-      },
-      isUpload(){
-      	if(!this.form.remark){
-      		this.canUpload=true;
-      	}
       }
+    
       
    	},
 	created(){

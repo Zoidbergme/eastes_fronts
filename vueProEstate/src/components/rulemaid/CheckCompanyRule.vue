@@ -120,7 +120,7 @@
                 <el-button-group>            
                     <el-button type="primary" size="small">查看</el-button>
                     <el-button @click="addCompanydealRule" type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
+                    <el-button type="primary"  size="small" >修改</el-button>
                     <el-button type="primary" size="small" >删除</el-button>
                 </el-button-group>
             </el-col>
@@ -250,9 +250,9 @@
 
 </div>
 </template>
-
 <script>
 import {mapMutations,mapState,mapActions} from 'vuex'
+import qs from 'qs'
 export default {
  	 name: "CheckCompanyRule",
  	 data(){
@@ -329,7 +329,7 @@ export default {
           		recommendNum: "TJBH"+i,
          		customerName: "否",
          		phone: "固定金额",
-          		state: "待审核",      		
+          		state: "待审核",      		    
           		type: "执行中",
           		companyName:"住宅、公寓",
           		planeTime:"人民币",
@@ -341,7 +341,7 @@ export default {
        this.page();
        },
        page() {
-         for (let i = 0;i < Math.ceil(this.tableData.length / this.pageSize); i++){
+        for (let i = 0;i < Math.ceil(this.tableData.length / this.pageSize); i++){
                  let arr = new Array();
        			 for (let j = 0; j < this.tableData.length; j++) {
          			 if (
@@ -363,8 +363,12 @@ export default {
       },
       onSubmit() {
         this.$refs.form.validate((valid)=>{
+        	let url=this.Rooturl+"";
         	if(valid){
-        		
+        		this.$http.post(url,qs.stringift({...this.form}))
+        		.then(res=>{
+        			 alert(res.data.code)
+        		})
         	}
         })
       },
@@ -387,28 +391,47 @@ export default {
         }else{
       	  this.$message.error("请选择查看内容")
         }
-      
       },
       selsChange(sels) {  
     	if(sels){
-    		   this.sels=sels; 
+    		this.sels=sels; 
     	}   
       },
     ...mapMutations([
     	'addsels'
       ]),
       ...mapActions([
-      	'GetComRules',
-      ])
- 	},
- 	created(){
- 		this.getApartmentInfoImgList();	
- 		this.form=this.ComRules;
+      
+      ]),
+      getCompanyRule(id){
+      	let url=this.Rooturl+"project/ruleCompany/getDetail";
+      	this.$http.get(url,{
+      		params:{
+      			rule_id:id
+      		}
+      	}).then(res=>{
+      		this.form=res.data//
+      	})
+      },
+      sortTable(arr){
+      	let sarr=[];
+      	for(let i=0;i<array.length;i++){
+      		if(array[i].rule_id==(i+1)){
+      			sarr.push(array[i]);
+      		}
+      	}
+      	return sarr;
+      }
  	},
  	computed:{
  		...mapState({
- 			ComRules:state=>state.CheckCompanyRule.ComRules
+ 			ComRules:state=>state.CheckCompanyRule.ComRules,
+ 			mes:state=>state.CommissioCheck.sels
  		})
+ 	},
+ 	created(){
+ 		this.getApartmentInfoImgList();	
+ 		this.getCompanyRule(this.mes);
  	}
 }
 </script>
