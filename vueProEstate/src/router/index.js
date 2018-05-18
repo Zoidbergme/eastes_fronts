@@ -1,5 +1,6 @@
 import Router from 'vue-router'
 import Vue from 'vue'
+
 import login from '@/components/user/login'
 import forgetPassword from '@/components/user/forgetPassword'
 import projectInfo from '@/components/buildingdictionary/projectinfo'
@@ -75,7 +76,7 @@ import AuditFailure  from '@/components/BrokersManagement/AuditFailure'
 import ToBeConfirmCheck  from '@/components/BrokersManagement/ToBeConfirmCheck' 
 import ToBeConfilmAudit  from '@/components/BrokersManagement/ToBeConfilmAudit'  
 import addHouseInfo from  '@/components/buildingdictionary/addHouseInfo'
-
+import CheckCompanypPayRule from '@/components/rulemaid/CheckCompanypPayRule'
 
 Vue.use(Router)
  
@@ -358,6 +359,10 @@ export default new Router({
         {	
         	path:'/index/AddCompanyRule',
         	component:AddCompanyRule
+        },
+        {
+        	path:'/index/CheckCompanypPayRule',
+        	component:CheckCompanypPayRule
         }
         ]
     }, ]

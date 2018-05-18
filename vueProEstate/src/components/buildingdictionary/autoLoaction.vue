@@ -30,15 +30,24 @@ export default{
 				var lat='';
 				var map = new BMap.Map("allmap");
 				var geo=new BMap.Geocoder();	
-				map.centerAndZoom(this.cityName,18);
+			
+				if(this.cityName){
+					map.centerAndZoom(this.cityName,18);
+				}else{
+					var point = new BMap.Point(116.331398,39.897445);
+					map.centerAndZoom(point,18);
+				}
+				
 				map.enableScrollWheelZoom(true);
 				map.addEventListener("click",function(e){
 					map.clearOverlays();
 				    geo.getLocation(e.point,function(r){
 				    var point = new BMap.Point(r.point.lng,r.point.lat);
 				    var marker = new BMap.Marker(point);
+				  
 				    map.addOverlay(marker); 
 				    _this.loactions=r.addressComponents;
+				      console.log(r.addressComponents)
 				    _this.address=r.address;				 
 				})
 				}); 
@@ -64,7 +73,7 @@ export default{
 			
 		},
 		created(){
-			console.log(this.cityName)
+			
 		},
 		mounted(){
 			this.load();

@@ -1,15 +1,15 @@
 <template>
-<div id="SetRule">
+<div id="CheckCompanypPayRule">
 <el-row style="height:40px;padding-left:40px;background:#545c64 ;" class="header" >	
 	<el-col :span="12">
-		<span class="check-basetitle">设置公司</span>
+		<span class="check-basetitle">查看修改公司</span>
 	</el-col>
 	<el-col :span="4" :push="8" >	
     	<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
     	<el-button size="small" @click="back" >取消</el-button>
 	</el-col>
 </el-row>
-<el-form ref="form" :model="form" :rules="rules" style="margin-top:40px;" label-width="120px">
+<el-form ref="form" :model="form" style="margin-top:40px;" label-width="120px">
 		<el-row style="height:40px;">
 			<el-form-item label="物业类型：">
             	<el-checkbox-group v-model="form.type">
@@ -109,7 +109,7 @@
 <script>
 	import qs from 'qs'
 	export default{
-		name:'SetRule',
+		name:'CheckCompanypPayRule',
 		data(){
 			const checkNum=(rule,value,callback)=>{
   			 if(value != null && value != ""){
@@ -129,8 +129,12 @@
         	}
   		};
 		return{
-			form: {
+				form: {
          		  company_rule_id:'',
+         		  name:'',
+                  region: '',
+                  date1: '',
+                  date2: '',
                   delivery: false,
                   type: [],
                   resource: '',
@@ -141,7 +145,7 @@
                   unit_price:'',
                   jump_point_id:'0',
                   is_include:'0'
-          },
+         },
                fixed_amount:true,
                percentage:false,
                unit_price:false,
@@ -171,32 +175,25 @@
                	is_include:[
                		{required:true,message:"不能为空",trigger:'blur'}
                	]
-               	
                }
 
 			}
 		},
 		methods:{
 			onSubmit(){
-			this.$refs.form.validate((valid)=>{
-				if(valid){
-					let url=this.Rooturl+"project/ruleCompany/getList";
-         	   		this.$http.post(url,qs.stringify({
-         	  	 		...this.form
-         	   		})).then(function(res){
-        				console.log(res.data);
-              		})
-				}
-			})
-			   
-         	},
+			   let url=this.Rooturl+"project/ruleCompany/getList";
+         	   this.$http.post(url,qs.stringify({
+         	  	 ...this.form
+         	   })).then(function(res){
+        			console.log(res.data);
+               })},
      		back(){
-      	 		this.$router.push({ path: "/index/AddCompanyRule" });
+      	 		this.$router.push({ path: "/index/CheckCompanyRule" });
      		},
      		change(){
-     			this.fixed_amount=false;
-                this.percentage=false;
-                this.unit_price=false;
+     			 this.fixed_amount=false;
+                 this.percentage=false;
+                 this.unit_price=false;
      			if(this.form.way=="1"){
      				this.fixed_amount=true;
      			}else if(this.form.way=="2"){
@@ -224,7 +221,7 @@
 </script>
 
 <style scoped  lang="scss">
-#SetRule{
+#CheckCompanypPayRule{
 .m_bottom{
 	margin-bottom:20px;
 	border:1px solid #ddd;

@@ -72,76 +72,9 @@
  	</el-col>    
 </el-row> 	    
 </el-form>
-    <div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666"> 附件</font>
-            </el-col>
-            <el-col  :span="5">
-                <el-button-group>            
-                    <el-button type="primary" size="small">查看</el-button>
-                    <el-button type="primary" @click="showDialog" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="文件名称" >
-            </el-table-column>
-            <el-table-column  label="附件"  >
-            	 <template slot-scope="scope">
-     				<a :href="scope.row.planeEndTime" target="_blank" style="color:blue;text-decoration: underline;cursor: pointer;">
-     					查看附件
-     				</a>
-      			 </template>
-            </el-table-column>
-            <el-table-column prop="phone" label="上传人员" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="上传时间" >
-            </el-table-column>               
-        </el-table>
-        <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-        </el-pagination>
-    </div>   
-    <div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666"> 成交佣金</font>
-                <font style="font-size:12px;color:#999">(推荐的客户在该项目购置房源后产生的佣金)</font>
-            </el-col>
-            <el-col :span="5">
-                <el-button-group>            
-                    <el-button type="primary" size="small">查看</el-button>
-                    <el-button @click="addCompanydealRule" type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="物业类型" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="跳点"  >
-            </el-table-column>
-            <el-table-column prop="phone" label="提成公式" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="单位" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
-            </el-table-column>   
-        </el-table>
-        <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-        </el-pagination>
-    </div> 
+    <addcompanyrulefile ></addcompanyrulefile>
+    
+    <dealcompanyruletable></dealcompanyruletable>
     <div class="attachment m_top" >
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
@@ -157,8 +90,8 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" border @selection-change="VisitSelsChange" ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserv-selection="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
@@ -191,8 +124,8 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" border @selection-change="IntroSelsChange" ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
@@ -218,8 +151,8 @@
             <el-col :span="5">  
             </el-col>
         </el-row>
-        <el-table :data="Data" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="Data" border  ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection"  label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
@@ -243,60 +176,16 @@
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
         </el-pagination>
     </div> 
-	<div class="dialoag_content" v-if="show">
-		<el-row>
-			<el-form :data="checkForm"   label-width="140px">
-			<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
-				<el-col :span="11">
-					<span class="check-basetitle">查看修改附件</span>
-				</el-col>
-				<el-col :span="10" :push="1"  >
-		 			<el-form-item>
-    					<el-button size="small" type="primary" @click="change">确认</el-button>
-    					<el-button size="small" @click="hide" >取消</el-button>
-  					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row  class="m_top">
-			<el-col  :span="22">
-				<el-form-item prop="file_name" label="文件名称：">
-					<el-input v-model="checkForm.file_name" ></el-input>
-				</el-form-item>
-				<el-form-item prop="file_url" label="附件：">
-					<el-upload
- 						class="upload-demo"
-  						action="https://jsonplaceholder.typicode.com/posts/"
-  						:on-preview="handlePreview"
-  						:on-remove="handleRemove"
-  						:before-remove="beforeRemove"
-  						:before-upload="beforeImgUpload"
-  						multiple
-  						:limit="3"
- 						:on-exceed="handleExceed"
-  						:file-list="fileList">
- 						 <el-button size="small" type="primary">点击上传</el-button>
-  						<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2m</div>
-					</el-upload>
-				</el-form-item>
-				<el-form-item prop="file_remark" label="备注：">
-					<el-input type="textarea" v-model="checkForm.file_remark" ></el-input>
-				</el-form-item>
-				<el-form-item prop="file_remark" label="上传人员：" >
-					<el-input  v-model="checkForm.file_remark" ></el-input>
-				</el-form-item>
-				<el-form-item prop="upload_time"  label="上传时间：">
-					<el-input v-model="checkForm.upload_time"></el-input>
-				</el-form-item>
-			</el-col>	
-			</el-row>
-			</el-form>		
-		</el-row>
-	</div>
+	
 </div>
 </template>
 
 <script>
 import {mapMutations,mapState,mapActions} from 'vuex'
+import addcompanyrulefile from './AddCompanyRuleFile'
+import dealcompanyruletable from './DealCompanyRuleTalble'
+
+import qs from 'qs'
 export default {
  	 name: "AddCompanyRule",
  	 data(){
@@ -311,14 +200,16 @@ export default {
  	 		}
  	 	};
  	 	return{
- 	 		canUpload:false,
- 	 		show:false,
+ 	 		DealSels:[],
+ 	 		VisitSels:[],
+ 	 		IntroSels:[],
+ 	 		fileList:[],
+ 	 		canUpload:false,	
  	 		title:"结佣规则",
  	 		Data: [],
      		tableData: [],
             pageSize: 8,
-            alltablesize: [],
-            url:"https://www.jianshu.com/p/5af06fdd8796",
+            alltablesize: [],      
             form: {
          		project_name:'',
  				project_docker:'',
@@ -378,14 +269,9 @@ export default {
         		upload_time:[
         			{required:true,message:'不能为空',trigger:'blur'}
         		]
-        	},
-        	checkForm:{
-        		file_name:'',
-        		file_url:'',
-        		file_remark:'',
-        		upload_person:'',
-        		upload_time:''
         	}
+        	
+        
            
         }
  	},
@@ -443,9 +329,6 @@ export default {
       chosseCompanyRule(){
       	this.$router.push({ path: "/index/choseCompany" });
       },
-      addCompanydealRule(){
-      	this.$router.push({ path: "/index/SetRule" });
-      },
       check(){
         let sels=this.sels;
         if(sels.length>1){
@@ -457,45 +340,28 @@ export default {
       	  this.$message.error("请选择查看内容")
         }
       },
-      selsChange(sels) {  
-    	if(sels){
-    		   this.sels=sels; 
-    	}   
+      //selsChange
+    
+      IntroSelsChange(sels){
+      	if(sels){
+      		this.DealSels=sels;
+      	}
       },
+      VisitSelsChange(sels){
+      	if(sels){
+      		this.VisitSels=sels;
+      	}
+      },
+      //selsChange
       ...mapMutations([
     	 'addsels'
       ]),
       ...mapActions([
       	'AddComRules'
       ]),
-      change(){
-      	
-      },
-      hide(){
-      	this.show=false;
-      },
-      showDialog(){
-      	this.show=true;
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      },
-      beforeImgUpload(file) {
-      	 const isLt2M = file.size / 1024 / 1024 < 2;
-      	 if (!isLt2M) {
-        	this.$message.error("上传头像图片大小不能超过 2MB!");
-     	 }
-      	 return isLt2M;
-   	  },
+       //begin-dialog
+      
+   	  //end-dialog
    	  checkOrderTime(){
    	  	if(this.compact_begin>this.compact_end){
    	  		this.$message.error("合同的开始时间不能大于合同结束时间");
@@ -534,12 +400,13 @@ export default {
  		...mapState({
  			ComRules:state=>state.CheckCompanyRule.ComRules
  		})
- 	}
+ 	},
+ 	components:{addcompanyrulefile,dealcompanyruletable}
 }
 </script>
 
 <style scoped lang="scss">
-	
+#AddCompanyRule{
 	.Commissio_title{
 		height:32px;
 		line-height:32px;
@@ -566,23 +433,11 @@ export default {
 	.Commissio_title{
 		line-height:32px;
 	}
+}		
 	#CheckCompanyRule .el-form{
 		margin-top:0px;
 	}
-	.dialoag_content{
-		position:fixed;
-   		margin:0 auto 50px;
-    	background:#fff;
-   		border-radius:2px;
-    	-webkit-box-shadow:0 1px 3px rgba(0,0,0,.3);
-    	box-shadow:0 1px 3px rgba(0,0,0,.3);
-    	-webkit-box-sizing:border-box;
-    	box-sizing:border-box;
-    	width: 50%;
-    	z-index:1000;
-    	top:50px;
-    	left:30%;
-    }
+	
 	
 	
 	

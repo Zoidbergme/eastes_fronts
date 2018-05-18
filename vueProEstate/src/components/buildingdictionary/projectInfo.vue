@@ -26,21 +26,21 @@
         <el-col :span="12">
           <el-form-item label="项目地址:">
             <el-col :span="8">
-              <el-select v-model="ruleForminfo.province" placeholder="请选择" @change="provinceChange($event)">
-                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item"  :value="idx">
+              <el-select v-model="ruleForminfo.province_name" placeholder="请选择" @change="provinceChange($event)">
+                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.name">
        
                 </el-option>
               </el-select>
             </el-col>
             <el-col  :span="8">
-              <el-select ref="cityName" v-model="ruleForminfo.city" placeholder="请选择" @change="cityChange($event)">
-                <el-option @click="addcityname($event)" v-for="(item,id) in secoptions" :key="id" :label="item"  :value="id" >
+              <el-select ref="cityName" v-model="ruleForminfo.city_name" placeholder="请选择" @change="cityChange($event)">
+                <el-option  v-for="(item,id) in secoptions" :key="id" :label="item.name"  :value="item.name" >
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="8">
-              <el-select v-model="ruleForminfo.district" placeholder="请选择">
-                <el-option v-for="(item,id) in thioptions" :key="id" :label="item"  :value="id">      
+              <el-select v-model="ruleForminfo.district_name" placeholder="请选择"  >
+                <el-option v-for="(item,idy) in thioptions" :key="idy" :label="item"  :value="item">      
                 </el-option>
               </el-select>
             </el-col>
@@ -99,7 +99,7 @@
     <el-form ref="form" :model="ruleFormbuild" label-width="100px" size="small" class="projectInfo-form">
       <el-form-item label="物业类型:">
         <el-checkbox-group v-model="ruleFormbuild.procheckList">
-          <el-checkbox v-for="(item,idx) in realState"  :label="item.id" :key="idx" >{{item.param}}</el-checkbox>    
+          <el-checkbox v-for="(item,idx) in realState"  :label="item.id"  :key="idx"  >{{item.param}}</el-checkbox>    
         </el-checkbox-group>
       </el-form-item>
       <el-col :span="12">
@@ -114,12 +114,25 @@
       </el-col>
       <el-form-item label="项目标签:">
        <el-col :span="22">
-          <el-tag :key="tag.id" v-for="tag in projectTags" closable :disable-transitions="false" @close="handleClose(tag)">
-            {{tag.param}}
+          <el-tag   
+          	v-for="(tag,idx) in projectTags" 
+          	:key="tag.id"  
+          	closable  
+          	@close="handleClose(tag)"  >
+          	{{tag.param}}
           </el-tag>
-          <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">输入项目标签</el-button>
+          <el-input
+  					class="input-new-tag"
+  					v-if="inputVisible"
+ 		 				v-model="inputValue"
+  					ref="saveTagInput"
+  					size="small"
+  					@keyup.enter.native="handleInputConfirm"
+  					@blur="handleInputConfirm"
+					>
+					</el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">添加项目标签</el-button>
+   
         </el-col>
       </el-form-item>
       <el-form-item label="建筑类型:">
@@ -259,10 +272,14 @@ export default {
     	project_select:false,
       ruleForminfo: {
         add: "",
-        provalue: "",
+        province: "",
         cityvalue: "",
         disvalue: "",
-        statevalue: ""
+        statevalue: "",
+        district_name:'',
+        city_name:'',
+        province_name:'',
+        sale_state:''
       },
       ruleFormbuild: {
         procheckList: [],
@@ -296,7 +313,9 @@ export default {
         { value: 2, label: "在售" },
         { value: 3, label: "售罄" }
       ],
-      projectTags: [],
+      projectTags: [
+      	
+      ] ,
       inputVisible: false,
       inputValue: "",
       projectInfo: {},
@@ -305,35 +324,45 @@ export default {
       realState:[],
       buildType:[],
       project_id:'',
-      projects:''
+      projects:'',
+      temparr:[],
+      projectTagsConfig:[]
     }
   },
   created() {
-  	let this_=this;
+  	this.getProjectInfo();
+  	
+  	
     this.getProvinceList();
-    this.getProjectInfo();
+   	
+   
    	this.getconfig();
   },
   methods: {
-    handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+  	handleClose(tag){
+        this.projectTags.splice(this.projectTags.indexOf(tag), 1);
     },
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
+    showInput(){
+        this.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
     },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
+    handleInputConfirm(){
+    		let inputValue={
+    			param:'',
+    			id:''
+    		}
+        inputValue.param = this.inputValue;
+        inputValue.id = this.inputValue;
+        if (inputValue) {
+          this.projectTags.push(inputValue);
+        }
+        this.inputVisible = false;
+        this.inputValue = '';
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, fileList){
+    	
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -344,7 +373,6 @@ export default {
     	let url=this.Rooturl+"project/project/getProjectInfo";
       this.$http.get(url).then(res => {
         localStorage.setItem("info",JSON.stringify(res));
-        console.log(res.data);
         this.projectInfo = res.data.data;
         this.ruleForminfo.provalue = this.projectInfo.province;
         this.provinceChange(this.ruleForminfo.provalue);
@@ -352,6 +380,11 @@ export default {
         this.cityChange(this.ruleForminfo.cityvalue);
         this.ruleForminfo.disvalue = this.projectInfo.district;
         this.proImageUrl = this.projectInfo.img_url;
+        
+        this.ruleForminfo.city_name = this.projectInfo.city_name;
+        this.ruleForminfo.district_name = this.projectInfo.district_name;
+        this.ruleForminfo.province_name = this.projectInfo.province_name;
+        
         this.ruleForminfo.statevalue = this.projectInfo.sale_state;
         this.ruleFormbuild.average_price = this.projectInfo.average_price;
         this.ruleForminfo.add = this.projectInfo.absolute_address;
@@ -373,46 +406,48 @@ export default {
         this.ruleFormpro.water_supply = this.projectInfo.water_supply;
         this.ruleFormbuild.buicheckList = [this.projectInfo.build_type];
         for (let i = 0; i < this.projectInfo.property_type.length; i++) {
-          this.ruleFormbuild.procheckList.push(
-            this.projectInfo.property_type[i].property_tag_id
+         this.ruleFormbuild.procheckList.push(
+           this.projectInfo.property_type[i].property_tag_id
           );
         }
-        this.projectTags = this.projectInfo.project_tags.split("，");
+       
+        this.projectTags = this.projectInfo.project_tags.split(",");
+        
       });
     },
     // 读取省列表
     getProvinceList() {
       let token = sessionStorage.getItem("userinfo");
-      let url=this.Rooturl+"getProvinceList";
+      let url="../../static/mockdata/cities.json"
       this.$http.get(url).then(res => {
         localStorage.setItem("prov",JSON.stringify(res));
-        this.firoptions = res.data.data;
-        console.log(res.data);
+        this.firoptions =res.data;
       });
     },
     // 读取市区列表
     provinceChange(value) {
-    	let url=this.Rooturl+"getCityList";
-      this.$http.get(url,{
-      			params:{
-      				provinceCode:value
-      			}
-      	}).then(res => {
-      	localStorage.setItem("city",JSON.stringify(res));
-        this.secoptions = res.data.data; 
-      });
+    		this.ruleForminfo.city_name="";
+        this.ruleForminfo.district_name="";
+        this.thioptions=[];
+        this.secoptions=[];
+    		for(let i=0;i<this.firoptions.length;i++){
+    			if(this.firoptions[i].name==value){
+    				this.secoptions = this.firoptions[i].city; 
+    			}
+    		}
+       
     },
     // 读取区县列表
     cityChange(value){
-    	let url=this.Rooturl+"getDistrictList";
-      this.$http.get(url,{
-      			params:{
-      				cityCode:value
-      			}
-      	}).then(res => {
-        this.thioptions = res.data.data;
-        localStorage.setItem("distri",JSON.stringify(res));
-      });
+    		for(let i=0;i<this.secoptions.length;i++){
+    			if(this.secoptions[i].name==value){
+    				this.thioptions = this.secoptions[i].area; 
+    			}
+    		}
+	
+    },
+    districtChang(value){
+    	
     },
     // 修改项目信息
     submit() {
@@ -486,7 +521,7 @@ export default {
     },
     localBtn(){
     	if(this.ruleForminfo.cityvalue){
-    		this.sencityName(this.ruleForminfo.cityvalue);
+    		this.sencityName(this.ruleForminfo.city_name);
   			this.$router.push({path:'/index/autoLoaction'})
     	}else{
     		this.$message.error("请先选择您所在城市")
@@ -495,29 +530,50 @@ export default {
  	  ...mapMutations([
  	  		'sencityName'
  	  ]),
- 	  addcityname(e){
- 	  	let src=e.currentTarget;
- 	  },
  	  getconfig(){
   		let url=this.Rooturl+"config";
     	this.$http.get(url,{
     	}).then(res=>{
+    		 let arr=[];
     		 this.realState=res.data.data[16].param;
     		 this.buildType=res.data.data[17].param;
-    		 this.projectTags=res.data.data[15].param
+    		 let projectTagsConfig=res.data.data[15].param;
+    		 for(let i=0;i<this.projectTags.length;i++){
+        	for(let y=0;y<projectTagsConfig.length;y++){
+        		if(this.projectTags[i]==projectTagsConfig[y].id){	
+        			arr.push(projectTagsConfig[y]);
+        		}
+        	}
+       }
+    	
+    		this.projectTags=arr;
+    		
     	})
   	}
   },
   computed:{
   	...mapState({
   		 areaAdrss:state=>state.autoLoaction.street,
-  		 address:state=>state.autoLoaction.address
+  		 address:state=>state.autoLoaction.address,
+  		 province:state=>state.autoLoaction.province,
+  		 city:state=>state.autoLoaction.city,
+  		 district:state=>state.autoLoaction.district,
+  		 street:state=>state.autoLoaction.street
   	})
   	
   },
   mounted(){
-
-  	setTimeout(()=>{this.address==""?this.ruleForminfo.add=this.ruleForminfo.add:this.ruleForminfo.add=this.address;},400)
+  	setTimeout(()=>{
+  		if(this.address==""){
+  			this.ruleForminfo.add=this.ruleForminfo.add;
+  		}else{
+  			this.ruleForminfo.add=this.address;
+  			this.ruleForminfo.province_name=this.province;
+  			this.ruleForminfo.city_name=this.city;
+  			this.ruleForminfo.district_name=this.district;
+  	  }
+  	
+  	},600)
   }
 }
 </script>
@@ -573,6 +629,21 @@ export default {
 	width:24px!important;
 	height:24px!important;
 }
+.el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
 </style>
  
 

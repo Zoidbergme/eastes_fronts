@@ -81,10 +81,10 @@
             </el-col>
             <el-col  :span="5">
                 <el-button-group>            
-                    <el-button type="primary" size="small">查看</el-button>
-                    <el-button type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
+                    <el-button type="primary"  @click="showCheckDialog" size="small">查看</el-button>
+                    <el-button type="primary" @click="showDialog" size="small">新增</el-button>
+                    <el-button type="primary" @click="showCheckDialog" size="small" >修改</el-button>
+                    <el-button type="primary" @click="deleFile" size="small" >删除</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
@@ -247,7 +247,104 @@
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
         </el-pagination>
     </div> 
-
+	<div class="dialoag_content" v-if="addshow">
+		<el-row>
+			<el-form v-model="addForm"  :rules="rules"  label-width="140px">
+			<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
+				<el-col :span="11">
+					<span class="check-basetitle">新增附件</span>
+				</el-col>
+				<el-col :span="10" :push="1"  >
+		 			<el-form-item>
+    					<el-button size="small" type="primary" @click="addDialog">确认</el-button>
+    					<el-button size="small" @click="hide" >取消</el-button>
+  					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row  class="m_top">
+			<el-col  :span="22">
+				<el-form-item prop="file_name" label="文件名称：">
+					<el-input v-model="checkForm.file_name" ></el-input>
+				</el-form-item>
+				<el-form-item prop="file_url" label="附件：">
+					<el-upload
+ 						class="upload-demo"
+  						action="https://jsonplaceholder.typicode.com/posts/"
+  						:on-preview="handlePreview"
+  						:on-remove="handleRemove"
+  						:before-remove="beforeRemove"
+  						:before-upload="beforeImgUpload"
+  						multiple
+  						:limit="3"
+ 						:on-exceed="handleExceed"
+  						:file-list="fileList">
+ 						 <el-button size="small" type="primary">点击上传</el-button>
+  						<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2m</div>
+					</el-upload>
+				</el-form-item>
+				<el-form-item prop="file_remark" label="备注：">
+					<el-input type="textarea" v-model="checkForm.file_remark" ></el-input>
+				</el-form-item>
+				<el-form-item prop="file_remark" label="上传人员：" >
+					<el-input  v-model="checkForm.file_remark" ></el-input>
+				</el-form-item>
+				<el-form-item prop="upload_time"  label="上传时间：">
+					<el-input v-model="checkForm.upload_time"></el-input>
+				</el-form-item>
+			</el-col>	
+			</el-row>
+			</el-form>		
+		</el-row>
+	</div>
+	<div class="dialoag_content" v-if="checkshow">
+		<el-row>
+			<el-form v-model="checkForm" :rules="rules"  label-width="140px">
+			<el-row style="height:40px;padding-left:40px;background:#545c64 ;">
+				<el-col :span="11">
+					<span class="check-basetitle">查看修改附件</span>
+				</el-col>
+				<el-col :span="10" :push="1"  >
+		 			<el-form-item>
+    					<el-button size="small" type="primary" @click="changeDialog">确认</el-button>
+    					<el-button size="small" @click="hideDialog" >取消</el-button>
+  					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row  class="m_top">
+			<el-col  :span="22">
+				<el-form-item prop="file_name" label="文件名称：">
+					<el-input v-model="checkForm.file_name" ></el-input>
+				</el-form-item>
+				<el-form-item prop="file_url" label="附件：">
+					<el-upload
+ 						class="upload-demo"
+  						action="https://jsonplaceholder.typicode.com/posts/"
+  						:on-preview="handlePreview"
+  						:on-remove="handleRemove"
+  						:before-remove="beforeRemove"
+  						:before-upload="beforeImgUpload"
+  						multiple
+  						:limit="3"
+ 						:on-exceed="handleExceed"
+  						:file-list="fileList">
+ 						 <el-button size="small" type="primary">点击上传</el-button>
+  						<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2m</div>
+					</el-upload>
+				</el-form-item>
+				<el-form-item prop="file_remark" label="备注：">
+					<el-input type="textarea" v-model="checkForm.file_remark" ></el-input>
+				</el-form-item>
+				<el-form-item prop="file_remark" label="上传人员：" >
+					<el-input  v-model="checkForm.file_remark" ></el-input>
+				</el-form-item>
+				<el-form-item prop="upload_time"  label="上传时间：">
+					<el-input v-model="checkForm.upload_time"></el-input>
+				</el-form-item>
+			</el-col>	
+			</el-row>
+			</el-form>		
+		</el-row>
+	</div>
 </div>
 </template>
 <script>
@@ -267,6 +364,10 @@ export default {
  	 		}
  	 	};
  	 	return{
+ 	 		fileList:[],
+ 	 		canUpload:false,
+ 	 		checkshow:false,
+ 	 		addshow:false,
  	 		title:"结佣规则",
  	 		Data: [],
      		tableData: [],
@@ -317,6 +418,20 @@ export default {
         		arc_end_time:[
         			{required:true,message:'不能为空',trigger:'blur'}
         		]
+        	},
+        	checkForm:{
+        		file_name:'',
+        		file_url:'',
+        		file_remark:'',
+        		upload_person:'',
+        		upload_time:''
+        	},
+        	addForm:{
+        		file_name:'',
+        		file_url:'',
+        		file_remark:'',
+        		upload_person:'',
+        		upload_time:''
         	}
            
         }
@@ -392,6 +507,90 @@ export default {
       	  this.$message.error("请选择查看内容")
         }
       },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
+      beforeImgUpload(file) {
+      	 const isLt2M = file.size / 1024 / 1024 < 2;
+      	 if (!isLt2M) {
+        	this.$message.error("上传头像图片大小不能超过 2MB!");
+     	 }
+      	 return isLt2M;
+   	  },
+         //begin-dialog
+      addDialog(){
+      	let url=this.Rooturl+"";
+      	this.$http.post(url,qs.stringify({
+      		...this.addForm
+      	})).then(res=>{
+      	 	 if(res.data.code==200){
+      	 	 	this.$message.success(res.data.msg);
+      	 	 	this.checkshow=false;
+      	 	 }else{
+      	 	 	this.$message.error(res.data.msg);
+      	 	 }
+      	 	 
+      	})
+      },   
+      hide(){
+      	this.addshow=false;
+      },
+      showDialog(){
+      	this.addshow=true;
+      },
+      showCheckDialog(){
+      	let url=this.Rooturl+"";
+      	this.$http.get(url,{
+      		param:{
+      			
+      		}
+      	}).then(res=>{
+      		this.checkForm=res.data.data;
+      	})
+      	this.checkshow=true;
+      	
+      },
+      changeDialog(){
+      	 let url=this.Rooturl+"";
+      	 this.$http.post(url,qsstringify({
+      	 	...this.checkForm
+      	 })).then(res=>{
+      	 	 if(res.data.code==200){
+      	 	 	this.$message.success(res.data.msg);
+      	 	 	this.checkshow=false;
+      	 	 }else{
+      	 	 	this.$message.error(res.data.msg);
+      	 	 }
+      	 	 
+      	 })
+      },
+      hideDialog(){	
+      	this.checkshow=false;
+      },
+      deleFile(){
+      	let url=this.Rooturl+"";
+      	this.$http.post(url,qs.stringify({
+      		...this.sels[0]
+      	})).then(res=>{
+      	 	 if(res.data.code==200){
+      	 	 	this.$message.success(res.data.msg);
+      	 	 	this.checkshow=false;
+      	 	 }else{
+      	 	 	this.$message.error(res.data.msg);
+      	 	 }
+      	 	 
+      	})
+      },
+      //end-dialog
       selsChange(sels) {  
     	if(sels){
     		this.sels=sels; 
@@ -436,7 +635,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+#CheckCompanyRule{
+	
+
 	.Commissio_title{
 		height:32px;
 		line-height:32px;
@@ -445,10 +647,10 @@ export default {
 		margin-bottom:20px;
 	}
 	
-	#AddTotalRule el-date-picker {
+	.el-date-picker {
  		 width: 275px !important;
 	}
-	#AddTotalRule .check-basetitle{
+	.check-basetitle{
 		height:40px;
 		line-height:40px;
 		color:#fff;
@@ -463,7 +665,23 @@ export default {
 	.Commissio_title{
 		line-height:32px;
 	}
+}	
 	#CheckCompanyRule .el-form{
 		margin-top:0px;
 	}
+	.dialoag_content{
+		position:fixed;
+   		margin:0 auto 50px;
+    	background:#fff;
+   		border-radius:2px;
+    	-webkit-box-shadow:0 1px 3px rgba(0,0,0,.3);
+    	box-shadow:0 1px 3px rgba(0,0,0,.3);
+    	-webkit-box-sizing:border-box;
+    	box-sizing:border-box;
+    	width: 50%;
+    	z-index:1000;
+    	top:50px;
+    	left:30%;
+    }
+	
 </style>
