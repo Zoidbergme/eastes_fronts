@@ -1,7 +1,20 @@
 <template>
     <div id="index">
         <el-container>
-            <el-header></el-header>
+            <el-header>
+            	<el-row>
+            		<el-col style="padding-left:20px;height:60px;line-height:60px;font-size:20px;" :span="22">
+            			云算系统后台
+            		</el-col>
+            		<el-col style="margin-top:18px;" :span="2">
+            			<el-button-group>
+            				<el-button @click="clearDatabase" size="small" type="danger" >
+            					清除缓存
+            				</el-button>
+            			</el-button-group>
+            		</el-col>
+            	</el-row>
+            </el-header>
             <el-container>
                 <el-aside width="201px">
                     <el-menu :router="true" default-active="2" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
@@ -46,6 +59,9 @@ export default {
           this.menulist = res.data;
         })
         .catch(res => {});
+    },
+    clearDatabase(){
+    	this.$message.success("清除缓存成功");
     }
   }
 };
@@ -60,8 +76,8 @@ export default {
 }
 .el-header,
 .el-footer {
-  background-color: #b3c0d1;
-  color: #333;
+  background-color: #999;
+  color: #fff;
 }
 .el-menu-vertical-demo {
   height: 100%;

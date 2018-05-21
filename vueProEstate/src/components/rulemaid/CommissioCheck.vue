@@ -128,7 +128,7 @@
                 	<el-button type="primary" size="small">审核</el-button>
                     <el-button type="primary" @click="checkCompany" size="small">查看</el-button>
                     <el-button type="primary" @click="addCompany" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
+                    <el-button type="primary" @click="checkCompany" size="small" >修改</el-button>
                     <el-button type="primary" @click="showCompany" size="small" >终止</el-button>
                 </el-button-group>
             </el-col>
@@ -167,8 +167,8 @@
                 <el-button-group>
                     <el-button type="primary" size="small">审核</el-button>
                     <el-button type="primary" @click="checkPerson" size="small">查看</el-button>
-                    <el-button type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
+                    <el-button type="primary" @click="addpersonrule" size="small">新增</el-button>
+                    <el-button type="primary" @click="checkPerson" size="small" >修改</el-button>
                     <el-button type="primary" @click="showPerson" size="small" >终止</el-button>
                 </el-button-group>
             </el-col>
@@ -390,8 +390,7 @@
     		},
     		PersonselsChange(sels) {  
     			if(sels){
-    		   		this.sels=sels; 
-    		   		console.log(this.sels)
+    		   		this.Personsels=sels; 
     			}   
     		},
     		delPerson(){
@@ -508,6 +507,9 @@
       		 }
       		
       			return sarr;
+     		},
+     		addpersonrule(){
+     			this.$router.push({path:'/index/AddPersonRule'})
      		}
     		
 		}

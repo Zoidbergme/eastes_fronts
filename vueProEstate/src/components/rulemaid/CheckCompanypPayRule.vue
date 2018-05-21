@@ -74,8 +74,8 @@
                 <el-button-group>            
                     <el-button @click="CheckJumpRule" type="primary" size="small">查看</el-button>
                     <el-button @click="addJumpRule" type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
+                    <el-button @click="CheckJumpRule" type="primary" size="small" >修改</el-button>
+                    <el-button @click="deletRule" type="primary" size="small" >删除</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
@@ -276,7 +276,25 @@
      		},
      		...mapMutations([
      			'AddSetRule'
-     		])
+     		]),
+     		deletRule(){
+     			let sels=this.sels;
+      			if(sels.length>1){
+      				this.$message.error("查看只能单选")
+      			}else if(sels.length==1){
+      				let url=this.Rooturl+"";
+      				this.$http.post(url,qs.stringify({
+      					...this.sels[0].key
+      				})).then(res=>{
+      					if(res.data.code==200){
+      						this.$message.success("删除成功");
+      					}
+      				})
+   					
+     			}else{
+      				this.$message.error("请选择查看内容")
+      			}
+     		}
 		},
 		created(){
 			this.getconfig();

@@ -78,6 +78,9 @@ import ToBeConfilmAudit  from '@/components/BrokersManagement/ToBeConfilmAudit'
 import addHouseInfo from  '@/components/buildingdictionary/addHouseInfo'
 import CheckCompanypPayRule from '@/components/rulemaid/CheckCompanypPayRule'
 import AddJumpPointRule  from  '@/components/rulemaid/AddJumpPointRule'
+import AddPersonRule  from '@/components/rulemaid/AddPersonRule'
+import SetPersonRule from '@/components/rulemaid/SetPersonRule'
+
 
 Vue.use(Router)
  
@@ -368,6 +371,14 @@ export default new Router({
         {
         	path:'/index/AddJumpPointRule',
         	component:AddJumpPointRule
+        },
+        {
+        	path:'/index/AddPersonRule',
+        	component:AddPersonRule
+        },
+        {
+        	path:'/index/SetPersonRule',
+        	component:SetPersonRule
         }
         ]
     }, ]

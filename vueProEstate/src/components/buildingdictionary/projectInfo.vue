@@ -355,7 +355,7 @@ export default {
     		}
         inputValue.param = this.inputValue;
         inputValue.id = this.inputValue;
-        if (inputValue) {
+        if (!inputValue.param=="") {
           this.projectTagss.push(inputValue);
         }
         this.inputVisible = false;
