@@ -188,9 +188,18 @@
             	</el-table-column>
             	<el-table-column prop="updataTime" label="实际开始时间" width="130">
             	</el-table-column>
+            	<el-table-column prop="updataTime" label="实际截止时间" width="130">		
+            	</el-table-column>
             	<el-table-column prop="updataTime" label="状态" width="130">
             	</el-table-column>
-            	<el-table-column prop="updataTime" label="筛选经济人" width="130">
+            	<el-table-column prop="islimit" label="筛选经济人" width="130">
+            		<template slot-scope="scope">
+            			<el-switch
+ 						 	v-model="scope.row.islimit"
+  							active-color="#13ce66"
+  							inactive-color="#ddd">
+						</el-switch>
+            		</template>
             	</el-table-column>
        		 </el-table>
 		</div>
@@ -208,7 +217,25 @@
 				nacoin:false,
 				input:"",
 				ruleData:[],
-				introData:[],
+				introData:[
+					{
+						key:1,
+						fileName:'规则一',
+						atachment:'未认证',
+						islimit:false,
+						updataPerson:'2018-01-09',
+						updataTime:'2018-10-20'
+					},
+					{
+						key:2,
+						fileName:'规则二',
+						atachment:'未认证',
+						islimit:true,
+						updataPerson:'2018-01-09',
+						updataTime:'2018-10-20'
+					}
+					
+				],
 				dellData:[],
 				visitedData:[],
 				checked:false,

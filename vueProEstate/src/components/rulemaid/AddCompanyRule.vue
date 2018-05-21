@@ -75,74 +75,8 @@
     <addcompanyrulefile ></addcompanyrulefile>
     
     <dealcompanyruletable></dealcompanyruletable>
-    <div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666"> 到访佣金</font>
-                <font style="font-size:12px;color:#999">(推荐的客户在该项目购置房源后产生的佣金)</font>
-            </el-col>
-            <el-col :span="5">
-                <el-button-group>            
-                    <el-button type="primary" size="small">查看</el-button>
-                    <el-button type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <el-table :data="Data" border @selection-change="VisitSelsChange" ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" reserv-selection="" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="物业类型" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="跳点"  >
-            </el-table-column>
-            <el-table-column prop="phone" label="提成公式" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="单位" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
-            </el-table-column>   
-        </el-table>
-        <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-        </el-pagination>
-    </div> 
-	<div class="attachment m_top" >
-		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
-            <el-col :span="16"   :push="1" class="Commissio_title">
-                <font style="font-size:16px;color:#666"> 推荐佣金</font>
-                <font style="font-size:12px;color:#999">(推荐的客户在该项目购置房源后产生的佣金)</font>
-            </el-col>
-            <el-col :span="5">
-                <el-button-group>            
-                    <el-button type="primary" size="small">查看</el-button>
-                    <el-button  type="primary" size="small">新增</el-button>
-                    <el-button type="primary" size="small" >修改</el-button>
-                    <el-button type="primary" size="small" >删除</el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <el-table :data="Data" border @selection-change="IntroSelsChange" ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
-            </el-table-column>
-            <el-table-column prop="key" label="序号" width="60">
-            </el-table-column>
-            <el-table-column prop="companyName" label="物业类型" >
-            </el-table-column>
-            <el-table-column prop="customerName" label="跳点"  >
-            </el-table-column>
-            <el-table-column prop="phone" label="提成公式" >
-            </el-table-column>
-            <el-table-column prop="planeTime" label="单位" >
-            </el-table-column> 
-             <el-table-column prop="planeTime" label="奖励金额(元/套)" >
-            </el-table-column>   
-        </el-table>
-        <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
-        </el-pagination>
-    </div> 
+    <companyvisitbrokeragetable></companyvisitbrokeragetable>
+	<companyintrobroker></companyintrobroker>
 	<div class="attachment m_top" >
 		<el-row type="flex" justify="space-between" class="dynamicList-title m_bottom">
             <el-col :span="16"   :push="1" class="Commissio_title">
@@ -151,7 +85,8 @@
             <el-col :span="5">  
             </el-col>
         </el-row>
-        <el-table :data="Data" border  ref="multipleTable" tooltip-effect="dark" class="apart-table">
+        
+        <el-table v-if="Data.length>0" :data="Data" border  ref="multipleTable" tooltip-effect="dark" class="apart-table">
             <el-table-column type="selection"  label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
@@ -164,17 +99,20 @@
             </el-table-column>
             <el-table-column prop="planeTime" label="截止时间" >
             </el-table-column> 
-             <el-table-column prop="planeTime" label="区域" >
+               <el-table-column prop="planeTime" label="区域" >
             </el-table-column> 
-             <el-table-column prop="planeTime" label="推荐客户数量" >
+            <el-table-column prop="planeTime" label="推荐客户数量" >
             </el-table-column>
-             <el-table-column prop="planeTime" label="到访数量" >
+            <el-table-column prop="planeTime" label="到访数量" >
             </el-table-column>
-             <el-table-column prop="planeTime" label="成交数量" >
+            <el-table-column prop="planeTime" label="成交数量" >
             </el-table-column>
         </el-table>
         <el-pagination v-if="false" background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
         </el-pagination>
+        <div class="tips"  v-if="!Data.length>0">
+        	暂无合作记录
+        </div>
     </div> 
 	
 </div>
@@ -184,6 +122,8 @@
 import {mapMutations,mapState,mapActions} from 'vuex'
 import addcompanyrulefile from './AddCompanyRuleFile'
 import dealcompanyruletable from './DealCompanyRuleTalble'
+import companyvisitbrokeragetable from './CompanyVisitBrokerageTable'
+import companyintrobroker from './CompanyIntroBrokerage'
 
 import qs from 'qs'
 export default {
@@ -316,7 +256,7 @@ export default {
       	 this.$router.push({ path:"/index/CommissioCheck"});
       },
       onSubmit() {
-      	checkArtureTime();
+      	this.checkArtureTime();
         this.$refs.form.validate((valid)=>{
         	if(valid&&this.canUpload){
         		this.AddComRules(this.form);
@@ -341,12 +281,6 @@ export default {
         }
       },
       //selsChange
-    
-      IntroSelsChange(sels){
-      	if(sels){
-      		this.DealSels=sels;
-      	}
-      },
       VisitSelsChange(sels){
       	if(sels){
       		this.VisitSels=sels;
@@ -401,7 +335,12 @@ export default {
  			ComRules:state=>state.CheckCompanyRule.ComRules
  		})
  	},
- 	components:{addcompanyrulefile,dealcompanyruletable}
+ 	components:{
+ 		addcompanyrulefile,
+ 		dealcompanyruletable,
+ 		companyvisitbrokeragetable,
+ 		companyintrobroker
+ 	}
 }
 </script>
 
@@ -432,6 +371,15 @@ export default {
 	}
 	.Commissio_title{
 		line-height:32px;
+	}
+	.tips{
+		width:100%;
+		height:60px;
+		line-height:50px;
+		text-align: center;
+		border-left:1px solid #ddd;
+		border-right:1px solid #ddd;
+		border-bottom:1px solid #ddd;
 	}
 }		
 	#CheckCompanyRule .el-form{

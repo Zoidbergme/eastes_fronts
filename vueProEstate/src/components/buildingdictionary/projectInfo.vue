@@ -115,7 +115,7 @@
       <el-form-item label="项目标签:">
        <el-col :span="22">
           <el-tag   
-          	v-for="(tag,idx) in projectTags" 
+          	v-for="(tag,idx) in projectTagss" 
           	:key="tag.id"  
           	closable  
           	@close="handleClose(tag)"  >
@@ -270,6 +270,7 @@ export default {
   data() {
     return {
     	project_select:false,
+    	projectTagss:[],
       ruleForminfo: {
         add: "",
         province: "",
@@ -318,7 +319,9 @@ export default {
       ] ,
       inputVisible: false,
       inputValue: "",
-      projectInfo: {},
+      projectInfo: {
+      	project_tags:''
+      },
       proVisible: false,
       proImageUrl: "",
       realState:[],
@@ -331,16 +334,13 @@ export default {
   },
   created() {
   	this.getProjectInfo();
-  	
-  	
+  	 	
     this.getProvinceList();
-   	
-   
-   	this.getconfig();
+   	  	
   },
   methods: {
   	handleClose(tag){
-        this.projectTags.splice(this.projectTags.indexOf(tag), 1);
+        this.projectTagss.splice(this.projectTags.indexOf(tag), 1);
     },
     showInput(){
         this.inputVisible = true;
@@ -356,7 +356,7 @@ export default {
         inputValue.param = this.inputValue;
         inputValue.id = this.inputValue;
         if (inputValue) {
-          this.projectTags.push(inputValue);
+          this.projectTagss.push(inputValue);
         }
         this.inputVisible = false;
         this.inputValue = '';
@@ -414,6 +414,7 @@ export default {
         this.projectTags = this.projectInfo.project_tags.split(",");
         
       });
+     
     },
     // 读取省列表
     getProvinceList() {
@@ -439,6 +440,8 @@ export default {
     },
     // 读取区县列表
     cityChange(value){
+    		this.ruleForminfo.district_name="";
+    		this.thioptions=[];
     		for(let i=0;i<this.secoptions.length;i++){
     			if(this.secoptions[i].name==value){
     				this.thioptions = this.secoptions[i].area; 
@@ -538,6 +541,7 @@ export default {
     		 this.realState=res.data.data[16].param;
     		 this.buildType=res.data.data[17].param;
     		 let projectTagsConfig=res.data.data[15].param;
+    		 console.log(this.projectTags);
     		 for(let i=0;i<this.projectTags.length;i++){
         	for(let y=0;y<projectTagsConfig.length;y++){
         		if(this.projectTags[i]==projectTagsConfig[y].id){	
@@ -546,8 +550,8 @@ export default {
         	}
        }
     	
-    		this.projectTags=arr;
-    		
+    		this.projectTagss=arr;
+    				console.log(arr)
     	})
   	}
   },
@@ -572,7 +576,7 @@ export default {
   			this.ruleForminfo.city_name=this.city;
   			this.ruleForminfo.district_name=this.district;
   	  }
-  	
+  		 this.getconfig();
   	},600)
   }
 }

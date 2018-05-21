@@ -23,6 +23,8 @@ import categoryImg from './modules/categoryImg'
 import projectImg from './modules/projectImg'
 import palnPho from './modules/palnPho'
 import addHouseInfo from  './modules/addHouseInfo'
+import CheckCompanypPayRule from './modules/CheckCompanypPayRule'
+
 
 Vue.use(Vuex)
 
@@ -48,6 +50,7 @@ export default new Vuex.Store({
  		categoryImg,
  		projectImg,
  		palnPho,
- 		addHouseInfo
+ 		addHouseInfo,
+ 		CheckCompanypPayRule
   }
 })

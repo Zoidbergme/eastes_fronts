@@ -77,6 +77,7 @@ import ToBeConfirmCheck  from '@/components/BrokersManagement/ToBeConfirmCheck'
 import ToBeConfilmAudit  from '@/components/BrokersManagement/ToBeConfilmAudit'  
 import addHouseInfo from  '@/components/buildingdictionary/addHouseInfo'
 import CheckCompanypPayRule from '@/components/rulemaid/CheckCompanypPayRule'
+import AddJumpPointRule  from  '@/components/rulemaid/AddJumpPointRule'
 
 Vue.use(Router)
  
@@ -363,6 +364,10 @@ export default new Router({
         {
         	path:'/index/CheckCompanypPayRule',
         	component:CheckCompanypPayRule
+        },
+        {
+        	path:'/index/AddJumpPointRule',
+        	component:AddJumpPointRule
         }
         ]
     }, ]

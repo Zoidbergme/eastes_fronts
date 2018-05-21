@@ -10,7 +10,7 @@
                     <el-button type="primary"  @click="showCheckDialog" size="small">查看</el-button>
                     <el-button type="primary" @click="showDialog" size="small">新增</el-button>
                     <el-button type="primary" @click="showCheckDialog" size="small" >修改</el-button>
-                    <el-button type="primary" @click="deleFile" size="small" >删除</el-button>
+                    <el-button type="primary" @click="deletFile" size="small" >删除</el-button>
                 </el-button-group>
             </el-col>
         </el-row>
@@ -138,6 +138,7 @@
 </template>
 
 <script>
+import qs from 'qs'	
 export default{
 	name:'addcompanyrulefile',
 	data(){
@@ -193,7 +194,8 @@ export default{
         			upload_time:[
         				{required:true,message:'不能为空',trigger:'blur'}
         			]
-        		}
+        		},
+        		Filesels:[]
 			}
 	},
 	methods:{
@@ -228,15 +230,14 @@ export default{
       	  			this.$message.error("查看只能单选")
         		}else if(sels.length==1){
       	  			let url=this.Rooturl+"";
-      	  		this.$http.get(url,{
-      		 		param:{
-      					file_id:sels[0].key
-      				 }
-      	  		}).then(res=>{
-      		   		this.checkForm=res.data.data;
-      		  		 this.checkshow=true;
-      	 		 })
-      	
+      	  			this.$http.get(url,{
+      		 			param:{
+      						file_id:sels[0].key
+      				 	}
+      	  			}).then(res=>{
+      		   			this.checkForm=res.data.data;
+      		  		 	this.checkshow=true;
+      	 			})
         		}else{
       	  			this.$message.error("请选择查看内容")
         		}   	
@@ -261,10 +262,20 @@ export default{
       	hideDialog(){	
       		this.checkshow=false;
      	},
+     	deletFile(){
+     		let sels=this.Filesels;
+      		if(sels.length>1){
+      			this.$message.error("查看只能单选")
+      		}else if(sels.length==1){
+      			this.deleFile();
+     		}else{
+      			this.$message.error("请选择查看内容")
+      		}
+     	},
      	deleFile(){
       		let url=this.Rooturl+"";
       		this.$http.post(url,qs.stringify({
-      			...this.sels[0]
+      			...this.Filesels[0]
       		})).then(res=>{
       	 	if(res.data.code==200){
       	 	 	this.$message.success(res.data.msg);

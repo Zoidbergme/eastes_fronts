@@ -12,13 +12,8 @@
 <el-form ref="form" :model="form" :rules="rules" style="margin-top:40px;" label-width="120px">
 		<el-row style="height:40px;">
 			<el-form-item label="物业类型：">
-            	<el-checkbox-group v-model="form.type">
-             		<el-checkbox label="住宅"  name="type"></el-checkbox>
-             		<el-checkbox label="公寓" name="type"></el-checkbox>
-             		<el-checkbox label="别墅" name="type"></el-checkbox>
-             		<el-checkbox label="商铺" name="type"></el-checkbox>
-             		<el-checkbox label="写字楼" name="type"></el-checkbox>
-            		 <el-checkbox label="车位" name="type"></el-checkbox>
+            	<el-checkbox-group  v-model="form.house_type">
+             		<el-checkbox v-for="(tag,idx) in house_type" :key="idx"  :label="tag.id"  name="type">{{tag.param}}</el-checkbox>
          		 </el-checkbox-group>
   	   		 </el-form-item>
   	   	</el-row>  	
@@ -51,9 +46,8 @@
   	   		<el-col :span="8">
   	   			<el-form-item label="*提成方式：">
            			<el-select @change="change" v-model="form.way" placeholder="提成方式：">
-            			<el-option checked label="固定金额x套数" value="1"></el-option>
-           				<el-option label="销售总价x比例" value="2"></el-option>
-           				<el-option label="建筑面积x单价" value="3"></el-option>
+            			<el-option v-for="(tag,idx) in ways" :key="idx" :label="tag.param" :value="tag.id"></el-option>
+        
          			</el-select>
   	 			</el-form-item>
   	   		</el-col>
@@ -84,8 +78,8 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="tableData" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="tableData" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
@@ -132,15 +126,16 @@
 			form: {
          		  company_rule_id:'',
                   delivery: false,
-                  type: [],
-                  resource: '',
+                  house_type: [],
+                  resource: '人民币',
                   desc: '',
-                  way:'1',
+                  way:18,
                   fixed_amount:'',
                	  percentage:'',
                   unit_price:'',
                   jump_point_id:'0',
-                  is_include:'0'
+                  is_include:'0',
+                  sels:[]
           },
                fixed_amount:true,
                percentage:false,
@@ -171,9 +166,19 @@
                	is_include:[
                		{required:true,message:"不能为空",trigger:'blur'}
                	]
-               	
-               }
-
+               },
+               house_type:[
+               		{
+               			id:'',
+               			param:''
+               		}
+               ],
+               ways:[
+               		{
+               			id:'',
+               			param:''
+               		}
+               ]
 			}
 		},
 		methods:{
@@ -184,11 +189,12 @@
          	   		this.$http.post(url,qs.stringify({
          	  	 		...this.form
          	   		})).then(function(res){
-        				console.log(res.data);
+        				if(res.data.code==200){
+        					this.$refs.form.resetFields();
+        				}
               		})
 				}
-			})
-			   
+			}) 
          	},
      		back(){
       	 		this.$router.push({ path: "/index/AddCompanyRule" });
@@ -197,11 +203,11 @@
      			this.fixed_amount=false;
                 this.percentage=false;
                 this.unit_price=false;
-     			if(this.form.way=="1"){
+     			if(this.form.way=="18"){
      				this.fixed_amount=true;
-     			}else if(this.form.way=="2"){
+     			}else if(this.form.way=="19"){
      				 this.percentage=true;
-     			}else if(this.form.way=="3"){
+     			}else if(this.form.way=="20"){
      				this.unit_price=true;
      				
      			}
@@ -218,7 +224,23 @@
      			}else if(value==0){
      				this.JumpPointBox=false;
      			}
+     		},
+     		getconfig(){
+     			let url =this.Rooturl+"config";
+     			this.$http.get(url)
+     				.then(res=>{
+     					this.house_type=res.data.data[16].param;
+     					this.ways=res.data.data[3].param;
+     				})
+     		},
+     		selsChange(sels){
+     			if(sels){
+     				this.form.sels=sels;
+     			}
      		}
+		},
+		created(){
+			this.getconfig();
 		}
 	}
 </script>

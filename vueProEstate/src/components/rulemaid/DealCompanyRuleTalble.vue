@@ -38,6 +38,7 @@
 </template>
 
 <script>
+	import {mapMuatations} from 'vuex'
 	export default{
 		name:'dealcompanyruletable',
 		data(){
@@ -48,7 +49,7 @@
 						key:1,
 						property_type:'住宅',
 						isjump_ponit:'是',
-						pay_methods:'固定金额',
+						pay_methods:'固定金额x套数',
 						unit:'人民币',
 						amount_reward:'30000'
 					},
@@ -56,7 +57,7 @@
 						key:2,
 						property_type:'住宅',
 						isjump_ponit:'是',
-						pay_methods:'固定金额',
+						pay_methods:'销售总价x比例',
 						unit:'人民币',
 						amount_reward:'30000'
 					}

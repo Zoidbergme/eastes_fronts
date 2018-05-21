@@ -2,23 +2,18 @@
 <div id="CheckCompanypPayRule">
 <el-row style="height:40px;padding-left:40px;background:#545c64 ;" class="header" >	
 	<el-col :span="12">
-		<span class="check-basetitle">查看修改公司</span>
+		<span class="check-basetitle">设置公司</span>
 	</el-col>
 	<el-col :span="4" :push="8" >	
     	<el-button size="small" type="primary" @click="onSubmit">确认</el-button>
     	<el-button size="small" @click="back" >取消</el-button>
 	</el-col>
 </el-row>
-<el-form ref="form" :model="form" style="margin-top:40px;" label-width="120px">
+<el-form ref="form" :model="form" :rules="rules" style="margin-top:40px;" label-width="120px">
 		<el-row style="height:40px;">
 			<el-form-item label="物业类型：">
-            	<el-checkbox-group v-model="form.type">
-             		<el-checkbox label="住宅"  name="type"></el-checkbox>
-             		<el-checkbox label="公寓" name="type"></el-checkbox>
-             		<el-checkbox label="别墅" name="type"></el-checkbox>
-             		<el-checkbox label="商铺" name="type"></el-checkbox>
-             		<el-checkbox label="写字楼" name="type"></el-checkbox>
-            		 <el-checkbox label="车位" name="type"></el-checkbox>
+            	<el-checkbox-group  v-model="form.house_type">
+             		<el-checkbox v-for="(tag,idx) in house_type" :key="idx"  :label="tag.id"  name="type">{{tag.param}}</el-checkbox>
          		 </el-checkbox-group>
   	   		 </el-form-item>
   	   	</el-row>  	
@@ -42,7 +37,8 @@
 			<el-col :span="8">
 				<el-form-item label="*单位：">
            			<el-select v-model="form.resource" placeholder="人民币">
-            			<el-option label="人民币" value="shanghai"></el-option>			
+        				<el-option  v-for="(item,idx) in icons" :key="idx" :label="item.param" :value="item.id" >       				</el-option>
+        				</el-select>		
          			</el-select>
   	 			</el-form-item>
 			</el-col>
@@ -51,9 +47,8 @@
   	   		<el-col :span="8">
   	   			<el-form-item label="*提成方式：">
            			<el-select @change="change" v-model="form.way" placeholder="提成方式：">
-            			<el-option checked label="固定金额x套数" value="1"></el-option>
-           				<el-option label="销售总价x比例" value="2"></el-option>
-           				<el-option label="建筑面积x单价" value="3"></el-option>
+            			<el-option v-for="(tag,idx) in ways" :key="idx" :label="tag.param" :value="tag.id"></el-option>
+        
          			</el-select>
   	 			</el-form-item>
   	   		</el-col>
@@ -84,8 +79,8 @@
                 </el-button-group>
             </el-col>
         </el-row>
-        <el-table :data="tableData" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
-            <el-table-column type="selection" label="ALL" width="50">
+        <el-table :data="tableData" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table">
+            <el-table-column type="selection" reserve-selection="" label="ALL" width="50">
             </el-table-column>
             <el-table-column prop="key" label="序号" width="60">
             </el-table-column>
@@ -95,7 +90,7 @@
             </el-table-column>
             <el-table-column prop="phone" label="提成公式" >
             </el-table-column>
-            <el-table-column prop="phone" label="金额/比例/单价" >
+            <el-table-column prop="methods" label="金额/比例/单价" >
             </el-table-column>
             <el-table-column prop="planeTime" label="是否累积" >
             </el-table-column> 
@@ -107,6 +102,7 @@
 </template>
 
 <script>
+	import {mapMutations} from 'vuex'
 	import qs from 'qs'
 	export default{
 		name:'CheckCompanypPayRule',
@@ -129,23 +125,21 @@
         	}
   		};
 		return{
-				form: {
+			icons:[],
+			form: {
          		  company_rule_id:'',
-         		  name:'',
-                  region: '',
-                  date1: '',
-                  date2: '',
                   delivery: false,
-                  type: [],
-                  resource: '',
+                  house_type: [],
+                  resource: 38,
                   desc: '',
-                  way:'1',
+                  way:18,
                   fixed_amount:'',
                	  percentage:'',
                   unit_price:'',
                   jump_point_id:'0',
-                  is_include:'0'
-         },
+                  is_include:'0',
+                  sels:[]
+          },
                fixed_amount:true,
                percentage:false,
                unit_price:false,
@@ -156,6 +150,19 @@
           				recommendNum: "TJBH",
          				customerName: "否",
          				phone: "固定金额",
+          				state: "待审核",      		
+          				type: "执行中",
+          				companyName:"住宅、公寓",
+          				planeTime:"人民币",
+          				planeEndTime:"2017/01/08",
+          				sureTime:"2017/01/08",
+         				sureEndTime:"2017/01/08"  
+               		},
+               		{
+               			key: 2,
+          				recommendNum: "TJBH",
+         				customerName: "否",
+         				phone: "建筑面积",
           				state: "待审核",      		
           				type: "执行中",
           				companyName:"住宅、公寓",
@@ -175,39 +182,67 @@
                	is_include:[
                		{required:true,message:"不能为空",trigger:'blur'}
                	]
-               }
-
+               },
+               house_type:[
+               		{
+               			id:'',
+               			param:''
+               		}
+               ],
+               ways:[
+               		{
+               			id:'',
+               			param:''
+               		}
+               ],
+               sels:[]
 			}
 		},
 		methods:{
 			onSubmit(){
-			   let url=this.Rooturl+"project/ruleCompany/getList";
-         	   this.$http.post(url,qs.stringify({
-         	  	 ...this.form
-         	   })).then(function(res){
-        			console.log(res.data);
-               })},
+			this.$refs.form.validate((valid)=>{
+				if(valid){
+					let url=this.Rooturl+"project/ruleCompany/getList";
+         	   		this.$http.post(url,qs.stringify({
+         	  	 		...this.form
+         	   		})).then(function(res){
+        				if(res.data.code==200){
+        					this.$refs.form.resetFields();
+        				}
+              		})
+				}
+			}) 
+         	},
      		back(){
-      	 		this.$router.push({ path: "/index/CheckCompanyRule" });
+      	 		this.$router.push({ path: "/index/AddCompanyRule" });
      		},
      		change(){
-     			 this.fixed_amount=false;
-                 this.percentage=false;
-                 this.unit_price=false;
-     			if(this.form.way=="1"){
+     			this.fixed_amount=false;
+                this.percentage=false;
+                this.unit_price=false;
+     			if(this.form.way=="18"){
      				this.fixed_amount=true;
-     			}else if(this.form.way=="2"){
+     			}else if(this.form.way=="19"){
      				 this.percentage=true;
-     			}else if(this.form.way=="3"){
+     			}else if(this.form.way=="20"){
      				this.unit_price=true;
      				
      			}
      		},
      		CheckJumpRule(){
-     			this.$router.push({ path: "/index/CheckJumpPointRule" });
+     			let sels=this.sels;
+      			if(sels.length>1){
+      				this.$message.error("查看只能单选")
+      			}else if(sels.length==1){
+      				this.AddSetRule(sels);
+      				this.$router.push({ path: "/index/CheckJumpPointRule" });
+     			}else{
+      				this.$message.error("请选择查看内容")
+      			}
+
      		},
      		addJumpRule(){
-     			
+     			this.$router.push({ path: "/index/AddJumpPointRule" });
      		},
      		JumpChange(value){
      			if(value==1){
@@ -215,7 +250,36 @@
      			}else if(value==0){
      				this.JumpPointBox=false;
      			}
-     		}
+     		},
+     		getconfig(){
+     			let url =this.Rooturl+"config";
+     			this.$http.get(url)
+     				.then(res=>{
+     					this.house_type=res.data.data[16].param;
+     					this.ways=res.data.data[3].param;
+     					this.icons=res.data.data[10].param;
+     					console.log(res.data.data);
+     				})
+     		},
+     		selsChange(sels){
+     			if(sels){
+     				this.form.sels=sels;
+     				this.sels=sels;
+     			}
+     		},
+     		getData(){
+     			let url=this.Rooturl+"";
+     			this.$http.get(res=>{
+     				this.form=res.data;
+     				this.tableData=res.data;
+     			})
+     		},
+     		...mapMutations([
+     			'AddSetRule'
+     		])
+		},
+		created(){
+			this.getconfig();
 		}
 	}
 </script>
