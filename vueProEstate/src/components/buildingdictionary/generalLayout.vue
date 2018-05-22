@@ -154,6 +154,7 @@ export default {
     }
   },
   created() {
+  	
     this.getYsBuild();
     this.getBindBuild();
   },

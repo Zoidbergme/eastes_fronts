@@ -15,39 +15,36 @@
             <el-main class="check-con">  
                 <el-form :model="ruleFormcheckApart" :rules="rules" ref="form" label-width="100px" class="checkInfo-form">
                     <el-form-item  prop="houseID" label="户型编号:">
-                        <el-input v-model="ruleFormcheckApart.houseNum">
+                        <el-input v-model="ruleFormcheckApart.houseID">
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="houseType" label="户型:">
-                        <el-input v-model="ruleFormcheckApart.house">
-                        </el-input>
+                       <el-select v-model="ruleFormcheckApart.houseType">
+                       		<el-option v-for="(item,idx) in house_types" :key="idx" :label="item.param" :value="item.id" ></el-option>
+                       </el-select>
                     </el-form-item>
-                    <el-row>
+                   <el-row>
                     <el-col :span="11">
                     <el-form-item prop="min_squre" label="产权面积:">
-                            <el-input  v-model="ruleFormcheckApart.min_area">
+                            <el-input  v-model="ruleFormcheckApart.min_squre">
                                 <template slot="append">m
                                     <sup>2</sup>
                                 </template>
                             </el-input>
-                 
-                     </el-form-item>  
-                     </el-col>
-                        <el-col :span="2">
-                            <i style="height:40px;width:100%;line-height:40px;text-align: center;" class="el-icon-minus"></i>
-                        </el-col>
-                    <el-form-item prop="max_squre" >    
-                        <el-col :span="11">
-                            <el-input v-model="ruleFormcheckApart.max_area">
+                    </el-form-item>  
+                    </el-col>
+                  	<el-col :span="11" class="middels">
+                    <el-form-item class="middleline" prop="max_squre"  label="——">    
+                            <el-input v-model="ruleFormcheckApart.max_squre">
                                 <template slot="append">m
                                     <sup>2</sup>
                                 </template>
-                            </el-input>
-                        </el-col>
+                            </el-input> 
                     </el-form-item>
+                     </el-col>
                     </el-row>
                     <el-form-item prop="sell_point" label="户型卖点:">
-                        <el-input type="textarea" autosize v-model="ruleFormcheckApart.sell">
+                        <el-input type="textarea" autosize v-model="ruleFormcheckApart.sell_point">
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -75,6 +72,7 @@ import thressDPic from './thressDPic'
 import LivePic  from './LivePic'
 import effectPic from './effectPic'
 import {mapState,mapActions} from 'vuex'
+import user from '../shared/userInfo'
 export default {
   name: "addHouseInfo",
   data() {
@@ -96,11 +94,17 @@ export default {
          }
   	};
     return {
+    	addimgform:{
+    		imgurl:'',
+    		remark:'',
+    		...user
+    	},
+    	house_types:[],
       ruleFormcheckApart: {
-        houseNum: "",
-        house: "",
-        min_area: "",
-        max_area: "",
+        houseID: "",
+        houseType: 32,
+        min_squre: "",
+        max_squre: "",
         sell_point: ""
       },
       ruleFormUplode: {
@@ -143,6 +147,7 @@ export default {
   },
   created() {
     this.getCheckApartmentList();
+    this.getconfig();
   },
   methods: {
     getCheckApartmentList() {
@@ -239,7 +244,24 @@ export default {
     },
     ...mapActions([
     	'houseAdd'
-    ])
+    ]),
+    getconfig(){
+    	let url=this.Lanurl+"config";
+    	this.$http.get(url)
+    		.then(res=>{
+    			this.house_types=res.data.data[9].param;
+    		})
+    			
+    		
+    },
+    addulrImg(){
+    	let url=this.Rooturl+"";
+    	this.$http.post(url,qs.stringify({
+    		...addimgform
+    	})).then(res=>{
+    		console.log(res.data);
+    	})
+    }
   },
   components:{
   	palnPho,
@@ -327,7 +349,12 @@ export default {
 	background: #409EFF;
 	
 }
-
+.el-form-item__label{
+	text-align:center!important;
+}
+.middles .el-form-item__label{
+	text-align:center!important;
+}
 }
 </style>
 

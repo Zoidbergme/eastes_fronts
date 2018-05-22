@@ -76,10 +76,15 @@
         <el-upload
   				class="upload-demo"
   				:action="uploadurl"
-  				:on-preview="handlePictureCardPreview"
+  				:before-upload="showfile"
+  				:on-success="handlePictureCardPreview"
   				:on-remove="handleRemove"
   				:file-list="fileList2"
-  				list-type="picture">
+  				list-type="picture"
+  				:limit="1"
+  				:on-exceed="bignum"
+  				:name="img_url"
+  				>
   				<el-button size="small" type="primary">点击上传</el-button>
   				<div slot="tip" class="el-upload__tip">只能上传jpg，且不超过2m</div>
 				</el-upload>
@@ -115,7 +120,7 @@
       </el-col>
       <el-form-item label="项目标签:">
        <el-col :span="22">
-          <el-tag   
+         <!-- <el-tag   
           	v-for="(tag,idx) in projectTagss" 
           	:key="tag.id"  
           	closable  
@@ -132,7 +137,11 @@
   					@blur="handleInputConfirm"
 					>
 					</el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">添加项目标签</el-button>
+        
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">添加项目标签</el-button>-->
+          <el-checkbox-group v-model="ruleFormbuild.procheckList">
+          	<el-checkbox v-for="(item,idx) in projectTagss"  :label="item.id"  :key="idx"  >{{item.param}}</el-checkbox>    
+       	 	</el-checkbox-group>
         </el-col>
       </el-form-item>
       <el-form-item label="建筑类型:">
@@ -269,9 +278,10 @@ export default {
   name: "projectInfo",
   data() {
     return {
-    	fileList2:[{name:'项目主图',url:'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+    	img_url:'project_img',
+    	fileList2:[],
     	imgul:this.Rooturl,
-    	uploadurl:this.Rooturl+"project/file/upload",
+    	uploadurl:this.Rooturl+"user/project/upload",
     	testData:{},
     	project_select:false,
     	projectTagss:[],
@@ -365,12 +375,20 @@ export default {
         this.inputVisible = false;
         this.inputValue = '';
     },
-    handleRemove(file, fileList){
-    	
+    bignum(){
+    	this.$message.error("项目主图只能有一个");
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    handleRemove(file, fileList){
+    	this.fileList2=[];
+    },
+    handlePictureCardPreview(response, file, fileList) {
+
+    		  this.fileList2.push({
+        			name:'项目主图',
+        			url:file.url
+     		 })
+    	console.log(this.fileList2);
+   
     },
     //查询项目信息
     getProjectInfo() {
@@ -409,14 +427,23 @@ export default {
         this.ruleFormpro.property_company_name = this.projectInfo.property_company_name;
         this.ruleFormpro.property_cost = this.projectInfo.property_cost;
         this.ruleFormpro.water_supply = this.projectInfo.water_supply;
-        this.ruleFormbuild.buicheckList = [this.projectInfo.build_type];
+        const builarr = this.projectInfo.build_type.split(","); 
+        for(let i=0;i<builarr.length;i++){
+        		this.ruleFormbuild.buicheckList.push(parseInt(builarr[i]));
+        }  
         for (let i = 0; i < this.projectInfo.property_type.length; i++) {
          this.ruleFormbuild.procheckList.push(
            this.projectInfo.property_type[i].property_tag_id
           );
         }
         this.projectTags = this.projectInfo.project_tags.split(","); 
-        this.fileList2.url=this.Lanurl+"upload/agent/headimg/1523850012_10.jpg";
+        for(let i=0;i<this.projectTags.length;i++){
+        	this.projectTags[i]=parseInt(this.projectTags[i]);
+        }
+        this.fileList2.push({
+        	name:'项目主图',
+        	url:this.Lanurl+this.projectInfo.general_layout_plan_url
+        })
       });
      
     },
@@ -450,7 +477,6 @@ export default {
     				this.thioptions = this.secoptions[i].area; 
     			}
     		}
-	
     },
     districtChang(value){
     	
@@ -458,7 +484,8 @@ export default {
     // 修改项目信息
     submit() {
       var qs = require("qs");
-      console.log(this.ruleFormbuild.procheckList)
+      console.log(this.fileList2);
+      console.log(this.projectTags);
       const data = {
         project_name: this.projectInfo.project_name,
         province: this.ruleForminfo.provalue,
@@ -496,15 +523,15 @@ export default {
         water_supply: this.ruleFormpro.water_supply,
         yunsuan_url:this.projectInfo.href,
         yunsuan_id:this.project_id,
-        total_float_url:"upload/project/img/1524463483_23.png",
+        total_float_url: this.fileList2[0].url,
 				total_float_url_phone:"upload/agent/headimg/1526565231_31.jpg"
       }; 
       let url =this.Rooturl+"project/update";
       console.log(data);
-      this.$http.post(url,qs.stringify({...data})).then(res => {
-      		console.log(res.data);
+      this.$http.post(url,qs.stringify({...data})).then(res =>{
       		if(res.data.code==200){
       			  this.$message.success(res.data.msg);
+      			  this.$router.push({path:"/index/projectinfo"});
       		}else{
       			this.$message.error(res.data.msg);
       		}
@@ -564,11 +591,8 @@ export default {
         			arr.push(projectTagsConfig[y]);
         		}
         	}
-       }
-    	
-    		this.projectTagss=arr;
-    		console.log(arr);
-    			
+       }  	
+    		this.projectTagss=arr;  			
     	})
   	}
   },
@@ -580,7 +604,10 @@ export default {
   		 city:state=>state.autoLoaction.city,
   		 district:state=>state.autoLoaction.district,
   		 street:state=>state.autoLoaction.street
-  	})
+  	}),
+  	showfile(file){
+  		console.log(file);
+  	}
   	
   },
   mounted(){

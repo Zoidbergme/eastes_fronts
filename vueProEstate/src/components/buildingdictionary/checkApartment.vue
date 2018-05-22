@@ -344,7 +344,9 @@ export default {
 	background: #409EFF;
 	
 }
-
+.el-form-item__label{
+	text-align:center!important;
+}
 }
 #checkApartment .middle .el-form-item__label{
 	text-align:center!important;

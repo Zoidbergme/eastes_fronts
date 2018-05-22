@@ -18,7 +18,7 @@
     <el-table :data="ImgCount" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="project-table">
       <el-table-column  reserve-selection="" type="selection" width="50">
       </el-table-column>
-       <el-table-column v-if="false" prop="type_id" width="60" label="序号">
+       <el-table-column v-show="Noshow" prop="type_id" width="60" label="序号">
       </el-table-column>
       <el-table-column prop="type_name" label="图片类别">
       </el-table-column>
@@ -29,22 +29,26 @@
     <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
     </el-pagination>
     <!-- 新增弹窗 -->
-    <el-dialog title="提示" :visible.sync="addImgTypeVisible" width="50%">
-      <el-form>
+    <el-dialog title="新增图片类型" :visible.sync="addImgTypeVisible" width="50%">
+      <el-form  :model="imgForm">
         <el-form-item label="图片类别:">
-          <input type="text" class="textImgType">
+          	<el-select v-model="imgForm.addImgType" >
+          		<el-option v-for="(item,idx) in img_type" :key="idx"  :label="item.param" :value="item.id" ></el-option>
+          	</el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addImgTypeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addImgTypeVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addimgType">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 修改弹窗 -->
-    <el-dialog title="提示" :visible.sync="changeImgTypeVisible" width="50%">
+    <el-dialog title="修改图片类型" :visible.sync="changeImgTypeVisible" width="50%">
       <el-form>
         <el-form-item label="图片类别:">
-          <input type="text" class="textImgType">
+          <el-select v-model="imgForm.addImgType" >
+          		<el-option v-for="(item,idx) in img_type" :key="idx"  :label="item.param" :value="item.id" ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -62,6 +66,9 @@ export default {
   components: { breadcrumb },
   data() {
     return {
+    	Noshow:false,
+    	addimg_name:'',
+    	img_type:[],
       breadcrumbName: [{ breadcrumbname: "项目图片", router: "" }],
       Data: [],
       tableData: [],
@@ -69,7 +76,10 @@ export default {
       alltablesize: [],
       addImgTypeVisible: false,
       changeImgTypeVisible: false,
-      sels:[]
+      sels:[],
+      imgForm:{
+      	addImgType:51
+      }
     };
   },
   created() {
@@ -136,8 +146,18 @@ export default {
     	let url=this.Rooturl+"config";
 			this.$http.get(url)
 				.then(res=>{
-						console.log(res.data);
+						this.img_type=res.data.data[14].param;
 				})
+    },
+    addimgType(){
+    	let url=this.Rooturl+'project/img/type/add';
+    	this.$http.get(url,{
+    		params:{
+    			type_name:this.imgForm.addImgType
+    		}
+    	}).then(res=>{
+    		console.log(res.data);
+    	})
     }
   },
   computed:{
