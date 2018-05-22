@@ -1,6 +1,7 @@
 import Router from 'vue-router'
 import Vue from 'vue'
 
+
 import login from '@/components/user/login'
 import forgetPassword from '@/components/user/forgetPassword'
 import projectInfo from '@/components/buildingdictionary/projectinfo'

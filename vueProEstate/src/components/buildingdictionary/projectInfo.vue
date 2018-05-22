@@ -27,8 +27,7 @@
           <el-form-item label="项目地址:">
             <el-col :span="8">
               <el-select v-model="ruleForminfo.province_name" placeholder="请选择" @change="provinceChange($event)">
-                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.name">
-       
+                <el-option v-for="(item,idx) in firoptions" :key="idx" :label="item.name"  :value="item.name">  
                 </el-option>
               </el-select>
             </el-col>
@@ -74,20 +73,22 @@
  <el-row>   
  	  <el-col :span="12">
       <el-form-item label="项目主图">
-        <el-upload action="" list-type="picture-card"   :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <el-dialog :visible.sync="proVisible">
-          <img width="100%" :src="proImageUrl" alt="">
-        </el-dialog>
+        <el-upload
+  				class="upload-demo"
+  				:action="uploadurl"
+  				:on-preview="handlePictureCardPreview"
+  				:on-remove="handleRemove"
+  				:file-list="fileList2"
+  				list-type="picture">
+  				<el-button size="small" type="primary">点击上传</el-button>
+  				<div slot="tip" class="el-upload__tip">只能上传jpg，且不超过2m</div>
+				</el-upload>
       </el-form-item>  	
  	  </el-col>  
  	  <el-col :span="12">
  	  	 <el-form-item v-if="project_select" label="编辑的项目">
     		<el-select v-model="project_id" style="width: 100%;" placeholder="请选择想要编辑的项目">
-              <el-option label="项目1" value="1"></el-option>
-              <el-option label="项目2" value="2"></el-option>
-              <el-option label="项目3" value="3"></el-option>
+              <el-option v-for="(item,idx) in  projects" :key="idx" :label="item.XMMC" :value="item.XMID"></el-option>
            </el-select>
     	 </el-form-item>
  	  </el-col>
@@ -132,7 +133,6 @@
 					>
 					</el-input>
           <el-button v-else class="button-new-tag" size="small" @click="showInput">添加项目标签</el-button>
-   
         </el-col>
       </el-form-item>
       <el-form-item label="建筑类型:">
@@ -269,6 +269,10 @@ export default {
   name: "projectInfo",
   data() {
     return {
+    	fileList2:[{name:'项目主图',url:'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+    	imgul:this.Rooturl,
+    	uploadurl:this.Rooturl+"project/file/upload",
+    	testData:{},
     	project_select:false,
     	projectTagss:[],
       ruleForminfo: {
@@ -372,12 +376,13 @@ export default {
     getProjectInfo() {
     	let url=this.Rooturl+"project/project/getProjectInfo";
       this.$http.get(url).then(res => {
-        localStorage.setItem("info",JSON.stringify(res));
+      	this.testData=res.data.data;
+      	console.log(res.data);
         this.projectInfo = res.data.data;
         this.ruleForminfo.provalue = this.projectInfo.province;
         this.provinceChange(this.ruleForminfo.provalue);
         this.ruleForminfo.cityvalue = this.projectInfo.city;
-        this.cityChange(this.ruleForminfo.cityvalue);
+        //this.cityChange(this.ruleForminfo.cityvalue);
         this.ruleForminfo.disvalue = this.projectInfo.district;
         this.proImageUrl = this.projectInfo.img_url;
         
@@ -410,9 +415,8 @@ export default {
            this.projectInfo.property_type[i].property_tag_id
           );
         }
-       
-        this.projectTags = this.projectInfo.project_tags.split(",");
-        
+        this.projectTags = this.projectInfo.project_tags.split(","); 
+        this.fileList2.url=this.Lanurl+"upload/agent/headimg/1523850012_10.jpg";
       });
      
     },
@@ -436,7 +440,6 @@ export default {
     				this.secoptions = this.firoptions[i].city; 
     			}
     		}
-       
     },
     // 读取区县列表
     cityChange(value){
@@ -455,17 +458,18 @@ export default {
     // 修改项目信息
     submit() {
       var qs = require("qs");
-      let data = {
+      console.log(this.ruleFormbuild.procheckList)
+      const data = {
         project_name: this.projectInfo.project_name,
         province: this.ruleForminfo.provalue,
         city: this.ruleForminfo.cityvalue,
         district: this.ruleForminfo.disvalue,
-        absolute_address: this.ruleForminfo.add,
-        property_type: JSON.stringify(this.ruleFormbuild.procheckList).substr(
+        absolute_address:this.ruleForminfo.add,
+        property_type:JSON.stringify(this.ruleFormbuild.procheckList).substr(
           1,
           JSON.stringify(this.ruleFormbuild.procheckList).length - 2
         ),
-        project_tags: JSON.stringify(this.projectTags).substr(
+        project_tags:JSON.stringify(this.projectTags).substr(
           1,
           JSON.stringify(this.projectTags).length - 2
         ),
@@ -475,7 +479,6 @@ export default {
         ),
         sale_address: this.ruleFormbuild.sale_address,
         decoration_company: this.ruleFormbuild.decoration_company,
-        build_type: this.ruleFormbuild.build_type,
         average_price: this.ruleFormbuild.average_price,
         min_price: this.ruleFormbuild.min_price,
         max_price: this.ruleFormbuild.max_price,
@@ -490,22 +493,36 @@ export default {
         property_cost: this.ruleFormpro.property_cost,
         heat_supply: this.ruleFormpro.heat_supply,
         power_supply: this.ruleFormpro.power_supply,
-        water_supply: this.ruleFormpro.water_supply
-      };
-      this.$http.post("api/project/update", qs.stringify(data)).then(res => {
+        water_supply: this.ruleFormpro.water_supply,
+        yunsuan_url:this.projectInfo.href,
+        yunsuan_id:this.project_id,
+        total_float_url:"upload/project/img/1524463483_23.png",
+				total_float_url_phone:"upload/agent/headimg/1526565231_31.jpg"
+      }; 
+      let url =this.Rooturl+"project/update";
+      console.log(data);
+      this.$http.post(url,qs.stringify({...data})).then(res => {
+      		console.log(res.data);
+      		if(res.data.code==200){
+      			  this.$message.success(res.data.msg);
+      		}else{
+      			this.$message.error(res.data.msg);
+      		}
       });
     },
     testUrl(){
-    	var reg=/^((25[0-5]|2[0-4]\\d|[1]{1}\\d{1}\\d{1}|[1-9]{1}\\d{1}|\\d{1})($|(?!\\.$)\\.)){4}$/;
-    	if(reg.test(this.projectInfo.href)){
+    //	var reg=/^((25[0-5]|2[0-4]\\d|[1]{1}\\d{1}\\d{1}|[1-9]{1}\\d{1}|\\d{1})[:?]($|(?!\\.$)\\.)){4}/;
+    	//if(reg.test(this.projectInfo.href)){
+    		if(1){
     			let url=this.Rooturl+"project/build/getYsBuild";
     		  this.$http.get(url,{
     		  	params:{
     		  		url:this.projectInfo.href
     		  	}
     		  }).then(res => {
+    		  	console.log(res.data.data[0].content[0].rows);
     		  	this.project_select=true;
-    		  	this.projects=res.content.rows;
+    		  	this.projects=res.data.data[0].content[0].rows;
     			});
     	}else{
     		this.$message.error("云算地址输入不正确")
@@ -541,7 +558,6 @@ export default {
     		 this.realState=res.data.data[16].param;
     		 this.buildType=res.data.data[17].param;
     		 let projectTagsConfig=res.data.data[15].param;
-    		 console.log(this.projectTags);
     		 for(let i=0;i<this.projectTags.length;i++){
         	for(let y=0;y<projectTagsConfig.length;y++){
         		if(this.projectTags[i]==projectTagsConfig[y].id){	
@@ -551,7 +567,8 @@ export default {
        }
     	
     		this.projectTagss=arr;
-    				console.log(arr)
+    		console.log(arr);
+    			
     	})
   	}
   },
@@ -580,6 +597,7 @@ export default {
   	},600)
   }
 }
+//省市区  目前固定在四川没改变
 </script>
 <style scoped>
 .projectInfo-form {

@@ -13,21 +13,21 @@
         </el-button-group>
       </el-col>
     </el-row>
-    <el-table :data="Data" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table" @select="a($event)">
+    <el-table :data="ImgList" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" class="cate-table" @select="a($event)">
       <el-table-column type="selection" label="all" width="50">
       </el-table-column>
-      <el-table-column type="index" label="图片顺序" width="100">
+      <el-table-column type="index" prop="sort" label="图片顺序" width="100">
       </el-table-column>
       <el-table-column prop="type_name" label="图片类型" width="120" >
       </el-table-column>
-      <el-table-column prop="imgPath" label="图片" width="120">
+      <el-table-column prop="img_url" label="图片" width="120">
         <template slot-scope="scope"> 
           <img :src="url+scope.row.img_url" alt="" class="baseImg" >
         </template> 
       </el-table-column>
-      <el-table-column prop="img_describe" label="备注">
+      <el-table-column prop="comment" label="备注">
       </el-table-column>
-      <el-table-column prop="update_time" label="更新时间">
+      <el-table-column prop="create_time" label="更新时间">
       </el-table-column>
       <el-table-column prop="ordering" label="调序">
         <template slot-scope="scope">  
@@ -114,6 +114,7 @@ export default {
   name: "categoryImg",
   data() {
     return {
+    	url:this.Baseurl,
       ruleFormUplode: {
         remarks: ""
       },
@@ -160,8 +161,8 @@ export default {
   methods: {
     // 图片详情接口
     getCategoryImgList() {
-      this.$http.get("/api/project/img/getList").then(res => {
-        console.log("+++++++++++++++++++++++++++++++++++++++");
+    	let url=this.Rooturl+"project/img/getList";
+      this.$http.get(url).then(res => {
         this.tableData = res.data.data;
         this.page();
       });
@@ -184,10 +185,10 @@ export default {
         }
         this.alltablesize.push(arr);
       }
-      this.Data = this.alltablesize[0];
+      this.ImgList = this.alltablesize[0];
     },
     handleCurrentChange(val) {
-      this.Data = this.alltablesize[val - 1];
+      this.ImgList = this.alltablesize[val - 1];
     },
     //修改图片顺序向上交换
     order(index) {
@@ -195,22 +196,24 @@ export default {
       let last = index - 1;
       let beijiaohuanid = 0;
       let id = 0;
-      for (let i = 0; i < this.Data.length; i++) {
+      for (let i = 0; i < this.ImgList.length; i++) {
         if (last == i) {
           //记住向上交换是当前索引-1，向下交换就是当前索引+1
-          beijiaohuanid = this.Data[i].project_img_id;
+          beijiaohuanid = this.ImgList[i].project_img_id;
         }
         if (index == i) {
-          id = this.Data[i].project_img_id;
+          id = this.ImgList[i].project_img_id;
         }
       }
+      let url=this.Rooturl+"project/img/changeSort?project_img_id=";
       this.$http.get(
-          "/api/project/img/changeSort?project_img_id=" +
+          url +
             id +
             "&project_img_id_another=" +
             parseInt(beijiaohuanid)
        ).then(res => {
-          this.$http.get("/api/project/img/getList").then(ress => {
+       		let url=this.Rooturl+"project/img/getList";
+          this.$http.get(url).then(res => {
             console.log("+++++++++++++++++++++++++++++++++++++++");
             this.tableData = ress.data.data;
             console.log(ress.data.data);
@@ -222,16 +225,17 @@ export default {
       let last = index + 1;
       let nowId = 0;
       let id = 0;
-      for (let i = 0; i < this.Data.length; i++) {
+      for (let i = 0; i < this.ImgList.length; i++) {
         if (last == i) {
-          id = this.Data[i].project_img_id;
+          id = this.ImgList[i].project_img_id;
         }
         if (index == i) {
-          nowId = this.Data[i].project_img_id;
+          nowId = this.ImgList[i].project_img_id;
         }
-        this.$http
+        let url=this.Rooturl+"project/img/changeSort?project_img_id=";
+        this.$http    	
           .get(
-            "/api/project/img/changeSort?project_img_id=" +
+             url+
               id +
               "&project_img_id_another=" +
               parseInt(nowId)
@@ -267,8 +271,9 @@ export default {
     //查看图片接口
     seeImgVisibleChange() {
       this.seeImgVisible = true;
+      let url=this.Rooturl+"project/img/getImg?project_img_id=";
       this.$http
-        .get("/api/project/img/getImg?project_img_id=" + this.imgId)
+        .get(url+ this.imgId)
         .then(res => {
           this.seeImg = res.data.data;
         });
@@ -285,8 +290,9 @@ export default {
         img_describe: this.ruleFormUplode.remarks
       };
       console.log(data);
+      let url=this.Rooturl+"project/img/update"
       this.$http
-        .post("/api/project/img/update", qs.stringify(data))
+        .post(url, qs.stringify(data))
         .then(res => {
           console.log(res);
         });
@@ -305,7 +311,8 @@ export default {
           house_type_num: "1",
           img_describe: this.ruleFormChange.remarks
        };
-       this.$http.post("/api/project/img/update", qs.stringify(data));
+       let url=this.Rooturl+'project/img/update'
+       this.$http.post(url, qs.stringify(data));
        this.$message({
            message: response.msg,
            type: "success"
@@ -326,7 +333,8 @@ export default {
           house_type_num: "1",
           img_describe: this.ruleFormUplode.remarks
         };
-        this.$http.post("/api/project/img/upload", qs.stringify(data));
+        let url=this.Baseurl+"project/img/upload";
+        this.$http.post(url, qs.stringify(data));
         this.$message({
           message: response.msg,
           type: "success"
@@ -346,12 +354,13 @@ export default {
     },
     // 删除图片
     deleteRow(index, rows) {
+    	let url=this.Rooturl+"project/img/delete?project_img_id=";
       this.$http
-        .get("/api/project/img/delete?project_img_id=" + this.imgId)
+        .get(url + this.imgId)
         .then(res => {
           console.log(index);
           for (let i = 0; i < index.length; i++) {
-            this.Data.splice(index[i], 1);
+            this.ImgList.splice(index[i], 1);
           }
         });
     },

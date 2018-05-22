@@ -76,12 +76,13 @@ export default {
     //this.getProjectImgList();
     this.addImgs();
     this.getImgList();
+    this.getconfig();
   },
   methods: {
     // 项目图片列表详情
     getProjectImgList() {
-      this.$http.get('api/project/img/getNum').then(res=>{
-        console.log("+++++++++++++++++++++++++++++++++++++++")
+    	let url=this.Baseurl+"project/img/getNum";
+      this.$http.get(url).then(res=>{
         this.tableData=res.data.data;
         this.page();
       })
@@ -130,6 +131,13 @@ export default {
     		this.sels=sels;
     		console.log(sels);
     	}
+    },
+    getconfig(){
+    	let url=this.Rooturl+"config";
+			this.$http.get(url)
+				.then(res=>{
+						console.log(res.data);
+				})
     }
   },
   computed:{

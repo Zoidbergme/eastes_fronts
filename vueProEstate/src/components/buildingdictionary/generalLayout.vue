@@ -132,7 +132,6 @@
         </el-row>
       </el-main>
     </el-container>
-
   </div>
 </template>
 <script>

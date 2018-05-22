@@ -1,5 +1,6 @@
 import $http from 'axios'
 import Rooturl from '../../../static/Rooturl'
+import Baseurl from '../../../static/Baseurl'
 import qs from 'qs'
 
 
@@ -22,17 +23,17 @@ const mutations={
 
 const actions={
 	AddImgList({commit},payload){
-		let url=Rooturl.Rooturl+"project/img/getOneTypeImgList";
+		let url=Baseurl.Baseurl+"project/img/getOneTypeImgList";
 		console.log(payload)
 		$http.get(url,{
 			params:{
 				type_id:payload
 			}
 		}).then(res=>{
-			console.log(res.data);
+			console.log(res.data.data.data);
 			commit({
 				type:'AddImgList',
-				res:res.data
+				res:res.data.data.data
 			})
 		})
 	}
